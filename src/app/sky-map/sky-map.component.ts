@@ -21,7 +21,6 @@ import * as d3geo from 'd3-geo';
 // Typy danych
 interface Star { id?: number|string; ra?: number; ra_deg?: number; dec: number; mag?: number; name?: string; }
 interface StarsData { meta?: any; stars: Star[]; }
-// interface Boundary { abbrev: string; name?: string; poly: [number, number][]; label?: { ra_deg: number; dec: number }; __projected?: [number, number][]; __labelProjected?: [number, number] | null; }
 interface BoundariesData { meta?: any; boundaries: Boundary[]; }
 interface Boundary {
   abbrev: string;
@@ -91,6 +90,20 @@ async function loadDefaultStars(): Promise<StarsData> {
   });
   return { meta: { name: 'd3-celestial stars.6.json', source: 'HYG/BSC via d3-celestial', epoch: 'J2000' }, stars };
 }
+
+
+async function loadFilteredStars(maxMag: number): Promise<StarsData> {
+  const all = await loadDefaultStars();
+  return {
+    meta: { ...all.meta, name: `stars.6 ≤${maxMag}` },
+    stars: all.stars.filter(s => s.mag !== undefined && s.mag <= maxMag)
+  };
+}
+
+
+
+
+
 
 
 async function loadDefaultBoundaries(): Promise<BoundariesData> {
@@ -219,6 +232,8 @@ function toDXF(params: { width: number; height: number; stars: (Star & { __proje
 export class SkyMapComponent {
   @ViewChild('svgEl', { static: true }) svgEl!: ElementRef<SVGSVGElement>;
 
+
+  
   // UI signals
   width = signal(1200);
   height = signal(1200);
@@ -313,7 +328,10 @@ export class SkyMapComponent {
   });
 });
 
-
+  async loadBrightStars() {
+    const stars = await loadFilteredStars(2.5);
+     this.starsData.set(stars);
+  }
   linePath(pts: [number, number][]): string | undefined {
     return d3.line()(<[number,number][]>pts) || undefined;
   }

@@ -27,6 +27,8 @@
         <label class="row">Rozmiar etykiet
           <input type="range" min="8" max="24" step="1" [value]="labelSize()" (input)="labelSize.set($any($event.target).valueAsNumber)"> {{labelSize()}} px
         </label>
+        <button class="btn w-full" (click)="loadBrightStars()">Tylko jasne gwiazdy (≤2.5 mag)</button>
+
       </section>
 
       <section class="border rounded-xl p-3">
