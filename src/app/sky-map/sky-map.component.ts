@@ -92,14 +92,15 @@ async function loadDefaultStars(): Promise<StarsData> {
 }
 
 
+
+
 async function loadFilteredStars(maxMag: number): Promise<StarsData> {
   const all = await loadDefaultStars();
   return {
     meta: { ...all.meta, name: `stars.6 ≤${maxMag}` },
-    stars: all.stars.filter(s => s.mag !== undefined && s.mag <= maxMag)
+    stars: all.stars.filter((s: Star) => s.mag !== undefined && s.mag <= maxMag)
   };
 }
-
 
 
 
@@ -232,6 +233,7 @@ function toDXF(params: { width: number; height: number; stars: (Star & { __proje
 export class SkyMapComponent {
   @ViewChild('svgEl', { static: true }) svgEl!: ElementRef<SVGSVGElement>;
 
+maxMag = signal<number>(2.5);
 
   
   // UI signals
@@ -327,11 +329,19 @@ export class SkyMapComponent {
     } as Boundary;
   });
 });
-
-  async loadBrightStars() {
-    const stars = await loadFilteredStars(2.5);
-     this.starsData.set(stars);
+async loadByMag() {
+  try {
+    const stars = await loadFilteredStars(this.maxMag());
+    this.starsData.set(stars);
+  } catch (e: any) {
+    alert('Błąd pobierania gwiazd: ' + e.message);
   }
+}
+
+  // async loadBrightStars() {
+  //   const stars = await loadFilteredStars(2.5);
+  //    this.starsData.set(stars);
+  // }
   linePath(pts: [number, number][]): string | undefined {
     return d3.line()(<[number,number][]>pts) || undefined;
   }
