@@ -56,6 +56,15 @@
 
         <button class="btn w-full" (click)="loadAsterisms()">Załaduj asteryzmy (d3-celestial)</button>
 
+<label class="row">
+  <input type="checkbox" [checked]="showConstellationLines()"
+         (change)="showConstellationLines.set($any($event.target).checked)">
+  Linie gwiazdozbiorów
+</label>
+<button class="btn w-full" (click)="loadConstellationLinesClick()">
+  Załaduj linie gwiazdozbiorów (d3-celestial)
+</button>
+
         <p class="muted">Źródło: d3-celestial CDN (stars.6.json, constellations.bounds.json)</p>
         <div class="mt-2 space-y-2">
           <label class="col">Wczytaj gwiazdy (JSON)
@@ -109,6 +118,13 @@
 </g>
 
 
+<g *ngIf="showConstellationLines()">
+  <ng-container *ngFor="let c of projectedConstellationLines()">
+    <path *ngFor="let seg of c.__projectedSegments"
+          [attr.d]="linePath(seg)" fill="none"
+          stroke="#06c" [attr.stroke-width]="0.7"></path>
+  </ng-container>
+</g>
 
 
 
