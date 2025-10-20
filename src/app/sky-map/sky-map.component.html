@@ -24,6 +24,12 @@
         <label class="row"><input type="checkbox" [checked]="showGrid()" (change)="showGrid.set($any($event.target).checked)"> Siatka RA/DEC</label>
         <label class="row"><input type="checkbox" [checked]="showStarLabels()" (change)="showStarLabels.set($any($event.target).checked)"> Etykiety gwiazd</label>
         <label class="row"><input type="checkbox" [checked]="showConstLabels()" (change)="showConstLabels.set($any($event.target).checked)"> Nazwy gwiazdozbiorów</label>
+        
+        <label class="row">
+            <input type="checkbox" [checked]="showAsterisms()" (change)="showAsterisms.set($any($event.target).checked)">
+             Asteryzmy
+        </label>
+
         <label class="row">Rozmiar etykiet
           <input type="range" min="8" max="24" step="1" [value]="labelSize()" (input)="labelSize.set($any($event.target).valueAsNumber)"> {{labelSize()}} px
         </label>
@@ -47,6 +53,9 @@
       <section class="border rounded-xl p-3">
         <h2 class="font-semibold text-lg mb-2">Dane</h2>
         <button class="btn w-full" (click)="loadDefaults()">Załaduj domyślne (HYG + IAU)</button>
+
+        <button class="btn w-full" (click)="loadAsterisms()">Załaduj asteryzmy (d3-celestial)</button>
+
         <p class="muted">Źródło: d3-celestial CDN (stars.6.json, constellations.bounds.json)</p>
         <div class="mt-2 space-y-2">
           <label class="col">Wczytaj gwiazdy (JSON)
@@ -88,6 +97,18 @@
     </ng-template>
   </ng-container> 
 </g>
+
+
+
+<g *ngIf="showAsterisms()">
+  <ng-container *ngFor="let a of projectedAsterisms()">
+    <path *ngFor="let seg of a.__projectedSegments"
+          [attr.d]="linePath(seg)"
+          fill="none" stroke="#d00" [attr.stroke-width]="0.6"></path>
+  </ng-container>
+</g>
+
+
 
 
 

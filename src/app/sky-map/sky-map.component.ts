@@ -161,6 +161,41 @@ async function loadDefaultBoundaries(): Promise<BoundariesData> {
 
 
 
+async function loadDefaultAsterisms(): Promise<BoundariesData> {
+  const url = `${D3C_BASE}/asterisms.json`;
+  const gj: any = await fetchJSON(url);
+
+  const toRaDec = ([lon, lat]: [number, number]): [number, number] =>
+    [geoLonToRaDeg(lon), lat];
+
+  const boundaries: Boundary[] = (gj.features || []).map((f: any) => {
+    const name = f.properties?.name || 'Asterism';
+    const abbr = f.properties?.abbr || name.slice(0, 3).toUpperCase();
+    const g = f.geometry || {};
+    let segments: [number, number][][] = [];
+
+    if (g.type === 'MultiLineString') {
+      segments = (g.coordinates as [number, number][][]).map(seg =>
+        seg.map(toRaDec)
+      );
+    } else if (g.type === 'LineString') {
+      segments = [ (g.coordinates as [number, number][]).map(toRaDec) ];
+    }
+
+    const first = segments?.[0]?.[0] || [0, 0];
+    return { abbrev: abbr, name, segments, label: { ra_deg: first[0], dec: first[1] } } as Boundary;
+  });
+
+  return { meta: { source: 'd3-celestial asterisms', epoch: 'J2000' }, boundaries };
+}
+
+
+
+
+
+
+
+
 
 
 function raToDeg(s: Star): number | undefined {
@@ -248,6 +283,11 @@ maxMag = signal<number>(2.5);
   showConstLabels = signal(true);
   labelSize = signal(12);
 
+
+  showAsterisms = signal(true);
+asterismsData = signal<BoundariesData>({ meta: {}, boundaries: [] });
+
+
   // Dane
   starsData = signal<StarsData>(DEMO_STARS);
   boundariesData = signal<BoundariesData>(DEMO_BOUNDARIES);
@@ -329,6 +369,35 @@ maxMag = signal<number>(2.5);
     } as Boundary;
   });
 });
+
+
+
+projectedAsterisms = computed(() => {
+  const proj = this.projection();
+  return (this.asterismsData().boundaries || []).map((b) => {
+    const projectedSegments = b.segments?.map(seg =>
+      seg.map(([raDeg, dec]) => proj([-raDeg, dec]) as [number, number])
+    );
+    let labelP: [number, number] | null = null;
+    if (b.label && typeof b.label.ra_deg === 'number' && typeof b.label.dec === 'number') {
+      labelP = proj([-b.label.ra_deg, b.label.dec]) as [number, number];
+    }
+    return { ...b, __projectedSegments: projectedSegments, __labelProjected: labelP } as Boundary;
+  });
+});
+
+async loadAsterisms() {
+  try {
+    const data = await loadDefaultAsterisms();
+    this.asterismsData.set(data);
+  } catch (e: any) {
+    alert('Błąd pobierania asteryzmów: ' + e.message);
+  }
+}
+
+
+
+
 async loadByMag() {
   try {
     const stars = await loadFilteredStars(this.maxMag());
@@ -338,10 +407,6 @@ async loadByMag() {
   }
 }
 
-  // async loadBrightStars() {
-  //   const stars = await loadFilteredStars(2.5);
-  //    this.starsData.set(stars);
-  // }
   linePath(pts: [number, number][]): string | undefined {
     return d3.line()(<[number,number][]>pts) || undefined;
   }
