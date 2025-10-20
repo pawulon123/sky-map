@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { SkyMapComponent } from "./sky-map/sky-map.component";
 import { CommonModule } from '@angular/common';
 

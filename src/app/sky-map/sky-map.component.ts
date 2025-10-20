@@ -21,9 +21,24 @@ import * as d3geo from 'd3-geo';
 // Typy danych
 interface Star { id?: number|string; ra?: number; ra_deg?: number; dec: number; mag?: number; name?: string; }
 interface StarsData { meta?: any; stars: Star[]; }
-interface Boundary { abbrev: string; name?: string; poly: [number, number][]; label?: { ra_deg: number; dec: number }; __projected?: [number, number][]; __labelProjected?: [number, number] | null; }
+// interface Boundary { abbrev: string; name?: string; poly: [number, number][]; label?: { ra_deg: number; dec: number }; __projected?: [number, number][]; __labelProjected?: [number, number] | null; }
 interface BoundariesData { meta?: any; boundaries: Boundary[]; }
+interface Boundary {
+  abbrev: string;
+  name?: string;
 
+  // Jeden z wariantów: legacy pojedyncza linia...
+  poly?: [number, number][];
+  // ...albo nowy: wiele segmentów (dla Polygon/MultiPolygon/MultiLineString)
+  segments?: [number, number][][];
+
+  label?: { ra_deg: number; dec: number };
+
+  // Projekcje
+  __projected?: [number, number][];
+  __projectedSegments?: [number, number][][];
+  __labelProjected?: [number, number] | null;
+}
 // Demo minimalny
 const DEMO_STARS: StarsData = {
   meta: { name: 'Demo Bright Stars', epoch: 'J2000' },
@@ -77,19 +92,62 @@ async function loadDefaultStars(): Promise<StarsData> {
   return { meta: { name: 'd3-celestial stars.6.json', source: 'HYG/BSC via d3-celestial', epoch: 'J2000' }, stars };
 }
 
+
 async function loadDefaultBoundaries(): Promise<BoundariesData> {
   const url = `${D3C_BASE}/constellations.bounds.json`;
   const gj: any = await fetchJSON(url);
+
+  function toRaDec([lon, lat]: [number, number]): [number, number] {
+    return [geoLonToRaDeg(lon), lat];
+  }
+
+
+
+
+
+
+
   const boundaries: Boundary[] = (gj.features || []).map((f: any) => {
     const name = f.properties?.name || f.properties?.n || f.properties?.abbr;
-    const abbr = f.properties?.abbr || f.properties?.a || (name?.slice(0,3)?.toUpperCase());
-    const segs = f.geometry?.type === 'MultiLineString' ? f.geometry.coordinates : (f.geometry?.type === 'LineString' ? [f.geometry.coordinates] : []);
-    const poly = segs.flat().map(([lon, lat]: [number, number]) => [geoLonToRaDeg(lon), lat]) as [number,number][];
-    const mid = poly[Math.floor(poly.length/2)] || [0,0];
-    return { abbrev: abbr, name, poly, label: { ra_deg: mid[0], dec: mid[1] } } as Boundary;
+    const abbr = f.properties?.abbr || f.properties?.a || (name?.slice(0, 3)?.toUpperCase());
+    const g = f.geometry || {};
+    let segments: [number, number][][] = [];
+
+    if (g.type === 'MultiLineString') {
+      segments = (g.coordinates as [number, number][][]).map(seg =>
+        seg.map(toRaDec)
+      );
+    } else if (g.type === 'LineString') {
+      segments = [ (g.coordinates as [number, number][]).map(toRaDec) ];
+    } else if (g.type === 'Polygon') {
+      // bierzemy zewnętrzny pierścień (index 0)
+      const rings = g.coordinates as [number, number][][]; // [ring][point]
+      if (rings?.length) segments = [ rings[0].map(toRaDec) ];
+    } else if (g.type === 'MultiPolygon') {
+      // z każdego wieloboku zewnętrzny pierścień (index 0)
+      const polys = g.coordinates as [number, number][][][]; // [poly][ring][point]
+      segments = polys
+        .map(poly => (poly?.[0] || []).map(toRaDec))
+        .filter(seg => seg.length > 0);
+    }
+
+    // prosty punkt etykiety – pierwszy punkt pierwszego segmentu
+    const first = segments?.[0]?.[0] || [0, 0];
+    return {
+      abbrev: abbr,
+      name,
+      segments,
+      label: { ra_deg: first[0], dec: first[1] },
+    } as Boundary;
   });
+
   return { meta: { source: 'IAU via d3-celestial', epoch: 'J2000' }, boundaries };
 }
+
+
+
+
+
 
 function raToDeg(s: Star): number | undefined {
   if (typeof s.ra_deg === 'number') return s.ra_deg;
@@ -146,94 +204,8 @@ function toDXF(params: { width: number; height: number; stars: (Star & { __proje
 @Component({
   selector: 'app-sky-map',
   standalone: true,
-  template: `
-  <div class="p-4 grid gap-4 md:grid-cols-[320px_1fr]">
-    <div class="space-y-4">
-      <section class="border rounded-xl p-3">
-        <h2 class="font-semibold text-lg mb-2">Rzut i wymiary</h2>
-        <div class="grid grid-cols-3 gap-2 mb-3">
-          <button class="btn" [class.active]="projectionName()==='stereographic'" (click)="projectionName.set('stereographic')">Stereograficzny</button>
-          <button class="btn" [class.active]="projectionName()==='azimuthal'" (click)="projectionName.set('azimuthal')">Azymutalny</button>
-          <button class="btn" [class.active]="projectionName()==='equirect'" (click)="projectionName.set('equirect')">Równikowy</button>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <label class="flex items-center gap-2">Szerokość
-            <input type="number" class="input" [value]="width()" (input)="width.set($any($event.target).valueAsNumber)" />
-          </label>
-          <label class="flex items-center gap-2">Wysokość
-            <input type="number" class="input" [value]="height()" (input)="height.set($any($event.target).valueAsNumber)" />
-          </label>
-        </div>
-      </section>
+  templateUrl:'sky-map.component.html',
 
-      <section class="border rounded-xl p-3">
-        <h2 class="font-semibold text-lg mb-2">Warstwy</h2>
-        <label class="row"><input type="checkbox" [checked]="showStars()" (change)="showStars.set($any($event.target).checked)"> Gwiazdy</label>
-        <label class="row"><input type="checkbox" [checked]="showBoundaries()" (change)="showBoundaries.set($any($event.target).checked)"> Granice IAU</label>
-        <label class="row"><input type="checkbox" [checked]="showGrid()" (change)="showGrid.set($any($event.target).checked)"> Siatka RA/DEC</label>
-        <label class="row"><input type="checkbox" [checked]="showStarLabels()" (change)="showStarLabels.set($any($event.target).checked)"> Etykiety gwiazd</label>
-        <label class="row"><input type="checkbox" [checked]="showConstLabels()" (change)="showConstLabels.set($any($event.target).checked)"> Nazwy gwiazdozbiorów</label>
-        <label class="row">Rozmiar etykiet
-          <input type="range" min="8" max="24" step="1" [value]="labelSize()" (input)="labelSize.set($any($event.target).valueAsNumber)"> {{labelSize()}} px
-        </label>
-      </section>
-
-      <section class="border rounded-xl p-3">
-        <h2 class="font-semibold text-lg mb-2">Dane</h2>
-        <button class="btn w-full" (click)="loadDefaults()">Załaduj domyślne (HYG + IAU)</button>
-        <p class="muted">Źródło: d3-celestial CDN (stars.6.json, constellations.bounds.json)</p>
-        <div class="mt-2 space-y-2">
-          <label class="col">Wczytaj gwiazdy (JSON)
-            <input type="file" accept="application/json" (change)="onImportJSON($event, 'stars')">
-          </label>
-          <label class="col">Wczytaj granice IAU (JSON)
-            <input type="file" accept="application/json" (change)="onImportJSON($event, 'bounds')">
-          </label>
-        </div>
-      </section>
-
-      <div class="flex gap-2">
-        <button class="btn" (click)="exportSVG()">Eksport SVG</button>
-        <button class="btn" (click)="exportDXF()">Eksport DXF</button>
-      </div>
-    </div>
-
-    <div class="border rounded-xl overflow-auto p-2">
-      <svg #svgEl [attr.width]="width()" [attr.height]="height()">
-        <rect [attr.width]="width()" [attr.height]="height()" fill="white"></rect>
-        <path [attr.d]="spherePath()" fill="none" stroke="#222" [attr.stroke-width]="0.6"></path>
-
-        <g *ngIf="showGrid()">
-          <path [attr.d]="graticulePath()" fill="none" stroke="#bbb" [attr.stroke-width]="0.4"></path>
-        </g>
-
-        <g *ngIf="showBoundaries()">
-          <ng-container *ngFor="let b of projectedBoundaries()">
-            <path [attr.d]="linePath(b.__projected || [])" fill="none" stroke="#000" [attr.stroke-width]="0.6"></path>
-          </ng-container>
-        </g>
-
-        <g *ngIf="showStars()">
-          <ng-container *ngFor="let s of projectedStars()">
-            <circle *ngIf="s.__projected" [attr.cx]="s.__projected![0]" [attr.cy]="s.__projected![1]" [attr.r]="starRadius(s)" fill="#000"></circle>
-          </ng-container>
-        </g>
-
-        <g *ngIf="showStarLabels()" [attr.font-size]="labelSize()" font-family="ui-sans-serif, system-ui" fill="#000">
-          <ng-container *ngFor="let s of projectedStars()">
-            <text *ngIf="s.__projected && s.name" [attr.x]="s.__projected![0] + starRadius(s) + 2" [attr.y]="s.__projected![1] - starRadius(s) - 2">{{s.name}}</text>
-          </ng-container>
-        </g>
-
-        <g *ngIf="showConstLabels()" [attr.font-size]="labelSize()" font-family="ui-sans-serif, system-ui" fill="#000">
-          <ng-container *ngFor="let b of projectedBoundaries()">
-            <text *ngIf="b.__labelProjected" [attr.x]="b.__labelProjected![0]" [attr.y]="b.__labelProjected![1]" text-anchor="middle">{{b.name || b.abbrev}}</text>
-          </ng-container>
-        </g>
-      </svg>
-    </div>
-  </div>
-  `,
   styles: [`
     .btn { @apply px-3 py-2 rounded-lg border text-sm; }
     .btn.active { @apply bg-black text-white; }
@@ -312,21 +284,35 @@ export class SkyMapComponent {
     });
   });
 
+  
   projectedBoundaries = computed(() => {
-    const proj = this.projection();
-    return (this.boundariesData().boundaries || []).map((b) => {
-      const poly = (b.poly || []).map(([raDeg, dec]) => {
-        const lon = -raDeg;
-        const lat = dec;
-        return proj([lon, lat]) as [number, number];
-      });
-      let labelP: [number, number] | null = null;
-      if (b.label && typeof b.label.ra_deg === 'number' && typeof b.label.dec === 'number') {
-        labelP = proj([-b.label.ra_deg, b.label.dec]) as [number, number];
-      }
-      return { ...b, __projected: poly, __labelProjected: labelP } as Boundary;
-    });
+  const proj = this.projection();
+  return (this.boundariesData().boundaries || []).map((b) => {
+    let projectedSegments: [number, number][][] | undefined;
+    if (b.segments?.length) {
+      projectedSegments = b.segments.map(seg =>
+        seg.map(([raDeg, dec]) => proj([-raDeg, dec]) as [number, number])
+      );
+    }
+    let projectedPoly: [number, number][] | undefined;
+    if (b.poly?.length) {
+      projectedPoly = b.poly.map(([raDeg, dec]) =>
+        proj([-raDeg, dec]) as [number, number]
+      );
+    }
+    let labelP: [number, number] | null = null;
+    if (b.label && typeof b.label.ra_deg === 'number' && typeof b.label.dec === 'number') {
+      labelP = proj([-b.label.ra_deg, b.label.dec]) as [number, number];
+    }
+    return {
+      ...b,
+      __projected: projectedPoly,
+      __projectedSegments: projectedSegments,
+      __labelProjected: labelP
+    } as Boundary;
   });
+});
+
 
   linePath(pts: [number, number][]): string | undefined {
     return d3.line()(<[number,number][]>pts) || undefined;
