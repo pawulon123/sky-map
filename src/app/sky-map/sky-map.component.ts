@@ -2,6 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, ViewChild, signal, computed, effect, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import * as d3geo from 'd3-geo';
+type ProjectionName =
+  | 'stereographic'
+  | 'azimuthal'        // azimuthal equidistant
+  | 'azimuthalEA'      // azimuthal equal-area
+  | 'orthographic'
+  | 'gnomonic'
+  | 'mercator'
+  | 'equirect';
 
 interface Star {
   id?: number | string;
@@ -163,6 +171,77 @@ async function loadConstellationLines(): Promise<BoundariesData> {
   return { meta: { source: 'd3-celestial constellation lines', epoch: 'J2000' }, boundaries };
 }
 
+function normLon(lonDeg: number): number {
+  // zwraca w [-180, 180)
+  return ((lonDeg + 180) % 360 + 360) % 360 - 180;
+}
+
+function lonForProj(projName: ProjectionName, raDeg: number): number {
+  // u Ciebie RA już jest w „długości” zgodnej z projekcją (bez minusa).
+  // Normalizujemy tylko dla rzutów z krawędziami pionowymi:
+  const needsClamp = projName === 'equirect' || projName === 'mercator';
+  return needsClamp ? normLon(raDeg) : raDeg;
+}
+
+
+
+
+function cutOnAntimeridian(
+  lonlat: [number, number][],
+  name: ProjectionName,
+  seam = 180
+): [number, number][][] {
+  if (!isRectularMap(name)) return [lonlat];
+
+  const segments: [number, number][][] = [];
+  let cur: [number, number][] = [];
+  if (lonlat.length === 0) return segments;
+
+  const norm = (lon: number) => ((lon + 180) % 360 + 360) % 360 - 180;
+
+  let prevLon = norm(lonlat[0][0]);
+  cur.push([prevLon, lonlat[0][1]]);
+
+  for (let i = 1; i < lonlat.length; i++) {
+    const rawLon = lonlat[i][0];
+    const dec = lonlat[i][1];
+    const lon = norm(rawLon);
+
+    const diff = lon - prevLon; // w zakresie (-360, 360)
+    // Jeżeli „skok” > 180° – rozcinamy w tym miejscu.
+    if (Math.abs(diff) > 180 - 1e-6) {
+      // zakończ aktualny segment
+      segments.push(cur);
+      // zacznij nowy od bieżącego punktu
+      cur = [[lon, dec]];
+    } else {
+      cur.push([lon, dec]);
+    }
+    prevLon = lon;
+  }
+  if (cur.length) segments.push(cur);
+  return segments;
+}
+
+function projectSegments(
+  segments: [number, number][][],
+  proj: d3geo.GeoProjection
+): [number, number][][] {
+  return segments.map(seg =>
+    seg
+      .map(([lon, lat]) => proj([lon, lat]) as [number, number])
+      .filter(p => Number.isFinite(p?.[0]) && Number.isFinite(p?.[1]))
+  ).filter(seg => seg.length > 1);
+}
+
+function isRectularMap(name: ProjectionName) {
+  return name === 'equirect' || name === 'mercator';
+}
+ 
+
+
+
+
 @Component({
   selector: 'app-sky-map',
   standalone: true,
@@ -183,7 +262,7 @@ export class SkyMapComponent implements OnInit {
   maxMag = signal<number>(2.5);
   width = signal(1200);
   height = signal(1200);
-  projectionName = signal<'stereographic'|'azimuthal'|'equirect'>('stereographic');
+  projectionName = signal<ProjectionName>('stereographic');
 
   showStars = signal(true);
   showBoundaries = signal(true);
@@ -208,57 +287,77 @@ private labelsEffect = effect(() => {
     }
   });
 
+projection = computed(() => {
+  const w = this.width();
+  const h = this.height();
+  const cx = w / 2, cy = h / 2;
 
-  projection = computed(() => {
-    const w = this.width();
-    const h = this.height();
-    const cx = w / 2, cy = h / 2;
-    let proj: d3geo.GeoProjection;
-    switch (this.projectionName()) {
-      case 'stereographic':
-        proj = d3geo.geoStereographic();
-        (proj as any).clipAngle(180);
-        break;
-      case 'azimuthal':
-        proj = d3geo.geoAzimuthalEquidistant();
-        (proj as any).clipAngle(180);
-        break;
-      default:
-        proj = d3geo.geoEquirectangular();
-        break;
-    }
-    (proj as any).translate([cx, cy]);
+  let proj: d3geo.GeoProjection;
 
-    if (this.projectionName() === 'equirect') {
-      (proj as any).fitExtent([[40, 40], [w - 40, h - 40]], { type: 'Sphere' });
-    } else {
-      const scale = Math.min(w, h) * 0.48;
-      (proj as any).scale(scale);
-    }
-// odwracanie lustrznego odbicia
-  // const anyProj = proj as any;
-  // if (typeof anyProj.reflectX === 'function') {
-  //   anyProj.reflectX(true);
-  // } else {
-  //   const r = (anyProj.rotate && anyProj.rotate()) || [0,0,0];
-  //   anyProj.rotate([ (r[0] ?? 0) + 180, r[1] ?? 0, r[2] ?? 0 ]);
-  // }
+  switch (this.projectionName()) {
+    case 'stereographic':
+      proj = d3geo.geoStereographic();
+      (proj as any).clipAngle(180);
+      break;
 
-    return proj;
-  });
+    case 'azimuthal':      // Azimuthal Equidistant (jak wcześniej)
+      proj = d3geo.geoAzimuthalEquidistant();
+      (proj as any).clipAngle(180);
+      break;
+
+    case 'azimuthalEA':    // NOWE: Azimuthal Equal-Area
+      proj = d3geo.geoAzimuthalEqualArea();
+      (proj as any).clipAngle(180);
+      break;
+
+    case 'orthographic':   // NOWE
+      proj = d3geo.geoOrthographic();
+      (proj as any).clipAngle(90);
+      break;
+
+    case 'gnomonic':       // NOWE
+      proj = d3geo.geoGnomonic();
+      (proj as any).clipAngle(90);
+      break;
+
+    case 'mercator':       // NOWE
+      proj = d3geo.geoMercator();
+      break;
+
+    default:               // 'equirect'
+      proj = d3geo.geoEquirectangular();
+      break;
+  }
+
+  (proj as any).translate([cx, cy]);
+
+  if (this.projectionName() === 'equirect' || this.projectionName() === 'mercator') {
+    (proj as any).fitExtent([[40, 40], [w - 40, h - 40]], { type: 'Sphere' });
+  } else {
+    const scale = Math.min(w, h) * 0.48;
+    (proj as any).scale(scale);
+  }
+
+  return proj;
+});
+
+
 
   path = computed(() => d3geo.geoPath(this.projection()));
   graticuleGen = d3geo.geoGraticule().step([15, 15]);
   spherePath = computed(() => this.path()({ type: 'Sphere' }) || undefined);
   graticulePath = computed(() => this.path()(this.graticuleGen()) || undefined);
 
- projectedStars = computed(() => {
+
+projectedStars = computed(() => {
   const proj = this.projection();
+  const name = this.projectionName();
   return (this.starsData().stars || []).map((s) => {
     const ra = raToDeg(s);
     const dec = s.dec;
     if (ra == null || dec == null) return s as any;
-    const p = proj([ ra, dec ]) as [number, number]; // ← minus!
+    const lon = lonForProj(name, ra);
+    const p = proj([lon, dec]) as [number, number];
     return { ...s, __projected: p } as Star;
   });
 });
@@ -266,56 +365,90 @@ private labelsEffect = effect(() => {
 
 projectedBoundaries = computed(() => {
   const proj = this.projection();
+  const name = this.projectionName();
+
   return (this.boundariesData().boundaries || []).map((b) => {
+    // segments (LineString/MultiLineString/Polygon->ring)
     let projectedSegments: [number, number][][] | undefined;
     if (b.segments?.length) {
-      projectedSegments = b.segments.map(seg =>
-        seg.map(([raDeg, dec]) => proj([ raDeg, dec ]) as [number, number]) // ← OK
-      );
+      projectedSegments = b.segments.flatMap(seg => {
+        const lonlat = seg.map(([raDeg, dec]) => [raDeg, dec] as [number, number]);
+        const cut = cutOnAntimeridian(lonlat, name);
+        return projectSegments(cut, proj);
+      });
     }
 
-    // ⬇️ TU BYŁ BŁĄD: brak minusa przy poly
+    // poly (legacy)
     let projectedPoly: [number, number][] | undefined;
     if (b.poly?.length) {
-      projectedPoly = b.poly.map(([raDeg, dec]) =>
-        proj([ -raDeg, dec ]) as [number, number]  // ← DODAJ MINUS
-      );
+      const lonlat = b.poly.map(([raDeg, dec]) => [raDeg, dec] as [number, number]);
+      const cut = cutOnAntimeridian(lonlat, name);
+      const projCuts = projectSegments(cut, proj);
+      // dla „poly” zachowujemy 1 segment (jeśli jest ich więcej, i tak rysujesz każdy osobno poniżej)
+      // więc przerzućmy to do __projectedSegments i wyczyść __projected
+      projectedSegments = (projectedSegments || []).concat(projCuts);
+      projectedPoly = undefined;
     }
 
     let labelP: [number, number] | null = null;
     if (b.label && typeof b.label.ra_deg === 'number' && typeof b.label.dec === 'number') {
-      labelP = proj([ -b.label.ra_deg, b.label.dec ]) as [number, number]; // ← OK
+      // label też respektuje seam
+      const labelLon = ((b.label.ra_deg + 180) % 360 + 360) % 360 - 180;
+      labelP = proj([labelLon, b.label.dec]) as [number, number];
     }
-    return { ...b, __projected: projectedPoly, __projectedSegments: projectedSegments, __labelProjected: labelP } as Boundary;
+
+    return {
+      ...b,
+      __projected: projectedPoly,
+      __projectedSegments: projectedSegments,
+      __labelProjected: labelP
+    } as Boundary;
   });
 });
 
 
-  projectedAsterisms = computed(() => {
-    const proj = this.projection();
-    return (this.asterismsData().boundaries || []).map((b) => {
-      const projectedSegments = b.segments?.map(seg =>
-        seg.map(([raDeg, dec]) => proj([raDeg, dec]) as [number, number])
-      );
-      let labelP: [number, number] | null = null;
-      if (b.label && typeof b.label.ra_deg === 'number' && typeof b.label.dec === 'number') {
-        labelP = proj([-b.label.ra_deg, b.label.dec]) as [number, number];
-      }
-      return { ...b, __projectedSegments: projectedSegments, __labelProjected: labelP } as Boundary;
-    });
-  });
 
-  projectedConstellationLines = computed(() => {
-    const proj = this.projection();
-    return (this.constellationLinesData().boundaries || []).map(b => {
-      const projectedSegments = b.segments?.map(seg =>
-        seg.map(([raDeg, dec]) => proj([raDeg, dec]) as [number, number])
-      );
-      let labelP: [number, number] | null = null;
-      if (b.label) labelP = proj([b.label.ra_deg, b.label.dec]) as [number, number];
-      return { ...b, __projectedSegments: projectedSegments, __labelProjected: labelP } as Boundary;
+
+projectedConstellationLines = computed(() => {
+  const proj = this.projection();
+  const name = this.projectionName();
+  return (this.constellationLinesData().boundaries || []).map(b => {
+    const projectedSegments = b.segments?.flatMap(seg => {
+      const lonlat = seg.map(([raDeg, dec]) => [raDeg, dec] as [number, number]);
+      const cut = cutOnAntimeridian(lonlat, name);
+      return projectSegments(cut, proj);
     });
+
+    let labelP: [number, number] | null = null;
+    if (b.label) {
+      const llon = ((b.label.ra_deg + 180) % 360 + 360) % 360 - 180;
+      labelP = proj([llon, b.label.dec]) as [number, number];
+    }
+    return { ...b, __projectedSegments: projectedSegments, __labelProjected: labelP } as Boundary;
   });
+});
+
+
+
+projectedAsterisms = computed(() => {
+  const proj = this.projection();
+  const name = this.projectionName();
+  return (this.asterismsData().boundaries || []).map((b) => {
+    const projectedSegments = b.segments?.flatMap(seg => {
+      const lonlat = seg.map(([raDeg, dec]) => [raDeg, dec] as [number, number]);
+      const cut = cutOnAntimeridian(lonlat, name);
+      return projectSegments(cut, proj);
+    });
+
+    let labelP: [number, number] | null = null;
+    if (b.label) {
+      const llon = ((b.label.ra_deg + 180) % 360 + 360) % 360 - 180;
+      labelP = proj([llon, b.label.dec]) as [number, number];
+    }
+    return { ...b, __projectedSegments: projectedSegments, __labelProjected: labelP } as Boundary;
+  });
+});
+
 
   ngOnInit(): void {
     this.loadDefaults();

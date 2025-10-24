@@ -2,11 +2,29 @@
   <div class="space-y-4">
     <section class="border rounded-xl p-3">
       <h2 class="font-semibold text-lg mb-2">Rzut i wymiary</h2>
-      <div class="grid grid-cols-3 gap-2 mb-3">
-        <button class="btn" [class.active]="projectionName()==='stereographic'" (click)="projectionName.set('stereographic')">Stereograficzny</button>
-        <button class="btn" [class.active]="projectionName()==='azimuthal'" (click)="projectionName.set('azimuthal')">Azymutalny</button>
-        <button class="btn" [class.active]="projectionName()==='equirect'" (click)="projectionName.set('equirect')">Równikowy</button>
-      </div>
+   <div class="grid grid-cols-3 gap-2 mb-3">
+  <button class="btn" [class.active]="projectionName()==='stereographic'"
+          (click)="projectionName.set('stereographic')">Stereograficzny</button>
+
+  <button class="btn" [class.active]="projectionName()==='azimuthal'"
+          (click)="projectionName.set('azimuthal')">Azymutalny (równoodleg.)</button>
+
+  <button class="btn" [class.active]="projectionName()==='azimuthalEA'"
+          (click)="projectionName.set('azimuthalEA')">Azymutalny (równo-pow.)</button>
+
+  <button class="btn" [class.active]="projectionName()==='orthographic'"
+          (click)="projectionName.set('orthographic')">Ortograficzny</button>
+
+  <button class="btn" [class.active]="projectionName()==='gnomonic'"
+          (click)="projectionName.set('gnomonic')">Gnomoniczny</button>
+
+  <button class="btn" [class.active]="projectionName()==='equirect'"
+          (click)="projectionName.set('equirect')">Równikowy</button>
+
+  <button class="btn" [class.active]="projectionName()==='mercator'"
+          (click)="projectionName.set('mercator')">Mercatora</button>
+</div>
+
       <div class="grid grid-cols-2 gap-2">
         <label class="flex items-center gap-2">Szerokość
           <input type="number" class="input" [value]="width()" (input)="width.set($any($event.target).valueAsNumber)" />
