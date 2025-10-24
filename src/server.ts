@@ -1,12 +1,9 @@
-import {
-  AngularNodeAppEngine,
-  createNodeRequestHandler,
-  isMainModule,
-  writeResponseToNodeResponse,
-} from '@angular/ssr/node';
+// server.ts
+import { AngularNodeAppEngine, createNodeRequestHandler, isMainModule, writeResponseToNodeResponse } from '@angular/ssr/node';
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Readable } from 'node:stream'; // <-- DODAJ
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -14,53 +11,42 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/**', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+/** PROXY HYG CSV */
+app.get('/api/hyg.csv', async (req, res, next) => {
+  try {
+    const upstream = 'https://raw.githubusercontent.com/astronexus/HYG-Database/master/hygdata_v3.csv';
+    const r = await fetch(upstream, { headers: { Accept: 'text/plain' } });
 
-/**
- * Serve static files from /browser
- */
-app.use(
-  express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: false,
-    redirect: false,
-  }),
-);
+    if (!r.ok || !r.body) {
+      const txt = await r.text().catch(() => '');
+      res.status(r.status).type('text/plain; charset=utf-8').send(txt || `Upstream error: ${r.status}`);
+      return;
+    }
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+
+    // Node 18+: przekonwertuj Web ReadableStream -> Node Readable i pipuj do Express res
+    Readable.fromWeb(r.body as any).pipe(res);
+  } catch (e) {
+    next(e);
+  }
+});
+
+/** Statyki z /browser */
+app.use(express.static(browserDistFolder, { maxAge: '1y', index: false, redirect: false }));
+
+/** SSR */
 app.use('/**', (req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 
-/**
- * Start the server if this module is the main entry point.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
- */
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
+  app.listen(port, () => console.log(`Node Express server listening on http://localhost:${port}`));
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
 export const reqHandler = createNodeRequestHandler(app);
