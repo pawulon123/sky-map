@@ -22,17 +22,13 @@
         <label class="row"><input type="checkbox" [checked]="showStars()" (change)="showStars.set($any($event.target).checked)"> Gwiazdy</label>
         <label class="row"><input type="checkbox" [checked]="showBoundaries()" (change)="showBoundaries.set($any($event.target).checked)"> Granice IAU</label>
         <label class="row"><input type="checkbox" [checked]="showGrid()" (change)="showGrid.set($any($event.target).checked)"> Siatka RA/DEC</label>
-        <label class="row"><input type="checkbox" [checked]="showStarLabels()" (change)="showStarLabels.set($any($event.target).checked)"> Etykiety gwiazd</label>
-        <label class="row"><input type="checkbox" [checked]="showConstLabels()" (change)="showConstLabels.set($any($event.target).checked)"> Nazwy gwiazdozbiorów</label>
-        
+      
         <label class="row">
             <input type="checkbox" [checked]="showAsterisms()" (change)="showAsterisms.set($any($event.target).checked)">
              Asteryzmy
         </label>
 
-        <label class="row">Rozmiar etykiet
-          <input type="range" min="8" max="24" step="1" [value]="labelSize()" (input)="labelSize.set($any($event.target).valueAsNumber)"> {{labelSize()}} px
-        </label>
+   
        <div class="mt-2 space-y-2">
   <label class="row">
     Maks. magnitudo (≤)
@@ -65,15 +61,7 @@
   Załaduj linie gwiazdozbiorów (d3-celestial)
 </button>
 
-        <p class="muted">Źródło: d3-celestial CDN (stars.6.json, constellations.bounds.json)</p>
-        <div class="mt-2 space-y-2">
-          <label class="col">Wczytaj gwiazdy (JSON)
-            <input type="file" accept="application/json" (change)="onImportJSON($event, 'stars')">
-          </label>
-          <label class="col">Wczytaj granice IAU (JSON)
-            <input type="file" accept="application/json" (change)="onImportJSON($event, 'bounds')">
-          </label>
-        </div>
+
       </section>
 
       <div class="flex gap-2">
@@ -137,18 +125,6 @@
 
 
 
-
-        <g *ngIf="showStarLabels()" [attr.font-size]="labelSize()" font-family="ui-sans-serif, system-ui" fill="#000">
-          <ng-container *ngFor="let s of projectedStars()">
-            <text *ngIf="s.__projected && s.name" [attr.x]="s.__projected![0] + starRadius(s) + 2" [attr.y]="s.__projected![1] - starRadius(s) - 2">{{s.name}}</text>
-          </ng-container>
-        </g>
-
-        <g *ngIf="showConstLabels()" [attr.font-size]="labelSize()" font-family="ui-sans-serif, system-ui" fill="#000">
-          <ng-container *ngFor="let b of projectedBoundaries()">
-            <text *ngIf="b.__labelProjected" [attr.x]="b.__labelProjected![0]" [attr.y]="b.__labelProjected![1]" text-anchor="middle">{{b.name || b.abbrev}}</text>
-          </ng-container>
-        </g>
-      </svg>
+      </svg> 
     </div>
   </div>
