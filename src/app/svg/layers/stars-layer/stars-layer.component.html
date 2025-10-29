@@ -1,0 +1,22 @@
+<ng-container *ngIf="show()">
+
+  
+  <svg:g >
+   
+    <ng-container *ngFor="let s of stars()">
+      <circle *ngIf="s.__projected"
+              [attr.cx]="s.__projected[0]"
+              [attr.cy]="s.__projected[1]"
+              [attr.r]="radius(s)"
+              fill="#85f"></circle>
+
+      <text *ngIf="showLabels() && s.__projected && s.name"
+            [attr.x]="labelX(s)"
+            [attr.y]="labelY(s)"
+            text-anchor="middle"
+            font-size="12">
+        {{ s.name }}
+      </text>
+    </ng-container>
+  </svg:g>
+</ng-container>

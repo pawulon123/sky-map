@@ -37,7 +37,7 @@ interface Boundary {
 interface BoundariesData { meta?: any; boundaries: Boundary[]; }
 
 const D3C_BASE = 'https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data';
-const ASSETS_STARS_JSON = 'hyg-stars.json'; // ← Twój plik JSON w /src/assets/…
+const ASSETS_STARS_JSON = ''; // ← Twój plik JSON w /src/assets/…
 
 async function fetchJSON<T = any>(url: string): Promise<T> {
   const res = await fetch(url, { cache: 'no-store' });
