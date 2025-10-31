@@ -1,5 +1,4 @@
-<!-- <app-sky-map></app-sky-map> -->
- <div class="p-4 grid gap-4 md:grid-cols-[320px_1fr]">
+<div class="p-4 grid gap-4 md:grid-cols-[320px_1fr]">
   <!-- Panel -->
   <div class="space-y-4">
     <section class="border rounded-xl p-3">
@@ -16,37 +15,42 @@
       </div>
 
       <div class="grid grid-cols-2 gap-2">
-        <label class="flex items-center gap-2">Szerokość
-          <input type="number" class="input"
-       [value]="width()"
-       (input)="setSize(($any($event.target).valueAsNumber)||1200, height())" />
+        <label class="flex items-center gap-2">
+          Szerokość
+          <input
+            type="number"
+            class="input"
+            [value]="width()"
+            (input)="setSize(($any($event.target).valueAsNumber)||1200, height())"
+          />
         </label>
-        <label class="flex items-center gap-2">Wysokość
-         <input type="number" class="input"
-       [value]="height()"
-       (input)="setSize(width(), ($any($event.target).valueAsNumber)||1200)" />
+
+        <label class="flex items-center gap-2">
+          Wysokość
+          <input
+            type="number"
+            class="input"
+            [value]="height()"
+            (input)="setSize(width(), ($any($event.target).valueAsNumber)||1200)"
+          />
         </label>
       </div>
     </section>
   </div>
 
-  <!-- SVG -->
+  <!-- SVG preview -->
   <div class="border rounded-xl overflow-auto p-2">
-
-<!-- fragment src/app/app.component.html -->
-<app-root-svg
-  [width]="width()"
-  [height]="height()"
-  [showStars]="showStars()"
-  [showBoundaries]="showBoundaries()"
-  [showGrid]="showGrid()"
-  [showAsterisms]="showAsterisms()"
-  [showConstellationLines]="showConstellationLines()"
-  [showLabels]="showLabels()"
-  [maxIntensity]="maxMag()">
-</app-root-svg>
-
-
-
+    <app-root-svg
+      [width]="width()"
+      [height]="height()"
+      [showStars]="showStars"
+      [showBoundaries]="showBoundaries"
+      [showGrid]="showGrid"
+      [showAsterisms]="showAsterisms"
+      [showConstellationLines]="showConstellationLines"
+      [showLabels]="showLabels"
+      [maxIntensity]="maxMag"
+    >
+    </app-root-svg>
   </div>
 </div>

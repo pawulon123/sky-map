@@ -1,6 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RootSvgComponent } from './svg/root-svg/root-svg.component';
+import { ProjectionService } from './services/projection.service';
+import { StarsService } from './services/stars.service';
 
 @Component({
   selector: 'app-root',
@@ -9,18 +11,49 @@ import { RootSvgComponent } from './svg/root-svg/root-svg.component';
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  width = signal(1200);
-  height = signal(1200);
-  projectionName = signal<'stereographic'|'azimuthal'|'azimuthalEA'|'orthographic'|'gnomonic'|'mercator'|'equirect'>('stereographic');
+  private proj = inject(ProjectionService);
+  private starsSvc = inject(StarsService);
 
-  showStars = signal(true);
-  showBoundaries = signal(true);
-  showGrid = signal(true);
-  showAsterisms = signal(true);
-  showConstellationLines = signal(true);
-  showLabels = signal(false);
-  maxMag = signal<number | null>(2.5);
+  // UI toggles
+  showStars = true;
+  showBoundaries = true;
+  showGrid = true;
+  showAsterisms = true;
+  showConstellationLines = true;
+  showLabels = true;
+  maxMag: number | null = 6.5;
 
-  setProjection(name: any) { this.projectionName.set(name); }
-  setSize(w: number, h: number) { this.width.set(w); this.height.set(h); }
+  // start values
+  private startWidth  = 1200;
+  private startHeight = 1200;
+  private startProj: 'stereographic'|'azimuthal'|'azimuthalEA'|'orthographic'|'gnomonic'|'mercator'|'equirect'
+    = 'stereographic';
+
+  constructor() {
+    // 1. Ustaw projekcję i rozmiar w ProjectionService
+    this.proj.setSize(this.startWidth, this.startHeight);
+    this.proj.setName(this.startProj);
+
+    // 2. Załaduj gwiazdy i zrób pierwszą reprojekcję
+    (async () => {
+      await this.starsSvc.loadOnce();
+      this.proj.reprojectStars(this.starsSvc);
+    })();
+  }
+
+  // helpers dla template
+  width()  { return this.proj.width(); }
+  height() { return this.proj.height(); }
+
+  // UI action: zmiana projekcji (przyciski)
+  setProjection(name: any) {
+    this.proj.setName(name);
+    this.proj.reprojectStars(this.starsSvc);
+  }
+
+  // UI action: zmiana rozmiaru (inputy width/height)
+  setSize(w: number, h: number) {
+    this.proj.setSize(w, h);
+    this.proj.reprojectStars(this.starsSvc);
+  }
 }

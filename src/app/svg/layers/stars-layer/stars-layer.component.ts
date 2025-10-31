@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, inject, effect } from '@angular/core';
+import { Component, computed, input, inject } from '@angular/core';
 import { ProjectionService } from '../../../services/projection.service';
 import { StarsService } from '../../../services/stars.service';
 import { Star } from '../../../domain/stars/star.model';
 import { StarLabelsLayerComponent } from '../star-labels-layer/star-labels-layer.component';
-
-
 
 @Component({
   selector: 'g[app-stars-layer]',
@@ -21,24 +19,21 @@ export class StarsLayerComponent {
   show        = input<boolean>(true);
   maxMag      = input<number | null>(null);
   showLabels  = input<boolean>(true);
-  labelMaxMag = input<number>(2.0); // <- przekazujemy dalej
+  labelMaxMag = input<number>(2.0);
 
-  private _sync = effect(async () => {
-    await this.svc.loadOnce();
-    const projFn = (lon: number, lat: number) => this.proj.projectRaDec(lon, lat);
-    const w = this.proj.width();
-    this.svc.updateProjection(projFn, w);
-  });
-
+  // dane gotowe do rysowania (po reprojectStars w AppComponent)
   stars = computed<Star[]>(() => {
     const all = this.svc.data().stars ?? [];
 
+    // pokazuj tylko gwiazdy które mają wyliczone __projected = [x,y]
     let visible = all.filter(s => Array.isArray(s.__projected));
+
     const limit = this.maxMag();
     if (limit != null) {
       visible = visible.filter(s => s.mag == null || s.mag <= limit);
     }
 
+    // sort wg jasności
     return [...visible].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
   });
 
@@ -53,6 +48,7 @@ export class StarsLayerComponent {
     const p = s.__projected ?? [0, 0];
     return p[0];
   }
+
   starCy(s: Star): number {
     const p = s.__projected ?? [0, 0];
     return p[1];

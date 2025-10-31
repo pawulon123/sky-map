@@ -75,53 +75,36 @@ export class StarsService {
    *  2. odbijamy w poziomie: xMirrored = widthPx - x
    *  3. zapisujemy do s.__projected = [xMirrored, y]
    */
+
 updateProjection(
   projectFn: (lonDeg: number, latDeg: number) => [number, number] | null,
   widthPx: number,
   options?: { mirrorX?: boolean }
 ) {
-  const mirrorX = options?.mirrorX ?? true; // domyślnie odbijamy w poziomie
+  const mirrorX = options?.mirrorX ?? true;
   const prev = this._data();
 
-  let projectedCount = 0;
-
   const starsUpdated = prev.stars.map(orig => {
-    // wyciągamy współrzędne równikowe
     const raDeg  = orig.ra_deg;
     const decDeg = orig.dec;
 
-    // jeżeli brak współrzędnych → nie rysujemy
     if (
       raDeg == null ||
       decDeg == null ||
       !Number.isFinite(raDeg) ||
       !Number.isFinite(decDeg)
     ) {
-      return {
-        ...orig,
-        __projected: null as [number, number] | null
-      };
+      return { ...orig, __projected: null };
     }
 
-    // rzut na płaszczyznę (np. equirectangular, stereographic, itp.)
     const p = projectFn(raDeg, decDeg);
 
     if (!p) {
-      // projectFn uznał że ten punkt jest poza zakresem widoku (np. druga półsfera)
-      return {
-        ...orig,
-        __projected: null as [number, number] | null
-      };
+      return { ...orig, __projected: null };
     }
 
     let [x, y] = p;
-
-    // odbicie lustrzane w osi pionowej, jeżeli chcemy RA "jak na niebie"
-    if (mirrorX) {
-      x = widthPx - x;
-    }
-
-    projectedCount++;
+    if (mirrorX) x = widthPx - x;
 
     return {
       ...orig,
@@ -129,13 +112,10 @@ updateProjection(
     };
   });
 
-  // zapisujemy nowe dane (nowa referencja tablicy i nowych obiektów)
   this._data.set({
     ...prev,
     stars: starsUpdated
   });
-
-
 }
 
 

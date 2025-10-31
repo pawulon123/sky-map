@@ -10,24 +10,36 @@ import { AsterismsLayerComponent } from '../layers/asterisms-layer/asterisms-lay
 @Component({
   selector: 'app-root-svg',
   standalone: true,
-  imports: [CommonModule,ConstellationLinesLayerComponent, StarsLayerComponent, BoundariesLayerComponent, AsterismsLayerComponent],
+  imports: [
+    CommonModule,
+    ConstellationLinesLayerComponent,
+    StarsLayerComponent,
+    BoundariesLayerComponent,
+    AsterismsLayerComponent
+  ],
   templateUrl: './root-svg.component.html'
 })
 export class RootSvgComponent {
   private proj = inject(ProjectionService);
 
-  // ← zwykłe @Input (nie sygnały)
+  // Rozmiar <svg> nadal kontrolujemy przez @Input,
+  // ale ProjectionService i tak ma własne wymiary do liczenia projekcji.
+  // To jest ok. Daje nam elastyczność.
   @Input() width  = 1200;
   @Input() height = 1200;
 
+  // Widoczność warstw / opcje UI
   @Input() showGrid = true;
   @Input() showStars = true;
   @Input() showBoundaries = true;
   @Input() showAsterisms = true;
   @Input() showConstellationLines = true;
   @Input() showLabels = true;
+
+  // maxIntensity = maxMag (limit jasności)
   @Input() maxIntensity: number | null = null;
 
+  // Ścieżki sfery i siatki z ProjectionService (reagują na rzut!)
   spherePath = computed(() => this.proj.spherePath());
   graticulePath = computed(() => this.proj.graticulePath());
 }
