@@ -25,7 +25,7 @@ export class RootSvgComponent {
   @Input() showBoundaries = true;
   @Input() showAsterisms = true;
   @Input() showConstellationLines = true;
-  @Input() showLabels = false;
+  @Input() showLabels = true;
   @Input() maxIntensity: number | null = null;
 
   spherePath = computed(() => this.proj.spherePath());

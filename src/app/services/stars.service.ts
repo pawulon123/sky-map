@@ -33,7 +33,7 @@ export class StarsService {
     const meta            = Array.isArray(json) ? { source: 'assets' } : (json.meta ?? {});
 
     // Normalizacja pól - dbamy o ra_deg (w stopniach), dec (w stopniach), mag
-    const stars: Star[] = starsRaw.map(raw => {
+    const stars: Star[] = starsRaw.map((raw):any => {
       // RA:
       // - jeśli mamy ra_deg (0..360) to bierzemy
       // - jeśli mamy ra (0..24h) to mnożymy razy 15
@@ -54,6 +54,7 @@ export class StarsService {
         ra_deg: raDeg,
         dec: decDeg,
         mag: magVal,
+        name:  raw.name ,
         __projected: null
       };
 
@@ -134,13 +135,7 @@ updateProjection(
     stars: starsUpdated
   });
 
-  // pomocniczy log diagnostyczny:
-  console.log(
-    '[StarsService.updateProjection] raw:',
-    prev.stars.length,
-    ' -> projected:',
-    projectedCount
-  );
+
 }
 
 

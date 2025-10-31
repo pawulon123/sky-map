@@ -1,0 +1,16 @@
+.star-label {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  fill: #e49696;
+
+  stroke: #000;
+  stroke-width: 2px;
+  paint-order: stroke fill;
+
+  dominant-baseline: middle;
+  text-anchor: start;
+
+  pointer-events: none;
+  user-select: none;
+}
