@@ -2,9 +2,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID, signal, computed } from '@angular/core';
 import { Star } from '../domain/stars/star.model';
 
-
 export interface StarsData { meta?: any; stars: Star[]; }
-// Uwaga: absolutna ścieżka do assets
+
 const ASSETS_STARS_JSON = 'hyg-stars.json';
 
 @Injectable({ providedIn: 'root' })
@@ -14,15 +13,13 @@ export class StarsService {
   private _loaded = signal(false);
   private _data   = signal<StarsData>({ meta: {}, stars: [] });
 
-  /** Publiczne „snapshociki” (zgodnie z Twoim stylem) */
   data()   { return this._data(); }
   loaded() { return this._loaded(); }
 
-  /** Publiczny widok: przeliczone gwiazdy (Signal) + alias-funkcja */
+  /** Gwiazdy po najnowszej projekcji (każda ma __projected = [x,y] GOTOWE DO RYSOWANIA W SVG) */
   readonly projected = computed(() => this._data().stars);
   projectedStars() { return this.projected(); }
 
-  /** Jednorazowy load z assets (tylko w przeglądarce) */
   async loadOnce() {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this._loaded()) return;
@@ -31,32 +28,122 @@ export class StarsService {
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${ASSETS_STARS_JSON}`);
     const json = await res.json();
 
-    const stars: Star[] = Array.isArray(json) ? json : (json.stars ?? []);
-    const meta          = Array.isArray(json) ? { source: 'assets' } : (json.meta ?? {});
+    // json może być tablicą gwiazd albo obiektem { stars: [...] }
+    const starsRaw: any[] = Array.isArray(json) ? json : (json.stars ?? []);
+    const meta            = Array.isArray(json) ? { source: 'assets' } : (json.meta ?? {});
 
-    // Uzupełnij ra_deg, jeśli jest tylko ra (w godzinach)
-    for (const s of stars) {
-      if (s.ra_deg == null && typeof s.ra === 'number') s.ra_deg = s.ra * 15;
-      // zapewnij pole pod projekcję
-      (s as any).__projected = null as [number, number] | null;
-    }
+    // Normalizacja pól - dbamy o ra_deg (w stopniach), dec (w stopniach), mag
+    const stars: Star[] = starsRaw.map(raw => {
+      // RA:
+      // - jeśli mamy ra_deg (0..360) to bierzemy
+      // - jeśli mamy ra (0..24h) to mnożymy razy 15
+      let raDeg: number | undefined = raw.ra_deg;
+      if (raDeg == null && typeof raw.ra === 'number') {
+        raDeg = raw.ra * 15;
+      }
+
+      // Dec:
+      const decDeg: number | undefined = raw.dec_deg ?? raw.dec;
+
+      // Mag:
+      const magVal: number | undefined = raw.mag ?? raw.vmag ?? raw.bt;
+
+      // Zwracamy nowy obiekt typu Star (plus nasze techniczne pole __projected)
+      const s: Star = {
+        ...raw,
+        ra_deg: raDeg,
+        dec: decDeg,
+        mag: magVal,
+        __projected: null
+      };
+
+      return s;
+    });
 
     this._data.set({ meta, stars });
     this._loaded.set(true);
   }
 
-  /** Przeliczenie [ra°,dec] -> [x,y] i zapis do __projected */
-updateProjection(project: (lonDeg: number, latDeg: number) => [number, number] | null) {
-  const d = this._data();
-  const stars = d.stars.map(s => {
-    if (s.ra_deg != null && s.dec != null) {
-      const p = project(s.ra_deg, s.dec);
-      s.__projected = p ? [p[0], p[1]] as [number, number] : null;
-    } else {
-      s.__projected = null;
+  /**
+   * Przeliczenie pozycji na ekran.
+   * projectFn: (lonDeg, latDeg) => [x, y] | null  // Twoja projekcja RA/Dec -> piksele (bez lustra)
+   * widthPx: szerokość aktualnego SVG w pikselach (potrzebne żeby odbić w poziomie)
+   *
+   * Robimy tu dwa kroki:
+   *  1. bierzemy [x,y] z projectFn
+   *  2. odbijamy w poziomie: xMirrored = widthPx - x
+   *  3. zapisujemy do s.__projected = [xMirrored, y]
+   */
+updateProjection(
+  projectFn: (lonDeg: number, latDeg: number) => [number, number] | null,
+  widthPx: number,
+  options?: { mirrorX?: boolean }
+) {
+  const mirrorX = options?.mirrorX ?? true; // domyślnie odbijamy w poziomie
+  const prev = this._data();
+
+  let projectedCount = 0;
+
+  const starsUpdated = prev.stars.map(orig => {
+    // wyciągamy współrzędne równikowe
+    const raDeg  = orig.ra_deg;
+    const decDeg = orig.dec;
+
+    // jeżeli brak współrzędnych → nie rysujemy
+    if (
+      raDeg == null ||
+      decDeg == null ||
+      !Number.isFinite(raDeg) ||
+      !Number.isFinite(decDeg)
+    ) {
+      return {
+        ...orig,
+        __projected: null as [number, number] | null
+      };
     }
-    return s;
+
+    // rzut na płaszczyznę (np. equirectangular, stereographic, itp.)
+    const p = projectFn(raDeg, decDeg);
+
+    if (!p) {
+      // projectFn uznał że ten punkt jest poza zakresem widoku (np. druga półsfera)
+      return {
+        ...orig,
+        __projected: null as [number, number] | null
+      };
+    }
+
+    let [x, y] = p;
+
+    // odbicie lustrzane w osi pionowej, jeżeli chcemy RA "jak na niebie"
+    if (mirrorX) {
+      x = widthPx - x;
+    }
+
+    projectedCount++;
+
+    return {
+      ...orig,
+      __projected: [x, y] as [number, number]
+    };
   });
-  this._data.set({ ...d, stars });
+
+  // zapisujemy nowe dane (nowa referencja tablicy i nowych obiektów)
+  this._data.set({
+    ...prev,
+    stars: starsUpdated
+  });
+
+  // pomocniczy log diagnostyczny:
+  console.log(
+    '[StarsService.updateProjection] raw:',
+    prev.stars.length,
+    ' -> projected:',
+    projectedCount
+  );
 }
+
+
+
+  
 }

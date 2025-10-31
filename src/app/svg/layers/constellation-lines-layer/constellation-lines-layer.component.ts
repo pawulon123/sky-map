@@ -64,6 +64,7 @@ export class ConstellationLinesLayerComponent implements OnInit {
         }
       }
     }
+    
     return out;
   });
 }

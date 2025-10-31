@@ -21,21 +21,48 @@ export class BoundariesService {
   private _data = signal<BoundariesData>({ meta: {}, boundaries: [] });
   data = this._data.asReadonly();
 
-  private lonToRa(lon: number) { return ((-lon % 360) + 360) % 360; }
+private lonToRa(lon: number) {
+  // normalizuj lon do [0,360)
+  // bez negacji -lon
+  const ra = ((lon % 360) + 360) % 360;
+  return ra;
+}
 
-  private featureToSegments(feat: any): [number, number][][] {
-    const g = feat?.geometry || {};
-    const toRaDec = ([lon, lat]: [number, number]) => [this.lonToRa(lon), lat] as [number, number];
 
-    if (g.type === 'LineString')        return [ (g.coordinates as [number,number][]) .map(toRaDec) ];
-    if (g.type === 'MultiLineString')   return (g.coordinates as [number,number][][]).map(seg => seg.map(toRaDec));
-    if (g.type === 'Polygon')           return (g.coordinates?.[0]?.length ? [ g.coordinates[0].map(toRaDec) ] : []);
-    if (g.type === 'MultiPolygon') {
-      const polys = g.coordinates as [number,number][][][];
-      return polys.map(poly => (poly?.[0] || []).map(toRaDec)).filter(seg => seg.length);
-    }
-    return [];
+
+private featureToSegments(feat: any): [number, number][][] {
+  const g = feat?.geometry || {};
+
+  // teraz toRaDec NIE odwraca znaku
+  const toRaDec = ([lon, lat]: [number, number]) =>
+    [this.lonToRa(lon), lat] as [number, number];
+
+  if (g.type === 'LineString') {
+    return [ (g.coordinates as [number,number][]) .map(toRaDec) ];
   }
+
+  if (g.type === 'MultiLineString') {
+    return (g.coordinates as [number,number][][])
+      .map(seg => seg.map(toRaDec));
+  }
+
+  if (g.type === 'Polygon') {
+    return (g.coordinates?.[0]?.length
+      ? [ g.coordinates[0].map(toRaDec) ]
+      : []
+    );
+  }
+
+  if (g.type === 'MultiPolygon') {
+    const polys = g.coordinates as [number,number][][][];
+    return polys
+      .map(poly => (poly?.[0] || []).map(toRaDec))
+      .filter(seg => seg.length);
+  }
+
+  return [];
+}
+
 
   async loadOnce() {
     if (!isPlatformBrowser(this.platformId) || this._loaded()) return;

@@ -10,7 +10,7 @@ import { AsterismsLayerComponent } from '../layers/asterisms-layer/asterisms-lay
 @Component({
   selector: 'app-root-svg',
   standalone: true,
-  imports: [CommonModule, StarsLayerComponent, BoundariesLayerComponent, ConstellationLinesLayerComponent, AsterismsLayerComponent],
+  imports: [CommonModule,ConstellationLinesLayerComponent, StarsLayerComponent, BoundariesLayerComponent, AsterismsLayerComponent],
   templateUrl: './root-svg.component.html'
 })
 export class RootSvgComponent {

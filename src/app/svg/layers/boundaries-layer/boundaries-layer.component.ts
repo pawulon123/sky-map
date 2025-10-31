@@ -3,91 +3,115 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { BoundariesService } from '../../../services/boundaries.service';
 import { ProjectionService } from '../../../services/projection.service';
 
-
-type ProjectionName = 'stereographic'|'azimuthal'|'azimuthalEA'|'orthographic'|'gnomonic'|'mercator'|'equirect';
-
 @Component({
   selector: 'g[app-boundaries-layer]',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <svg:g id="layer-boundaries">
-      <ng-container *ngFor="let d of paths()">
-        <path [attr.d]="d" stroke="#000" stroke-width="0.6" fill="none"></path>
-      </ng-container>
-    </svg:g>
-  `,
+  templateUrl: 'boundaries-layer.component.html',
 })
 export class BoundariesLayerComponent implements OnInit {
-  private svc = inject(BoundariesService);
-  private proj: ProjectionService  = inject(ProjectionService);
+  private svc  = inject(BoundariesService);
+  private proj = inject(ProjectionService);
 
-  ngOnInit() { this.svc.loadOnce(); }
+  ngOnInit() {
+    this.svc.loadOnce();
+  }
 
-  // --- helpers ---
-  private isRectangular(name: ProjectionName) {
-    return name === 'equirect' || name === 'mercator';
-  }
-  private raToLonForProj(name: ProjectionName, raDeg: number) {
-    // dla prostokątnych mapujemy RA [0..360) → lon [-180,180)
-    if (this.isRectangular(name)) {
-      const lon = ((raDeg + 180) % 360 + 360) % 360 - 180;
-      return lon;
-    }
-    // dla azymutalnych zostawiamy tak jak jest (pracujesz już „po właściwej stronie”)
-    return raDeg;
-  }
-  private splitByDateline(name: ProjectionName, seg: [number, number][]) {
-    // tnie po Δlon > 180° (po zamianie RA→lon)
+  // ★ nowa funkcja rozcinająca z interpolacją na meridianie RA
+  private splitAtWrapWithInterpolation(segRaDec: [number, number][]): [number, number][][] {
     const out: [number, number][][] = [];
     let cur: [number, number][] = [];
-    let prevLon: number | null = null;
+    if (segRaDec.length === 0) return out;
 
-    for (const [ra, dec] of seg) {
-      const lon = this.raToLonForProj(name, ra);
-      if (prevLon != null) {
-        const d = Math.abs(lon - prevLon);
-        if (d > 180) {
-          // zamknij poprzednią część
-          if (cur.length) out.push(cur);
-          cur = [];
-        }
+    const norm360 = (ra: number) => ((ra % 360) + 360) % 360;
+
+    let [prevRaRaw, prevDec] = segRaDec[0];
+    let prevRa = norm360(prevRaRaw);
+    cur.push([prevRa, prevDec]);
+
+    for (let i = 1; i < segRaDec.length; i++) {
+      const [rawRa, dec] = segRaDec[i];
+      let ra = norm360(rawRa);
+
+      const needsWrapBreak = Math.abs(rawRa - prevRaRaw) > 180;
+
+      if (needsWrapBreak) {
+        // określ, czy przeszliśmy 360→0 czy 0→360
+        const wrapDown = prevRaRaw > rawRa; // 360 -> 0
+
+        const raBoundaryA = wrapDown ? 360 : 0;
+        const raBoundaryB = wrapDown ? 0   : 360;
+
+        const totalSpan = (rawRa - prevRaRaw);
+        const boundarySpan = (wrapDown ? raBoundaryA : raBoundaryA) - prevRaRaw;
+        const t = totalSpan === 0 ? 0 : boundarySpan / totalSpan;
+        const decInterp = prevDec + t * (dec - prevDec);
+
+        const boundaryPointA: [number, number] = [norm360(raBoundaryA), decInterp];
+        const boundaryPointB: [number, number] = [norm360(raBoundaryB), decInterp];
+
+        // zamknij bieżący fragment
+        cur.push(boundaryPointA);
+        out.push(cur);
+
+        // zacznij nowy fragment
+        cur = [boundaryPointB, [ra, dec]];
+      } else {
+        cur.push([ra, dec]);
       }
-      cur.push([lon, dec]);
-      prevLon = lon;
+
+      prevRaRaw = rawRa;
+      prevDec   = dec;
+      prevRa    = ra;
     }
-    if (cur.length) out.push(cur);
+
+    if (cur.length > 1) {
+      out.push(cur);
+    }
+
     return out;
   }
-  private makePath(pts: [number, number][]): string {
-    if (pts.length === 0) return '';
-    const xy = pts
-      .map(([lon, dec]) => this.proj.projectLonLat(lon, dec))
-      .filter(Boolean) as [number, number][];
-    if (!xy.length) return '';
-    // Szybciej niż d3.line dla prostych segmentów:
+
+  private projectRaDecToScreen(raDeg: number, decDeg: number): [number, number] | null {
+    const base = this.proj.projectRaDec(raDeg, decDeg);
+    if (!base) return null;
+    const w = this.proj.width();
+    let [x, y] = base;
+    x = w - x;
+    return [x, y];
+  }
+
+  private segmentToPath(segRaDec: [number, number][]): string {
+    const xy: [number, number][] = [];
+    for (const [ra, dec] of segRaDec) {
+      const p = this.projectRaDecToScreen(ra, dec);
+      if (p) xy.push(p);
+    }
+    if (xy.length < 2) return '';
     let d = `M${xy[0][0]},${xy[0][1]}`;
-    for (let i = 1; i < xy.length; i++) d += `L${xy[i][0]},${xy[i][1]}`;
+    for (let i = 1; i < xy.length; i++) {
+      d += `L${xy[i][0]},${xy[i][1]}`;
+    }
     return d;
   }
 
-  // --- ścieżki do rysowania ---
   paths = computed(() => {
-    const name = this.proj.name() as ProjectionName;
-    const all = this.svc.data().boundaries ?? [];
+    const allBoundaries = this.svc.data().boundaries ?? [];
     const out: string[] = [];
-    for (const b of all) {
-      const segs = b.segments ?? [];
-      for (const seg of segs) {
-        // 1) potnij przy ±180
-        const chunks = this.splitByDateline(name, seg);
-        // 2) przelicz na XY i złóż d
+
+    for (const boundary of allBoundaries) {
+      const segs = boundary.segments ?? [];
+      for (const segRaDec of segs) {
+        // ★ używamy nowego splitowania
+        const chunks = this.splitAtWrapWithInterpolation(segRaDec);
+
         for (const ch of chunks) {
-          const d = this.makePath(ch);
+          const d = this.segmentToPath(ch);
           if (d) out.push(d);
         }
       }
     }
+
     return out;
   });
 }
