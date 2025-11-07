@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, inject } from '@angular/core';
+import { Component, computed, input, inject, Input } from '@angular/core';
 import { ProjectionService } from '../../../services/projection.service';
 import { StarsService } from '../../../services/stars.service';
 import { Star } from '../../../domain/stars/star.model';
@@ -13,14 +13,15 @@ import { StarLabelsLayerComponent } from '../star-labels-layer/star-labels-layer
   styleUrls: ['./stars-layer.component.css']
 })
 export class StarsLayerComponent {
-  private proj = inject(ProjectionService);
+  // private proj = inject(ProjectionService);
   private svc  = inject(StarsService);
 
-  show        = input<boolean>(true);
+  // show        = input<boolean>(true);
   maxMag      = input<number | null>(null);
   showLabels  = input<boolean>(true);
   labelMaxMag = input<number>(2.0);
-
+  
+@Input() showStars = true
   // dane gotowe do rysowania (po reprojectStars w AppComponent)
   stars = computed<Star[]>(() => {
     const all = this.svc.data().stars ?? [];

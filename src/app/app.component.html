@@ -1,6 +1,8 @@
 <div class="p-4 grid gap-4 md:grid-cols-[320px_1fr]">
   <!-- Panel -->
   <div class="space-y-4">
+
+    <!-- Rzut i wymiary -->
     <section class="border rounded-xl p-3">
       <h2 class="font-semibold text-lg mb-2">Rzut i wymiary</h2>
 
@@ -33,6 +35,80 @@
             [value]="height()"
             (input)="setSize(width(), ($any($event.target).valueAsNumber)||1200)"
           />
+        </label>
+      </div>
+    </section>
+
+    <!-- Warstwy -->
+    <section class="border rounded-xl p-3">
+      <h2 class="font-semibold text-lg mb-2">Warstwy</h2>
+
+      <!-- Master checkbox -->
+      <label class="flex items-center gap-2 mb-2 font-medium">
+        <input
+          type="checkbox"
+          [checked]="allLayersOn()"
+          (change)="toggleAllLayers($any($event.target).checked)"
+        />
+        Wszystkie warstwy
+      </label>
+
+      <hr class="my-2" />
+
+      <!-- Pojedyncze warstwy -->
+      <div class="space-y-1 text-sm">
+        <label class="flex items-center gap-2">
+          <input
+            type="checkbox"
+            [checked]="showStars"
+            (change)="showStars = $any($event.target).checked"
+          />
+          Gwiazdy
+        </label>
+
+        <label class="flex items-center gap-2">
+          <input
+            type="checkbox"
+            [checked]="showBoundaries"
+            (change)="showBoundaries = $any($event.target).checked"
+          />
+          Granice konstelacji
+        </label>
+
+        <label class="flex items-center gap-2">
+          <input
+            type="checkbox"
+            [checked]="showGrid"
+            (change)="showGrid = $any($event.target).checked"
+          />
+          Siatka RA / Dec
+        </label>
+
+        <label class="flex items-center gap-2">
+          <input
+            type="checkbox"
+            [checked]="showAsterisms"
+            (change)="showAsterisms = $any($event.target).checked"
+          />
+          Asterizmy
+        </label>
+
+        <label class="flex items-center gap-2">
+          <input
+            type="checkbox"
+            [checked]="showConstellationLines"
+            (change)="showConstellationLines = $any($event.target).checked"
+          />
+          Linie konstelacji
+        </label>
+
+        <label class="flex items-center gap-2">
+          <input
+            type="checkbox"
+            [checked]="showLabels"
+            (change)="showLabels = $any($event.target).checked"
+          />
+          Etykiety / nazwy
         </label>
       </div>
     </section>

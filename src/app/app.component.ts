@@ -56,4 +56,28 @@ export class AppComponent {
     this.proj.setSize(w, h);
     this.proj.reprojectStars(this.starsSvc);
   }
+
+  // --- WARSTWY ---
+
+  /** Czy wszystkie warstwy są aktualnie włączone */
+  allLayersOn(): boolean {
+    return (
+      this.showStars &&
+      this.showBoundaries &&
+      this.showGrid &&
+      this.showAsterisms &&
+      this.showConstellationLines &&
+      this.showLabels
+    );
+  }
+
+  /** Włącz/wyłącz wszystkie warstwy jednym checkboxem */
+  toggleAllLayers(checked: boolean) {
+    this.showStars = checked;
+    this.showBoundaries = checked;
+    this.showGrid = checked;
+    this.showAsterisms = checked;
+    this.showConstellationLines = checked;
+    this.showLabels = checked;
+  }
 }

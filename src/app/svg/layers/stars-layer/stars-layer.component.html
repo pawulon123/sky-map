@@ -1,7 +1,10 @@
-<svg:g id="layer-stars" *ngIf="show()">
+<svg:g id="layer-stars" >
 
   <!-- punkty gwiazd -->
-  <ng-container *ngFor="let s of stars()">
+   <ng-container *ngIf="showStars">
+
+   
+  <ng-container  *ngFor="let s of stars()">
     <circle
       class="star-point"
       [attr.cx]="starCx(s)"
@@ -9,7 +12,7 @@
       [attr.r]="radius(s)"
     />
   </ng-container>
-
+</ng-container>
   <!-- warstwa etykiet gwiazd jako osobny komponent -->
 <g
   app-star-labels-layer
