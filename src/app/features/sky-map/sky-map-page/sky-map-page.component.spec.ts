@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SkyMapComponent } from './sky-map.component';
+import { SkyMapPageComponent } from './sky-map-page.component';
 
-describe('SkyMapComponent', () => {
-  let component: SkyMapComponent;
-  let fixture: ComponentFixture<SkyMapComponent>;
+describe('SkyMapPageComponent', () => {
+  let component: SkyMapPageComponent;
+  let fixture: ComponentFixture<SkyMapPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkyMapComponent]
+      imports: [SkyMapPageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SkyMapComponent);
+    fixture = TestBed.createComponent(SkyMapPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

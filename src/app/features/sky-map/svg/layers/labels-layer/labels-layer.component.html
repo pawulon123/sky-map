@@ -1,0 +1,10 @@
+<ng-container *ngFor="let s of labeledStars">
+  <svg:text
+    class="star-label"
+    [attr.x]="labelX(s)"
+    [attr.y]="labelY(s)"
+  >
+    {{ s.name }}
+  </svg:text>
+</ng-container>
+
