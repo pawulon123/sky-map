@@ -1,2 +1,1 @@
-export interface Asterism {
-}
+export interface Asterism {}

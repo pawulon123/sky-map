@@ -8,9 +8,8 @@ describe('RootSvgComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RootSvgComponent]
-    })
-    .compileComponents();
+      imports: [RootSvgComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RootSvgComponent);
     component = fixture.componentInstance;

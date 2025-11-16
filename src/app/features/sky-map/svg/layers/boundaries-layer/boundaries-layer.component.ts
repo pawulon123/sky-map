@@ -3,7 +3,6 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { BoundariesService } from '../../../domain/services/boundaries/boundaries.service';
 import { ProjectionService } from '../../../domain/services/projection/projection.service';
 
-
 @Component({
   selector: 'g[app-boundaries-layer]',
   standalone: true,
@@ -11,7 +10,7 @@ import { ProjectionService } from '../../../domain/services/projection/projectio
   templateUrl: 'boundaries-layer.component.html',
 })
 export class BoundariesLayerComponent implements OnInit {
-  private svc  = inject(BoundariesService);
+  private svc = inject(BoundariesService);
   private proj = inject(ProjectionService);
 
   ngOnInit() {
@@ -23,10 +22,10 @@ export class BoundariesLayerComponent implements OnInit {
    * jak robimy dla gwiazd.
    */
   private projectStarStyle(raDeg: number, decDeg: number): [number, number] | null {
-    const p = this.proj.projectRaDec(raDeg, decDeg);
+    const p = this.proj.getProjectionByLonLat(raDeg, decDeg);
     if (!p) return null;
 
-    const w = this.proj.width();
+    const w = this.proj.settings().width;
     let [x, y] = p;
     x = w - x; // RA rośnie w lewo, tak jak w warstwie gwiazd
     return [x, y];
@@ -45,10 +44,8 @@ export class BoundariesLayerComponent implements OnInit {
    * Robimy własne cięcie tam, gdzie następuje wrap przez brzeg mapy:
    * jeśli |x - prevX| > width * 0.5 → nowa pod-ścieżka.
    */
-  private segmentToScreenChunks(
-    segRaDec: [number, number][]
-  ): [number, number][][] {
-    const w = this.proj.width();
+  private segmentToScreenChunks(segRaDec: [number, number][]): [number, number][][] {
+    const w = this.proj.settings().width;
     const maxJump = w * 0.5;
 
     const chunks: [number, number][][] = [];

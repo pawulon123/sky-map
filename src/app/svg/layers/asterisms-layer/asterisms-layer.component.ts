@@ -3,8 +3,14 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { AsterismsService } from '../../../services/asterisms.service';
 import { ProjectionService } from '../../../services/projection.service';
 
-
-type ProjectionName = 'stereographic'|'azimuthal'|'azimuthalEA'|'orthographic'|'gnomonic'|'mercator'|'equirect';
+type ProjectionName =
+  | 'stereographic'
+  | 'azimuthal'
+  | 'azimuthalEA'
+  | 'orthographic'
+  | 'gnomonic'
+  | 'mercator'
+  | 'equirect';
 
 @Component({
   selector: 'g[app-asterisms-layer]',
@@ -22,11 +28,13 @@ export class AsterismsLayerComponent implements OnInit {
   private svc = inject(AsterismsService);
   private proj = inject(ProjectionService);
 
-  ngOnInit() { this.svc.loadOnce(); }
+  ngOnInit() {
+    this.svc.loadOnce();
+  }
 
   private isRectangular = (n: ProjectionName) => n === 'equirect' || n === 'mercator';
   private raToLonForProj(n: ProjectionName, ra: number) {
-    return this.isRectangular(n) ? (((ra + 180) % 360 + 360) % 360 - 180) : ra;
+    return this.isRectangular(n) ? ((((ra + 180) % 360) + 360) % 360) - 180 : ra;
   }
   private splitByDateline(n: ProjectionName, seg: [number, number][]) {
     const out: [number, number][][] = [];
@@ -57,7 +65,7 @@ export class AsterismsLayerComponent implements OnInit {
     const items = this.svc.data().items ?? [];
     const out: string[] = [];
     for (const a of items) {
-      for (const seg of (a.segments ?? [])) {
+      for (const seg of a.segments ?? []) {
         for (const chunk of this.splitByDateline(n, seg)) {
           const d = this.makePath(chunk);
           if (d) out.push(d);

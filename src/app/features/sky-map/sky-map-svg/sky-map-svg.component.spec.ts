@@ -8,9 +8,8 @@ describe('SkyMapSvgComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkyMapSvgComponent]
-    })
-    .compileComponents();
+      imports: [SkyMapSvgComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SkyMapSvgComponent);
     component = fixture.componentInstance;

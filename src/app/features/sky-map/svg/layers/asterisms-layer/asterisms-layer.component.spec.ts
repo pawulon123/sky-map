@@ -8,9 +8,8 @@ describe('AsterismsLayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AsterismsLayerComponent]
-    })
-    .compileComponents();
+      imports: [AsterismsLayerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AsterismsLayerComponent);
     component = fixture.componentInstance;

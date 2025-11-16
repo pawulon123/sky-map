@@ -1,5 +1,4 @@
-
-    export interface Star {
+export interface Star {
   id?: number | string;
   ra?: number;
   ra_deg?: number;
@@ -11,11 +10,7 @@
   __projected?: [number, number] | null; // ważne: może być null
 }
 
-
-
-
 export interface StarsData {
   meta?: any;
   stars: Star[];
 }
-

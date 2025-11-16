@@ -10,8 +10,8 @@ function toNum(v) {
 }
 
 // 🔹 Ścieżki
-const INPUT_CSV = './hyg_v42.csv';       // <- zmień jeśli masz inny plik (np. hyg_v42.csv)
-const OUTPUT_JSON = './hyg-stars.json';     // <- wynikowy plik
+const INPUT_CSV = './hyg_v42.csv'; // <- zmień jeśli masz inny plik (np. hyg_v42.csv)
+const OUTPUT_JSON = './hyg-stars.json'; // <- wynikowy plik
 
 console.log('⏳ Wczytywanie CSV...');
 const text = fs.readFileSync(INPUT_CSV, 'utf8');

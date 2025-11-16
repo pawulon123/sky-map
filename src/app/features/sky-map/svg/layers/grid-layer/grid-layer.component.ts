@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'g[app-grid-layer]',
   imports: [],
   templateUrl: './grid-layer.component.html',
-  styleUrl: './grid-layer.component.css'
+  styleUrl: './grid-layer.component.css',
 })
-export class GridLayerComponent {
-
-}
+export class GridLayerComponent {}

@@ -1,0 +1,23 @@
+.stars-symbol-controls {
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .label {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .input {
+    padding: 0.1rem 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .value {
+    margin-left: 0.25rem;
+    font-size: 0.75rem;
+    color: #999;
+  }
+}

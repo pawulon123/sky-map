@@ -1,0 +1,101 @@
+<div class="stars-label-controls space-y-2">
+  <div class="flex items-center justify-between">
+    <label class="font-semibold">Etykiety gwiazd</label>
+    <label class="flex items-center gap-2 text-sm">
+      <span>Widoczne</span>
+      <input
+        type="checkbox"
+        [ngModel]="(starsSettings$ | async)?.labels?.visible"
+        (ngModelChange)="toggleLabelsVisible($event)"
+      />
+    </label>
+  </div>
+
+  <!-- <div class="field">
+    <label class="label">Położenie</label>
+    <select
+      class="input"
+      [ngModel]="(starsSettings$ | async)?.labels?.position"
+      (ngModelChange)="changePosition($event)"
+    >
+      <option value="top">Nad gwiazdą</option>
+      <option value="bottom">Pod gwiazdą</option>
+      <option value="left">Po lewej</option>
+      <option value="right">Po prawej</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label class="label">
+      Rozmiar czcionki
+      <span class="value">
+        {{ (starsSettings$ | async)?.labels?.fontSize ?? 10 }} px
+      </span>
+    </label>
+    <input
+      type="range"
+      min="6"
+      max="24"
+      step="1"
+      [ngModel]="(starsSettings$ | async)?.labels?.fontSize"
+      (ngModelChange)="changeFontSize($event)"
+    />
+  </div>
+
+  <div class="field">
+    <label class="label">Maks. liczba linii</label>
+    <input
+      type="number"
+      class="input"
+      min="1"
+      max="4"
+      [ngModel]="(starsSettings$ | async)?.labels?.maxLines"
+      (ngModelChange)="changeMaxLines($event)"
+    />
+  </div>
+
+  <label class="flex items-center gap-2 text-sm">
+    <input
+      type="checkbox"
+      [ngModel]="(starsSettings$ | async)?.labels?.iconEnabled"
+      (ngModelChange)="toggleIcon($event)"
+    />
+    Ikona przy etykiecie
+  </label>
+
+  <div class="grid grid-cols-[1fr_auto] gap-2 items-center">
+    <label class="flex items-center gap-2 text-sm">
+      <input
+        type="checkbox"
+        [ngModel]="(starsSettings$ | async)?.labels?.borderEnabled"
+        (ngModelChange)="toggleBorder($event)"
+      />
+      Obramowanie
+    </label>
+
+    <input
+      type="color"
+      [ngModel]="(starsSettings$ | async)?.labels?.borderColor || '#ffffff'"
+      (ngModelChange)="changeBorderColor($event)"
+    />
+  </div>
+
+  <div class="grid grid-cols-2 gap-2">
+    <div class="field">
+      <label class="label">Kolor tekstu</label>
+      <input
+        type="color"
+        [ngModel]="(starsSettings$ | async)?.labels?.textColor || '#ffffff'"
+        (ngModelChange)="changeTextColor($event)"
+      />
+    </div>
+    <div class="field">
+      <label class="label">Tło etykiety</label>
+      <input
+        type="color"
+        [ngModel]="(starsSettings$ | async)?.labels?.backgroundColor || '#000000'"
+        (ngModelChange)="changeBackgroundColor($event)"
+      />
+    </div>
+  </div> -->
+</div>

@@ -5,8 +5,6 @@ import { RootSvgComponent } from '../svg/root-svg/root-svg.component';
   selector: 'app-sky-map-svg',
   imports: [RootSvgComponent],
   templateUrl: './sky-map-svg.component.html',
-  styleUrl: './sky-map-svg.component.css'
+  styleUrl: './sky-map-svg.component.css',
 })
-export class SkyMapSvgComponent {
-
-}
+export class SkyMapSvgComponent {}

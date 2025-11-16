@@ -1,2 +1,1 @@
-export interface Boundary {
-}
+export interface Boundary {}

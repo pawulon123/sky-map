@@ -8,9 +8,8 @@ describe('BoundariesLayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BoundariesLayerComponent]
-    })
-    .compileComponents();
+      imports: [BoundariesLayerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(BoundariesLayerComponent);
     component = fixture.componentInstance;

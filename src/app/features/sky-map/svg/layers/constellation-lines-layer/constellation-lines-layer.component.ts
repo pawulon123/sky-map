@@ -3,24 +3,32 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { ConstellationLinesService } from '../../../domain/services/constellation-lines/constellation-lines.service';
 import { ProjectionService } from '../../../domain/services/projection/projection.service';
 
-
-type ProjectionName = 'stereographic'|'azimuthal'|'azimuthalEA'|'orthographic'|'gnomonic'|'mercator'|'equirect';
+type ProjectionName =
+  | 'stereographic'
+  | 'azimuthal'
+  | 'azimuthalEA'
+  | 'orthographic'
+  | 'gnomonic'
+  | 'mercator'
+  | 'equirect';
 
 @Component({
   selector: 'g[app-constellation-lines-layer]',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: 'constellation-lines-layer.component.html' ,
+  templateUrl: 'constellation-lines-layer.component.html',
 })
 export class ConstellationLinesLayerComponent implements OnInit {
   private svc = inject(ConstellationLinesService);
   private proj = inject(ProjectionService);
 
-  ngOnInit() { this.svc.loadOnce(); }
+  ngOnInit() {
+    this.svc.loadOnce();
+  }
 
   private isRectangular = (n: ProjectionName) => n === 'equirect' || n === 'mercator';
   private raToLonForProj(n: ProjectionName, ra: number) {
-    return this.isRectangular(n) ? (((ra + 180) % 360 + 360) % 360 - 180) : ra;
+    return this.isRectangular(n) ? ((((ra + 180) % 360) + 360) % 360) - 180 : ra;
   }
   private splitByDateline(n: ProjectionName, seg: [number, number][]) {
     const out: [number, number][][] = [];
@@ -40,25 +48,25 @@ export class ConstellationLinesLayerComponent implements OnInit {
   }
   private makePath(pts: [number, number][]) {
     if (!pts.length) return '';
-    const xy = pts.map(([lon, dec]) => this.proj.projectLonLat(lon, dec)) as [number, number][];
+    const xy = pts.map(([lon, dec]) => this.proj.getProjectionByLonLat(lon, dec)) as [number, number][];
     let d = `M${xy[0][0]},${xy[0][1]}`;
     for (let i = 1; i < xy.length; i++) d += `L${xy[i][0]},${xy[i][1]}`;
     return d;
   }
 
   paths = computed(() => {
-    const n = this.proj.name() as ProjectionName;
+    const n = this.proj.settings().projectionName as ProjectionName;
     const items = this.svc.data().items ?? [];
     const out: string[] = [];
     for (const c of items) {
-      for (const seg of (c.segments ?? [])) {
+      for (const seg of c.segments ?? []) {
         for (const chunk of this.splitByDateline(n, seg)) {
           const d = this.makePath(chunk);
           if (d) out.push(d);
         }
       }
     }
-    
+
     return out;
   });
 }

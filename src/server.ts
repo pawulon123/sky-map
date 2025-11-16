@@ -1,5 +1,10 @@
 // server.ts
-import { AngularNodeAppEngine, createNodeRequestHandler, isMainModule, writeResponseToNodeResponse } from '@angular/ssr/node';
+import {
+  AngularNodeAppEngine,
+  createNodeRequestHandler,
+  isMainModule,
+  writeResponseToNodeResponse,
+} from '@angular/ssr/node';
 import express from 'express';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -19,7 +24,10 @@ app.get('/api/hyg.csv', async (req, res, next) => {
 
     if (!r.ok || !r.body) {
       const txt = await r.text().catch(() => '');
-      res.status(r.status).type('text/plain; charset=utf-8').send(txt || `Upstream error: ${r.status}`);
+      res
+        .status(r.status)
+        .type('text/plain; charset=utf-8')
+        .send(txt || `Upstream error: ${r.status}`);
       return;
     }
 

@@ -10,9 +10,6 @@ export interface Star {
   __projected?: [number, number] | null; // ważne: może być null
 }
 
-
-
-
 export interface StarsData {
   meta?: any;
   stars: Star[];

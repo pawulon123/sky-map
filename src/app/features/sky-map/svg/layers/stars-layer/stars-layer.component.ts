@@ -3,45 +3,40 @@ import { Component, computed, inject, Input, input, OnInit } from '@angular/core
 import { Star } from '../../../domain/models/star.model';
 import { StarsService } from '../../../domain/services/stars/stars.service';
 import { LabelsLayerComponent } from '../labels-layer/labels-layer.component';
-import { ProjectionService } from '../../../domain/services/projection/projection.service';
+import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 
 @Component({
   selector: 'g[app-stars-layer]',
   imports: [CommonModule, LabelsLayerComponent],
   templateUrl: './stars-layer.component.html',
-  styleUrl: './stars-layer.component.css'
+  styleUrl: './stars-layer.component.css',
 })
-export class StarsLayerComponent implements OnInit{
-
-  private svc  = inject(StarsService);
-
-
-  ngOnInit(): void {
-this.svc.loadOnce();
-
-  }
+export class StarsLayerComponent {
+  private svc = inject(StarsService);
+  private state = inject(SkyMapStateService);
+  // private proj = inject(ProjectionService);
+  starsSettings$ = this.state.starsLayerSettings$;
 
   // show        = input<boolean>(true);
-  maxMag      = input<number | null>(null);
-  showLabels  = input<boolean>(true);
+  maxMag = input<number | null>(null);
+  showLabels = input<boolean>(true);
   labelMaxMag = input<number>(2.0);
-  
-@Input() showStars = true
+
+  @Input() showStars = true;
   // dane gotowe do rysowania (po reprojectStars w AppComponent)
   stars = computed<Star[]>(() => {
     const all = this.svc.data().stars ?? [];
-   
     // pokazuj tylko gwiazdy które mają wyliczone __projected = [x,y]
-    let visible = all.filter(s => Array.isArray(s.__projected));
- 
+    let visible = all.filter((s) => Array.isArray(s.__projected));
+
     const limit = this.maxMag();
     if (limit != null) {
-      visible = visible.filter(s => s.mag == null || s.mag <= limit);
+      visible = visible.filter((s) => s.mag == null || s.mag <= limit);
     }
 
     // sort wg jasności
     // console.log([...visible].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99)));
-    
+
     return [...visible].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
   });
 
@@ -61,5 +56,4 @@ this.svc.loadOnce();
     const p = s.__projected ?? [0, 0];
     return p[1];
   }
-
 }

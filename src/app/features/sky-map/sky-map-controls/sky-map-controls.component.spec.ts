@@ -8,9 +8,8 @@ describe('SkyMapControlsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkyMapControlsComponent]
-    })
-    .compileComponents();
+      imports: [SkyMapControlsComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SkyMapControlsComponent);
     component = fixture.componentInstance;

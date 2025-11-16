@@ -8,9 +8,8 @@ describe('ConstellationLinesLayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConstellationLinesLayerComponent]
-    })
-    .compileComponents();
+      imports: [ConstellationLinesLayerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ConstellationLinesLayerComponent);
     component = fixture.componentInstance;

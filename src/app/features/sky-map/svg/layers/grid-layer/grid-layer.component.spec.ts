@@ -8,9 +8,8 @@ describe('GridLayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GridLayerComponent]
-    })
-    .compileComponents();
+      imports: [GridLayerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(GridLayerComponent);
     component = fixture.componentInstance;

@@ -10,7 +10,7 @@ import { ProjectionService } from '../../../services/projection.service';
   templateUrl: 'boundaries-layer.component.html',
 })
 export class BoundariesLayerComponent implements OnInit {
-  private svc  = inject(BoundariesService);
+  private svc = inject(BoundariesService);
   private proj = inject(ProjectionService);
 
   ngOnInit() {
@@ -44,9 +44,7 @@ export class BoundariesLayerComponent implements OnInit {
    * Robimy własne cięcie tam, gdzie następuje wrap przez brzeg mapy:
    * jeśli |x - prevX| > width * 0.5 → nowa pod-ścieżka.
    */
-  private segmentToScreenChunks(
-    segRaDec: [number, number][]
-  ): [number, number][][] {
+  private segmentToScreenChunks(segRaDec: [number, number][]): [number, number][][] {
     const w = this.proj.width();
     const maxJump = w * 0.5;
 

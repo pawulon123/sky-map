@@ -8,9 +8,8 @@ describe('SkyMapPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkyMapPageComponent]
-    })
-    .compileComponents();
+      imports: [SkyMapPageComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SkyMapPageComponent);
     component = fixture.componentInstance;

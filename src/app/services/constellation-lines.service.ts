@@ -7,7 +7,10 @@ export interface ConstellationLine {
   segments: [number, number][][];
   label?: { ra_deg: number; dec: number } | null;
 }
-export interface ConstellationLinesData { meta?: any; items: ConstellationLine[]; }
+export interface ConstellationLinesData {
+  meta?: any;
+  items: ConstellationLine[];
+}
 
 const D3C_BASE = 'https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data';
 
@@ -21,13 +24,15 @@ export class ConstellationLinesService {
   private _data = signal<ConstellationLinesData>({ meta: {}, items: [] });
   data = this._data.asReadonly();
 
-  private lonToRa(lon: number) { return ((-lon % 360) + 360) % 360; }
+  private lonToRa(lon: number) {
+    return ((-lon % 360) + 360) % 360;
+  }
 
   private featureToSegments(feat: any): [number, number][][] {
     const g = feat?.geometry || {};
     const toRaDec = ([lon, lat]: [number, number]) => [this.lonToRa(lon), lat] as [number, number];
-    if (g.type === 'LineString')      return [ (g.coordinates as [number,number][]) .map(toRaDec) ];
-    if (g.type === 'MultiLineString') return (g.coordinates as [number,number][][]).map(seg => seg.map(toRaDec));
+    if (g.type === 'LineString') return [(g.coordinates as [number, number][]).map(toRaDec)];
+    if (g.type === 'MultiLineString') return (g.coordinates as [number, number][][]).map((seg) => seg.map(toRaDec));
     return [];
   }
 
@@ -42,7 +47,7 @@ export class ConstellationLinesService {
     const items: ConstellationLine[] = (gj.features || []).map((f: any) => {
       const p = f.properties || {};
       const name = p.name || p.n || p.abbr;
-      const abbrev = p.abbr || p.a || (name?.slice(0,3)?.toUpperCase?.());
+      const abbrev = p.abbr || p.a || name?.slice(0, 3)?.toUpperCase?.();
       const segments = this.featureToSegments(f);
       const first = segments?.[0]?.[0] || null;
       const label = first ? { ra_deg: first[0], dec: first[1] } : null;

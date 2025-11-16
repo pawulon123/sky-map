@@ -12,16 +12,21 @@ export type ProjectionName =
 
 @Injectable({ providedIn: 'root' })
 export class ProjectionService {
-
   // --- stan reaktywny ---
-  private _name   = signal<ProjectionName>('stereographic');
-  private _width  = signal<number>(1200);
+  private _name = signal<ProjectionName>('stereographic');
+  private _width = signal<number>(1200);
   private _height = signal<number>(1200);
 
   // PUBLIC GETTERY
-  name()   { return this._name(); }
-  width()  { return this._width(); }
-  height() { return this._height(); }
+  name() {
+    return this._name();
+  }
+  width() {
+    return this._width();
+  }
+  height() {
+    return this._height();
+  }
 
   // PUBLIC SETTERY (AppComponent woła to po kliknięciu UI)
   setName(n: ProjectionName) {
@@ -97,7 +102,10 @@ export class ProjectionService {
         proj = d3geo.geoMercator();
         // dopasuj całą kulę z marginesem 40px
         (proj as any).fitExtent(
-          [[40, 40], [w - 40, h - 40]],
+          [
+            [40, 40],
+            [w - 40, h - 40],
+          ],
           { type: 'Sphere' }
         );
         break;
@@ -107,7 +115,10 @@ export class ProjectionService {
       default: {
         proj = d3geo.geoEquirectangular();
         (proj as any).fitExtent(
-          [[40, 40], [w - 40, h - 40]],
+          [
+            [40, 40],
+            [w - 40, h - 40],
+          ],
           { type: 'Sphere' }
         );
         break;
@@ -163,28 +174,20 @@ export class ProjectionService {
     return this._projection();
   }
 
-reprojectStars(starsSvc: StarsService) {
-  const mode = this.name();
-  const w    = this.width();
-  const h    = this.height();
+  reprojectStars(starsSvc: StarsService) {
+    const mode = this.name();
+    const w = this.width();
+    const h = this.height();
 
-  const projFn = (lon: number, lat: number) =>
-    this.projectRaDec(lon, lat);
+    const projFn = (lon: number, lat: number) => this.projectRaDec(lon, lat);
 
-  // NOWA LOGIKA:
-  // Chcemy RA rosnące w lewo w KAŻDEJ projekcji,
-  // więc zawsze odbijamy w poziomie.
-  const mirror = true;
+    // NOWA LOGIKA:
+    // Chcemy RA rosnące w lewo w KAŻDEJ projekcji,
+    // więc zawsze odbijamy w poziomie.
+    const mirror = true;
 
-  starsSvc.updateProjection(projFn, w, { mirrorX: mirror });
+    starsSvc.updateProjection(projFn, w, { mirrorX: mirror });
 
-  console.log(
-    '[ProjectionService.reprojectStars]',
-    'mode=', mode,
-    'mirrorX=', mirror,
-    'w=', w,
-    'h=', h
-  );
-}
-
+    console.log('[ProjectionService.reprojectStars]', 'mode=', mode, 'mirrorX=', mirror, 'w=', w, 'h=', h);
+  }
 }

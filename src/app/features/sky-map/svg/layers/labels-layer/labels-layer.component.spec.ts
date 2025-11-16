@@ -8,9 +8,8 @@ describe('LabelsLayerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LabelsLayerComponent]
-    })
-    .compileComponents();
+      imports: [LabelsLayerComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LabelsLayerComponent);
     component = fixture.componentInstance;

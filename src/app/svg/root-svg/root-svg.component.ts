@@ -15,9 +15,9 @@ import { AsterismsLayerComponent } from '../layers/asterisms-layer/asterisms-lay
     ConstellationLinesLayerComponent,
     StarsLayerComponent,
     BoundariesLayerComponent,
-    AsterismsLayerComponent
+    AsterismsLayerComponent,
   ],
-  templateUrl: './root-svg.component.html'
+  templateUrl: './root-svg.component.html',
 })
 export class RootSvgComponent {
   private proj = inject(ProjectionService);
@@ -25,7 +25,7 @@ export class RootSvgComponent {
   // Rozmiar <svg> nadal kontrolujemy przez @Input,
   // ale ProjectionService i tak ma własne wymiary do liczenia projekcji.
   // To jest ok. Daje nam elastyczność.
-  @Input() width  = 1200;
+  @Input() width = 1200;
   @Input() height = 1200;
 
   // Widoczność warstw / opcje UI

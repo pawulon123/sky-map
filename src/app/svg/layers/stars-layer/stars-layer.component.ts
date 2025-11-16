@@ -10,28 +10,28 @@ import { StarLabelsLayerComponent } from '../star-labels-layer/star-labels-layer
   standalone: true,
   imports: [CommonModule, StarLabelsLayerComponent],
   templateUrl: './stars-layer.component.html',
-  styleUrls: ['./stars-layer.component.css']
+  styleUrls: ['./stars-layer.component.css'],
 })
 export class StarsLayerComponent {
   // private proj = inject(ProjectionService);
-  private svc  = inject(StarsService);
+  private svc = inject(StarsService);
 
   // show        = input<boolean>(true);
-  maxMag      = input<number | null>(null);
-  showLabels  = input<boolean>(true);
+  maxMag = input<number | null>(null);
+  showLabels = input<boolean>(true);
   labelMaxMag = input<number>(2.0);
-  
-@Input() showStars = true
+
+  @Input() showStars = true;
   // dane gotowe do rysowania (po reprojectStars w AppComponent)
   stars = computed<Star[]>(() => {
     const all = this.svc.data().stars ?? [];
 
     // pokazuj tylko gwiazdy które mają wyliczone __projected = [x,y]
-    let visible = all.filter(s => Array.isArray(s.__projected));
+    let visible = all.filter((s) => Array.isArray(s.__projected));
 
     const limit = this.maxMag();
     if (limit != null) {
-      visible = visible.filter(s => s.mag == null || s.mag <= limit);
+      visible = visible.filter((s) => s.mag == null || s.mag <= limit);
     }
 
     // sort wg jasności

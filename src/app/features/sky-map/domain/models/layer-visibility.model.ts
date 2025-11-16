@@ -1,2 +1,1 @@
-export interface LayerVisibility {
-}
+export interface LayerVisibility {}
