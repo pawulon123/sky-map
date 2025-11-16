@@ -54,11 +54,7 @@ export interface StarsLabelsSettings {
   /** Kolor tła etykiety */
   backgroundColor: string;
 }
-export interface ProjectionSettings {
-  height: number;
-  width: number;
-  projectionName: ProjectionName;
-}
+
 /**
  * Główne ustawienia warstwy gwiazd – łączy ustawienia symboli i etykiet.
  */

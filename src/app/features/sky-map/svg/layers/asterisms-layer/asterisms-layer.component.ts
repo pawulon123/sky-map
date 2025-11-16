@@ -3,6 +3,7 @@ import { ProjectionService } from '../../../domain/services/projection/projectio
 import { ProjectionName } from '../../../domain/models/projection-options.model';
 import { AsterismsService } from '../../../domain/services/asterisms/asterisms.service';
 import { CommonModule } from '@angular/common';
+import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 
 @Component({
   selector: 'g[app-asterisms-layer]',
@@ -13,6 +14,9 @@ import { CommonModule } from '@angular/common';
 export class AsterismsLayerComponent implements OnInit {
   private svc = inject(AsterismsService);
   private proj = inject(ProjectionService);
+  private state = inject(SkyMapStateService);
+
+  asterismSettings$ = this.state.asterismLayerSettings$;
 
   ngOnInit() {
     this.svc.loadOnce();

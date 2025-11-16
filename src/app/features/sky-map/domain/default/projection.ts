@@ -1,4 +1,4 @@
-import { ProjectionSettings } from '../models/stars-layer-settings.model';
+import { ProjectionSettings } from '../models/projection-options.model';
 
 export const defaultProjectionSettings: ProjectionSettings = {
   width: 1200,

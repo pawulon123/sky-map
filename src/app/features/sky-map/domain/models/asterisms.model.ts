@@ -8,3 +8,7 @@ export interface AsterismsData {
   meta?: any;
   items: Asterism[];
 }
+export interface AsterismSettings {
+  visible: boolean;
+  color: string;
+}

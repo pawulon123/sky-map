@@ -1,5 +1,9 @@
 <svg:g id="layer-constellation-lines">
-  <ng-container *ngFor="let d of paths()">
-    <path [attr.d]="d" stroke="#06c" stroke-width="0.7" fill="none"></path>
+  <ng-container *ngIf="constellationLineSettings$ | async as settings">
+    <ng-container *ngIf="settings.visible">
+      <ng-container *ngFor="let d of paths()">
+        <path [attr.d]="d" stroke="#06c" stroke-width="0.7" fill="none"></path>
+      </ng-container>
+    </ng-container>
   </ng-container>
 </svg:g>

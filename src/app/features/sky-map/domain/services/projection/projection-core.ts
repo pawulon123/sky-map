@@ -1,10 +1,9 @@
 import { computed, Signal } from '@angular/core';
 import * as d3geo from 'd3-geo';
-import { ProjectionSettings } from '../../models/stars-layer-settings.model';
+import { ProjectionSettings } from '../../models/projection-options.model';
 
 export const projectionCore = (settings: Signal<ProjectionSettings>) => {
   return computed<d3geo.GeoProjection>(() => {
-    // ODCZYT sygnału – tu jest reaktivność
     const { width: w, height: h, projectionName: name } = settings();
 
     const cx = w / 2;

@@ -1,5 +1,9 @@
 <svg:g id="layer-boundaries">
-  <ng-container *ngFor="let d of paths()">
-    <path [attr.d]="d" stroke="#000" stroke-width="0.6" fill="none"></path>
+  <ng-container *ngIf="boundariesSettings$ | async as settings">
+    <ng-container *ngIf="settings.visible">
+      <ng-container *ngFor="let d of paths()">
+        <path [attr.d]="d" stroke="#000" stroke-width="0.6" fill="none"></path>
+      </ng-container>
+    </ng-container>
   </ng-container>
 </svg:g>

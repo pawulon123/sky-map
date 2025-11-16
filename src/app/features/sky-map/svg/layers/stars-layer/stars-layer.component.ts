@@ -14,16 +14,14 @@ import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-m
 export class StarsLayerComponent {
   private svc = inject(StarsService);
   private state = inject(SkyMapStateService);
-  // private proj = inject(ProjectionService);
+
   starsSettings$ = this.state.starsLayerSettings$;
 
-  // show        = input<boolean>(true);
   maxMag = input<number | null>(null);
   showLabels = input<boolean>(true);
   labelMaxMag = input<number>(2.0);
 
   @Input() showStars = true;
-  // dane gotowe do rysowania (po reprojectStars w AppComponent)
   stars = computed<Star[]>(() => {
     const all = this.svc.data().stars ?? [];
     // pokazuj tylko gwiazdy które mają wyliczone __projected = [x,y]
@@ -33,9 +31,6 @@ export class StarsLayerComponent {
     if (limit != null) {
       visible = visible.filter((s) => s.mag == null || s.mag <= limit);
     }
-
-    // sort wg jasności
-    // console.log([...visible].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99)));
 
     return [...visible].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
   });

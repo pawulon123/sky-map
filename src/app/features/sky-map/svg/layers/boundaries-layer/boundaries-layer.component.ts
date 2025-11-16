@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { BoundariesService } from '../../../domain/services/boundaries/boundaries.service';
 import { ProjectionService } from '../../../domain/services/projection/projection.service';
+import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 
 @Component({
   selector: 'g[app-boundaries-layer]',
@@ -11,6 +12,10 @@ import { ProjectionService } from '../../../domain/services/projection/projectio
 })
 export class BoundariesLayerComponent implements OnInit {
   private svc = inject(BoundariesService);
+  private state = inject(SkyMapStateService);
+
+  boundariesSettings$ = this.state.boundariesLayerSettings$;
+
   private proj = inject(ProjectionService);
 
   ngOnInit() {

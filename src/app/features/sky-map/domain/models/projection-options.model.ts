@@ -6,3 +6,9 @@ export type ProjectionName =
   | 'gnomonic'
   | 'mercator'
   | 'equirect';
+
+export interface ProjectionSettings {
+  height: number;
+  width: number;
+  projectionName: ProjectionName;
+}

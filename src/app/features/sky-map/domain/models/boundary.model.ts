@@ -1,1 +1,4 @@
-export interface Boundary {}
+export interface BoundarySettings {
+  visible: boolean;
+  color: string;
+}

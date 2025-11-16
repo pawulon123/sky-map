@@ -1,8 +1,7 @@
 import { Injectable, signal, computed } from '@angular/core';
-import * as d3geo from 'd3-geo';
-import { ProjectionSettings } from '../../models/stars-layer-settings.model';
 import { defaultProjectionSettings } from '../../default/projection';
 import { projectionCore } from './projection-core';
+import { ProjectionSettings } from '../../models/projection-options.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectionService {

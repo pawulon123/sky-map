@@ -2,15 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { ConstellationLinesService } from '../../../domain/services/constellation-lines/constellation-lines.service';
 import { ProjectionService } from '../../../domain/services/projection/projection.service';
-
-type ProjectionName =
-  | 'stereographic'
-  | 'azimuthal'
-  | 'azimuthalEA'
-  | 'orthographic'
-  | 'gnomonic'
-  | 'mercator'
-  | 'equirect';
+import { ProjectionName } from '../../../domain/models/projection-options.model';
+import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 
 @Component({
   selector: 'g[app-constellation-lines-layer]',
@@ -21,6 +14,8 @@ type ProjectionName =
 export class ConstellationLinesLayerComponent implements OnInit {
   private svc = inject(ConstellationLinesService);
   private proj = inject(ProjectionService);
+  private state = inject(SkyMapStateService);
+  constellationLineSettings$ = this.state.constellationLineSettings$;
 
   ngOnInit() {
     this.svc.loadOnce();
