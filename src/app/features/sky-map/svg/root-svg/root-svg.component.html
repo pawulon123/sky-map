@@ -39,5 +39,5 @@
   <g app-boundaries-layer *ngIf="showBoundaries"></g>
 
   <!-- asterizmy -->
-  <g app-asterisms-layer *ngIf="showAsterisms"></g>
+  <g app-asterisms-layer *ngIf="(asterismSettings$ | async)?.visible"></g>
 </svg>

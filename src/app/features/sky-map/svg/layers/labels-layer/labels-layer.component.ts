@@ -16,12 +16,7 @@ export class LabelsLayerComponent {
 
   private state = inject(SkyMapStateService);
   starsSettings$ = this.state.starsLayerSettings$;
-  /**
-   * WAŻNE:
-   * Robimy zwykłego gettera zamiast computed(),
-   * bo @Input() to nie jest signal i Angular nie zintegruje nam computed()
-   * automatycznie. Getter jest wywoływany przy renderze template.
-   */
+
   get labeledStars(): Star[] {
     const limit = this.labelMaxMag;
     return this.stars.filter((s) => {
