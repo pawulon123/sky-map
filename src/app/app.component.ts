@@ -9,6 +9,4 @@ import { SkyMapPageComponent } from './features/sky-map/sky-map-page/sky-map-pag
   imports: [CommonModule, SkyMapPageComponent],
   templateUrl: './app.component.html',
 })
-export class AppComponent {
- 
-}
+export class AppComponent {}

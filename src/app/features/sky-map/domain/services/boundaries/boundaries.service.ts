@@ -62,10 +62,10 @@ export class BoundariesService {
     if (!isPlatformBrowser(this.platformId) || this._loaded()) return;
 
     const url = `${D3C_BASE}`;
-       const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
     const gj = await res.json();
-   
+
     const boundaries: Boundary[] = (gj || []).map((f: any) => {
       const p = f.properties || {};
       const name = p.name || p.n || p.abbr;

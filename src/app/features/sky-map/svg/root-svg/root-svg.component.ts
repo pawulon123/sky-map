@@ -19,11 +19,9 @@ import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-
   styleUrl: './root-svg.component.css',
 })
 export class RootSvgComponent {
-
   readonly state = inject(SkyMapStateService);
   readonly projectionSettings$ = this.state.projectionSettings$;
   readonly asterismSettings$ = this.state.asterismLayerSettings$;
-
 
   @Input() showGrid = true;
   @Input() showStars = true;
@@ -31,6 +29,4 @@ export class RootSvgComponent {
   @Input() showConstellationLines = true;
   @Input() showLabels = true;
   @Input() maxIntensity: number | null = null;
-
-
 }

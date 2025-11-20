@@ -62,3 +62,4 @@ export interface StarsLayerSettings {
   symbols: StarsSymbolsSettings;
   labels: StarsLabelsSettings;
 }
+export type StarKey = 'symbols' | 'labels';

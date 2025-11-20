@@ -34,7 +34,6 @@ export class AsterismsService {
     const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
     const gj = await res.json();
-console.log(JSON.stringify(gj));
 
     const items: Asterism[] = (gj || []).map((f: any) => {
       const p = f.properties || {};

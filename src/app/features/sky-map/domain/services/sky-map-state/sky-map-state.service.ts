@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { StarsLabelsSettings, StarsLayerSettings, StarsSymbolsSettings } from '../../models/stars-layer-settings.model';
 import { RefreshProjectionService } from '../projection/refresh-projection.service';
 import { ProjectionService } from '../projection/projection.service';
-import { isTheSameValuesOfObjects } from '../../../../../core/utils/utils-function';
+import { isTheSameValuesOfObjects, update } from '../../../../../core/utils/utils-function';
 import { defaultStarsSettings } from '../../default/stars';
 import { defaultProjectionSettings } from '../../default/projection';
 import { ProjectionSettings } from '../../models/projection-options.model';
@@ -13,6 +13,7 @@ import { AsterismSettings } from '../../models/asterisms.model';
 import { asterismDefaultSettings } from '../../default/asterism';
 import { ConstellationLineSettings } from '../../models/constellation-line.model';
 import { constellationLineDefaultSettings } from '../../default/constellation-line';
+import { updateEndNext } from '../../../../../core/utils/update-end-next';
 
 @Injectable({
   providedIn: 'root',
@@ -44,67 +45,31 @@ export class SkyMapStateService {
     effect(() => {
       const proj = this.projectionSv.settings();
       const current = this.projectionSettingsSubject.getValue();
-      const prev = current;
 
-      if (isTheSameValuesOfObjects(prev, proj)) return;
-      const next: ProjectionSettings = {
-        ...current,
-        ...proj,
-      };
+      if (isTheSameValuesOfObjects(current, proj)) return;
+      const next: ProjectionSettings = update(proj, current);
       this.projectionSettingsSubject.next(next);
       this.refreshProjectionSv.reprojectStars();
     });
   }
 
   updateStarsSymbols(partialSymbols: Partial<StarsSymbolsSettings>): void {
-    const current = this.starsLayerSettingsSubject.getValue();
-    const next: StarsLayerSettings = {
-      ...current,
-      symbols: {
-        ...current.symbols,
-        ...partialSymbols,
-      },
-    };
-    this.starsLayerSettingsSubject.next(next);
+    updateEndNext(partialSymbols, this.starsLayerSettingsSubject, 'symbols');
   }
 
   updateStarsLabels(partialLabels: Partial<StarsLabelsSettings>): void {
-    const current = this.starsLayerSettingsSubject.getValue();
-    const next: StarsLayerSettings = {
-      ...current,
-      labels: {
-        ...current.labels,
-        ...partialLabels,
-      },
-    };
-    this.starsLayerSettingsSubject.next(next);
+    updateEndNext(partialLabels, this.starsLayerSettingsSubject, 'labels');
   }
 
   updateBoundary(partial: Partial<BoundarySettings>): void {
-    const current = this.boundariesLayerSettingsSubject.getValue();
-    const next: BoundarySettings = {
-      ...current,
-      ...partial,
-    };
-
-    this.boundariesLayerSettingsSubject.next(next);
+    updateEndNext(partial, this.boundariesLayerSettingsSubject);
   }
+
   updateAsterism(partial: Partial<AsterismSettings>): void {
-    const current = this.asterismLayerSettingsSubject.getValue();
-    const next: AsterismSettings = {
-      ...current,
-      ...partial,
-    };
-
-    this.asterismLayerSettingsSubject.next(next);
+    updateEndNext(partial, this.asterismLayerSettingsSubject);
   }
-  updateConstellationLine(partial: Partial<ConstellationLineSettings>): void {
-    const current = this.constellationLineSettingsSubject.getValue();
-    const next: ConstellationLineSettings = {
-      ...current,
-      ...partial,
-    };
 
-    this.constellationLineSettingsSubject.next(next);
+  updateConstellationLine(partial: Partial<ConstellationLineSettings>): void {
+    updateEndNext(partial, this.constellationLineSettingsSubject);
   }
 }

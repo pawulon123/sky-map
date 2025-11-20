@@ -45,7 +45,6 @@ export class ConstellationLinesService {
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
     const gj = await res.json();
 
-
     const items: ConstellationLine[] = (gj || []).map((f: any) => {
       const p = f.properties || {};
       const name = p.name || p.n || p.abbr;
