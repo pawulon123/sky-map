@@ -24,6 +24,10 @@ export class StarsSymbolControlsComponent {
     this.state.updateStarsSymbols({ visible });
   }
 
+  updateRing(value: number) {
+    this.state.updateStarsSymbols({ ring: Number(value) });
+  }
+
   changeShape(shape: Shape) {
     this.state.updateStarsSymbols({ shape });
   }

@@ -32,7 +32,6 @@ export class StarsLayerComponent {
     if (limit != null) {
       visible = visible.filter((s) => s.mag == null || s.mag <= limit);
     }
-
     return [...visible].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
   });
 

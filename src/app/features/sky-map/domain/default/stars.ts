@@ -3,9 +3,10 @@ import { StarsLayerSettings } from '../models/stars-layer-settings.model';
 export const defaultStarsSettings: StarsLayerSettings = {
   symbols: {
     visible: true,
+    ring: 0,
     shape: 'circle',
     size: 1.5,
-    color: '#ffffff',
+    color: '#4205e8ff',
     strokeWidth: 0.2,
     strokeColor: '#1c7138ff',
     scaleByMagnitude: true,

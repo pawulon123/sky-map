@@ -1,6 +1,7 @@
 <div class="stars-symbol-controls space-y-2">
   <div class="flex items-center justify-between">
     <label class="font-semibold">Symbole gwiazd</label>
+
     <label class="flex items-center gap-2 text-sm">
       <span>Widoczne</span>
       <input
@@ -11,7 +12,31 @@
     </label>
   </div>
 
-  <!-- <div class="field">
+  <!-- SUWAK RING -->
+  <ng-container *ngIf="starsSettings$ | async as settings">
+    <div class="flex items-center justify-between">
+      <label class="text-sm">Pierścień</label>
+
+      <div class="flex items-center gap-2">
+        <input
+          type="range"
+          min="0"
+          max="15"
+          step="0.1"
+          [ngModel]="settings.symbols.ring"
+          (ngModelChange)="updateRing($event)"
+        />
+
+        <!-- liczbowy podgląd wartości -->
+        <span class="text-sm w-10 text-right">
+          {{ settings.symbols.ring }}
+        </span>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<!-- <div class="field">
     <label class="label">Kształt</label>
     <select
       class="input"
@@ -81,4 +106,4 @@
     />
     Skaluj rozmiar wg jasności (magnitudo)
   </label> -->
-</div>
+<!-- </div> -->

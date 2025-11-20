@@ -7,6 +7,8 @@ export interface StarsSymbolsSettings {
   /** Czy w ogóle rysować gwiazdy (markery) */
   visible: boolean;
 
+  ring: number;
+
   /** Kształt symbolu gwiazdy */
   shape: StarSymbolShape;
 
