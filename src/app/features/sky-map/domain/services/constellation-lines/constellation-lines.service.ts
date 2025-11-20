@@ -12,7 +12,8 @@ export interface ConstellationLinesData {
   items: ConstellationLine[];
 }
 
-const D3C_BASE = 'https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data';
+// const D3C_BASE = 'https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data/constellations.lines.json';
+const D3C_BASE = 'constellations-lines.json';
 
 @Injectable({ providedIn: 'root' })
 export class ConstellationLinesService {
@@ -39,12 +40,13 @@ export class ConstellationLinesService {
   async loadOnce() {
     if (!isPlatformBrowser(this.platformId) || this._loaded()) return;
 
-    const url = `${D3C_BASE}/constellations.lines.json`;
+    const url = `${D3C_BASE}`;
     const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
     const gj = await res.json();
 
-    const items: ConstellationLine[] = (gj.features || []).map((f: any) => {
+
+    const items: ConstellationLine[] = (gj || []).map((f: any) => {
       const p = f.properties || {};
       const name = p.name || p.n || p.abbr;
       const abbrev = p.abbr || p.a || name?.slice(0, 3)?.toUpperCase?.();

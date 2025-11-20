@@ -28,8 +28,7 @@ export class StarsLayerComponent {
     let visible = all.filter((s) => Array.isArray(s.__projected));
 
     const limit = this.maxMag();
-    console.log(limit);
-    
+     
     if (limit != null) {
       visible = visible.filter((s) => s.mag == null || s.mag <= limit);
     }

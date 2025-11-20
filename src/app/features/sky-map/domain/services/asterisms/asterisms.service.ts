@@ -2,7 +2,8 @@ import { Injectable, inject, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Asterism, AsterismsData } from '../../models/asterisms.model';
 
-const D3C_BASE = 'https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data';
+const D3C_BASE = 'asterisms.json';
+// const D3C_BASE = 'https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data/asterisms.json';
 
 @Injectable({ providedIn: 'root' })
 export class AsterismsService {
@@ -29,12 +30,13 @@ export class AsterismsService {
   async loadOnce() {
     if (!isPlatformBrowser(this.platformId) || this._loaded()) return;
 
-    const url = `${D3C_BASE}/asterisms.json`;
+    const url = `${D3C_BASE}`;
     const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
     const gj = await res.json();
+console.log(JSON.stringify(gj));
 
-    const items: Asterism[] = (gj.features || []).map((f: any) => {
+    const items: Asterism[] = (gj || []).map((f: any) => {
       const p = f.properties || {};
       const name = p.name || 'Asterism';
       const abbrev = p.abbr || name.slice(0, 3).toUpperCase();

@@ -12,7 +12,8 @@ export interface BoundariesData {
   boundaries: Boundary[];
 }
 
-const D3C_BASE = 'https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data';
+// const D3C_BASE = 'https://cdn.jsdelivr.net/npm/d3-celestial@0.7.35/data/constellations.bounds.json';
+const D3C_BASE = 'boundaries-constalation.json';
 
 @Injectable({ providedIn: 'root' })
 export class BoundariesService {
@@ -60,12 +61,12 @@ export class BoundariesService {
   async loadOnce() {
     if (!isPlatformBrowser(this.platformId) || this._loaded()) return;
 
-    const url = `${D3C_BASE}/constellations.bounds.json`;
-    const res = await fetch(url, { cache: 'no-store' });
+    const url = `${D3C_BASE}`;
+       const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
     const gj = await res.json();
-
-    const boundaries: Boundary[] = (gj.features || []).map((f: any) => {
+   
+    const boundaries: Boundary[] = (gj || []).map((f: any) => {
       const p = f.properties || {};
       const name = p.name || p.n || p.abbr;
       const abbrev = p.abbr || p.a || name?.slice(0, 3)?.toUpperCase?.();
