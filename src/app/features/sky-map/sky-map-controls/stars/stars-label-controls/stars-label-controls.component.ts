@@ -35,9 +35,9 @@ export class StarsLabelControlsComponent {
   //   this.state.updateStarsLabels({ position });
   // }
 
-  // changeFontSize(size: number) {
-  //   this.state.updateStarsLabels({ fontSize: size });
-  // }
+  updateLabelFontSize(fontSize: number) {
+    this.state.updateStarsLabels({ fontSize });
+  }
 
   // changeMaxLines(lines: number) {
   //   this.state.updateStarsLabels({ maxLines: lines });

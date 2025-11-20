@@ -2,7 +2,12 @@
   <ng-container *ngIf="settings.labels.visible">
     <ng-container *ngFor="let s of labeledStars">
       <ng-container *ngIf="isInRange(s.mag, settings.labels.magnitudeRange)">
-        <svg:text class="star-label" [attr.x]="labelX(s)" [attr.y]="labelY(s)">
+        <svg:text
+          class="star-label"
+          [attr.x]="labelX(s)"
+          [attr.y]="labelY(s)"
+          [style.fontSize.px]="settings.labels.fontSize"
+        >
           {{ s.name }}
         </svg:text>
       </ng-container>
