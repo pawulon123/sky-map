@@ -33,6 +33,11 @@
             (input)="setSize(width(), $any($event.target).valueAsNumber || 1200)"
           />
         </label>
+
+        <label class="flex items-center gap-2 text-sm">
+          <span>Odbicie w osi pionowej</span>
+          <input type="checkbox" [ngModel]="projectionSv.settings().mirrorX" (ngModelChange)="toggleMirrorX($event)" />
+        </label>
       </div>
     </section>
   </div>

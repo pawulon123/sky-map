@@ -3,18 +3,21 @@ import { ProjectionService } from '../../domain/services/projection/projection.s
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
 import { RefreshProjectionService } from '../../domain/services/projection/refresh-projection.service';
 import { ProjectionName } from '../../domain/models/projection-options.model';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-projection-controls',
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './projection-controls.component.html',
   styleUrl: './projection-controls.component.css',
 })
 export class ProjectionControlsComponent {
   private state = inject(SkyMapStateService);
   starsSettings$ = this.state.starsLayerSettings$;
+  // starsSettings$ = this.state.starsLayerSettings$;
 
-  private projectionSv = inject(ProjectionService);
+  protected projectionSv = inject(ProjectionService);
 
   setProjection(projectionName: ProjectionName) {
     this.projectionSv.setSettings({ projectionName });
@@ -32,5 +35,9 @@ export class ProjectionControlsComponent {
   }
   height() {
     return this.projectionSv.settings().height;
+  }
+
+  toggleMirrorX(mirrorX: boolean) {
+    this.projectionSv.setSettings({ mirrorX });
   }
 }

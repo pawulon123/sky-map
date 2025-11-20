@@ -9,32 +9,58 @@ import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-m
   standalone: true,
   imports: [CommonModule],
   templateUrl: 'boundaries-layer.component.html',
+  host: {
+    '[attr.transform]': 'transform()',
+  },
 })
 export class BoundariesLayerComponent implements OnInit {
   private svc = inject(BoundariesService);
   private state = inject(SkyMapStateService);
 
   boundariesSettings$ = this.state.boundariesLayerSettings$;
-
   private proj = inject(ProjectionService);
+  transform = this.reflectOnTheVerticalAxis();
 
   ngOnInit() {
     this.svc.loadOnce();
+  }
+  private reflectOnTheVerticalAxis() {
+    return computed(() => {
+      let { width, mirrorX } = this.proj.settings();
+      mirrorX = !mirrorX;
+      if (!mirrorX) return null;
+      return `translate(${width},0) scale(-1,1)`;
+    });
+  }
+  /**
+   * Rzutuje punkt RA/Dec na ekran w pikselach.
+   * Odbicie X robimy na poziomie <g> przez transform, nie tutaj.
+   */
+  private projectStarStyle(raDeg: number, decDeg: number): [number, number] | null {
+    const p = this.proj.getProjectionByLonLat(raDeg, decDeg);
+    if (!p) return null;
+
+    // przedtem było:
+    // const w = this.proj.settings().width;
+    // let [x, y] = p;
+    // x = w - x;
+
+    return p; // [x, y] bez zmian
   }
 
   /**
    * Rzutuje punkt RA/Dec na ekran w pikselach, z takim samym mirrorem X,
    * jak robimy dla gwiazd.
    */
-  private projectStarStyle(raDeg: number, decDeg: number): [number, number] | null {
-    const p = this.proj.getProjectionByLonLat(raDeg, decDeg);
-    if (!p) return null;
+  // private projectStarStyle(raDeg: number, decDeg: number): [number, number] | null {
+  //   const p = this.proj.getProjectionByLonLat(raDeg, decDeg);
+  //   if (!p) return null;
 
-    const w = this.proj.settings().width;
-    let [x, y] = p;
-    x = w - x; // RA rośnie w lewo, tak jak w warstwie gwiazd
-    return [x, y];
-  }
+  //   const w = this.proj.settings().width;
+  //   let [x, y] = p;
+  //   x = w - x; // RA rośnie w lewo, tak jak w warstwie gwiazd
+  //   return [x, y];
+  // }
 
   /**
    * Dany segment granicy to tablica punktów [ [ra,dec], [ra,dec], ... ].

@@ -90,7 +90,7 @@ export class StarsService {
     widthPx: number,
     options?: { mirrorX?: boolean }
   ) {
-    const mirrorX = options?.mirrorX ?? true;
+    const mirrorX = options?.mirrorX;
     const prev = this._data();
 
     const starsUpdated = prev.stars.map((orig) => {
