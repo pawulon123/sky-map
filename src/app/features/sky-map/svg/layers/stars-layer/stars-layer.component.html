@@ -2,14 +2,16 @@
   <ng-container *ngIf="starsSettings$ | async as settings">
     <ng-container *ngIf="settings.symbols.visible">
       <ng-container *ngFor="let s of stars()">
-        <circle
-          [attr.cx]="starCx(s)"
-          [attr.cy]="starCy(s)"
-          [attr.r]="radius(s)"
-          [attr.fill]="settings.symbols.ring === 0 ? settings.symbols.color : 'none'"
-          [attr.stroke]="settings.symbols.ring === 0 ? 'none' : settings.symbols.color"
-          [attr.stroke-width]="settings.symbols.ring === 0 ? null : radius(s) * settings.symbols.ring"
-        />
+        <ng-container *ngIf="s.mag <= settings.symbols.magMax">
+          <circle
+            [attr.cx]="starCx(s)"
+            [attr.cy]="starCy(s)"
+            [attr.r]="radius(s)"
+            [attr.fill]="settings.symbols.ring === 0 ? settings.symbols.color : 'none'"
+            [attr.stroke]="settings.symbols.ring === 0 ? 'none' : settings.symbols.color"
+            [attr.stroke-width]="settings.symbols.ring === 0 ? null : radius(s) * settings.symbols.ring"
+          />
+        </ng-container>
       </ng-container>
     </ng-container>
 

@@ -4,6 +4,7 @@ export const defaultStarsSettings: StarsLayerSettings = {
   symbols: {
     visible: true,
     ring: 0,
+    magMax: 7,
     shape: 'circle',
     size: 1.5,
     color: '#4205e8ff',

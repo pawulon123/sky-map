@@ -28,6 +28,10 @@ export class StarsSymbolControlsComponent {
     this.state.updateStarsSymbols({ ring: Number(value) });
   }
 
+  updateMagMax(value: number) {
+    this.state.updateStarsSymbols({ magMax: Number(value) });
+  }
+
   changeShape(shape: Shape) {
     this.state.updateStarsSymbols({ shape });
   }

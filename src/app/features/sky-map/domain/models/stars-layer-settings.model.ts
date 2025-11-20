@@ -8,7 +8,7 @@ export interface StarsSymbolsSettings {
   visible: boolean;
 
   ring: number;
-
+  magMax: number;
   /** Kształt symbolu gwiazdy */
   shape: StarSymbolShape;
 
