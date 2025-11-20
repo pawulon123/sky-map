@@ -7,6 +7,7 @@
 <!-- src/app/svg/root-svg/root-svg.component.html -->
 
 <svg
+  #skySvg
   [attr.width]="(projectionSettings$ | async)?.width"
   [attr.height]="(projectionSettings$ | async)?.height"
   [attr.viewBox]="'0 0 ' + (projectionSettings$ | async)?.width + ' ' + (projectionSettings$ | async)?.height"
@@ -41,3 +42,4 @@
   <!-- asterizmy -->
   <g app-asterisms-layer *ngIf="(asterismSettings$ | async)?.visible"></g>
 </svg>
+<button type="button" (click)="exportSvgForEngraving()">Eksportuj SVG do grawerki</button>
