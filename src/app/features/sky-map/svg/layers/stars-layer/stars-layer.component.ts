@@ -19,7 +19,7 @@ export class StarsLayerComponent {
 
   maxMag = input<number | null>(null);
   showLabels = input<boolean>(true);
-  labelMaxMag = input<number>(2.0);
+  // labelMaxMag = input<number>(2.0);
 
   @Input() showStars = true;
   stars = computed<Star[]>(() => {

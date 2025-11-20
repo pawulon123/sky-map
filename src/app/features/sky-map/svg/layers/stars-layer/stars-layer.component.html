@@ -8,12 +8,6 @@
     </ng-container>
 
     <!-- warstwa etykiet gwiazd -->
-    <g
-      app-labels-layer
-      *ngIf="showLabels()"
-      [stars]="stars()"
-      [labelMaxMag]="labelMaxMag()"
-      [radiusFn]="radius.bind(this)"
-    ></g>
+    <g app-labels-layer *ngIf="showLabels()" [stars]="stars()" [radiusFn]="radius.bind(this)"></g>
   </ng-container>
 </svg:g>

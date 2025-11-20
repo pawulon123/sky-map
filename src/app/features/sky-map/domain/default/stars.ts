@@ -12,6 +12,7 @@ export const defaultStarsSettings: StarsLayerSettings = {
   },
   labels: {
     visible: true,
+    magnitudeRange: [-1, 6],
     position: 'top',
     fontSize: 10,
     maxLines: 2,

@@ -19,6 +19,18 @@ export class StarsLabelControlsComponent {
     this.state.updateStarsLabels({ visible });
   }
 
+  updateMagnitudeRange(index: 0 | 1, value: number, range: [number, number]) {
+    const magnitudeRange = this.getValidateRange(index, range, Number(value));
+    this.state.updateStarsLabels({ magnitudeRange });
+  }
+
+  private getValidateRange(index: 0 | 1, [min, max]: [number, number], value: number): [number, number] {
+    const isMin = index === 0;
+    const newMin = isMin ? value : value < min ? value : min;
+    const newMax = isMin ? (value > max ? value : max) : value;
+    return [newMin, newMax];
+  }
+
   // changePosition(position: 'top' | 'bottom' | 'left' | 'right') {
   //   this.state.updateStarsLabels({ position });
   // }

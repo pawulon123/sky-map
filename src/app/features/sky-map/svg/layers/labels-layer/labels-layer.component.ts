@@ -2,6 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import { Star } from '../../../domain/models/star.model';
 import { CommonModule } from '@angular/common';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
+import { isInRange } from '../../../../../core/utils/utils-function';
 
 @Component({
   selector: 'g[app-labels-layer]',
@@ -11,14 +12,13 @@ import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-m
 })
 export class LabelsLayerComponent {
   @Input({ required: true }) stars: Star[] = [];
-  @Input({ required: true }) labelMaxMag = 2.0;
   @Input({ required: false }) radiusFn: (s: Star) => number = () => 2;
 
+  isInRange: (value: number, [min, max]: [number, number]) => boolean = isInRange;
   private state = inject(SkyMapStateService);
   starsSettings$ = this.state.starsLayerSettings$;
 
   get labeledStars(): Star[] {
-    const limit = this.labelMaxMag;
     return this.stars.filter((s) => {
       // 1. nazwa jako string (jeśli to numer albo cokolwiek innego, zmieniamy na string)
       const rawName = (s as any).name;
@@ -31,11 +31,6 @@ export class LabelsLayerComponent {
 
       // 3. czy punkt ma współrzędne ekranowe?
       if (!Array.isArray(s.__projected)) {
-        return false;
-      }
-
-      // 4. czy gwiazda jest wystarczająco jasna?
-      if (s.mag != null && s.mag > limit) {
         return false;
       }
 

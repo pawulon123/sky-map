@@ -3,7 +3,7 @@ export interface Star {
   ra?: number;
   ra_deg?: number;
   dec: number;
-  mag?: number;
+  mag: number;
   name?: string;
   spect?: string | null;
   dist_pc?: number | null;

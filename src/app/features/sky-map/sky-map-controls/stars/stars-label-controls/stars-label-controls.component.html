@@ -1,17 +1,43 @@
-<div class="stars-label-controls space-y-2">
+<div class="stars-label-controls space-y-3" *ngIf="starsSettings$ | async as starsSettings">
   <div class="flex items-center justify-between">
     <label class="font-semibold">Etykiety gwiazd</label>
+
     <label class="flex items-center gap-2 text-sm">
       <span>Widoczne</span>
-      <input
-        type="checkbox"
-        [ngModel]="(starsSettings$ | async)?.labels?.visible"
-        (ngModelChange)="toggleLabelsVisible($event)"
-      />
+      <input type="checkbox" [ngModel]="starsSettings.labels.visible" (ngModelChange)="toggleLabelsVisible($event)" />
     </label>
   </div>
 
-  <!-- <div class="field">
+  <div class="flex items-center justify-between gap-3">
+    <label class="text-sm whitespace-nowrap">Magnitudo od–do</label>
+
+    <div class="flex items-center gap-2">
+      <!-- OD -->
+      <input
+        type="number"
+        min="-5"
+        max="20"
+        class="w-20 border rounded px-2 py-1"
+        [ngModel]="starsSettings.labels.magnitudeRange[0]"
+        (ngModelChange)="updateMagnitudeRange(0, $event, starsSettings.labels.magnitudeRange)"
+      />
+
+      <span>–</span>
+
+      <!-- DO -->
+      <input
+        type="number"
+        min="-5"
+        max="20"
+        class="w-20 border rounded px-2 py-1"
+        [ngModel]="starsSettings.labels.magnitudeRange[1]"
+        (ngModelChange)="updateMagnitudeRange(1, $event, starsSettings.labels.magnitudeRange)"
+      />
+    </div>
+  </div>
+</div>
+
+<!-- <div class="field">
     <label class="label">Położenie</label>
     <select
       class="input"
@@ -98,4 +124,4 @@
       />
     </div>
   </div> -->
-</div>
+<!-- </div> -->

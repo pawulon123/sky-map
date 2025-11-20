@@ -13,9 +13,6 @@ const ASSETS_STARS_JSON = 'hyg-stars.json';
 export class StarsService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
-  // private proj  = inject(ProjectionService);
-  // private refreshProjectionSv = inject(RefreshProjectionService)
-
   private _loaded = signal(false);
   private _data = signal<StarsData>({ meta: {}, stars: [] });
 
@@ -25,7 +22,6 @@ export class StarsService {
   loaded() {
     return this._loaded();
   }
-
   /** Gwiazdy po najnowszej projekcji (każda ma __projected = [x,y] GOTOWE DO RYSOWANIA W SVG) */
   readonly projected = computed(() => this._data().stars);
   projectedStars() {
@@ -75,9 +71,6 @@ export class StarsService {
 
     this._data.set({ meta, stars });
     this._loaded.set(true);
-    ///dziwne
-    // this.proj.reprojectStars();
-    // this.refreshProjectionSv.reprojectStars()
     reprojectStarsAfterLoad();
   }
 

@@ -29,6 +29,7 @@ export interface StarsSymbolsSettings {
 export interface StarsLabelsSettings {
   /** Czy wyświetlać etykiety gwiazd */
   visible: boolean;
+  magnitudeRange: [number, number];
 
   /** Położenie etykiety względem symbolu */
   position: StarLabelPosition;
