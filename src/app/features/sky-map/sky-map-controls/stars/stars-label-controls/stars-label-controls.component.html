@@ -6,6 +6,10 @@
       <span>Widoczne</span>
       <input type="checkbox" [ngModel]="starsSettings.labels.visible" (ngModelChange)="toggleLabelsVisible($event)" />
     </label>
+    <label class="flex items-center gap-2 text-sm">
+      <span>Bayer</span>
+      <input type="checkbox" [ngModel]="starsSettings.labels.showBayer" (ngModelChange)="toggleBayerVisible($event)" />
+    </label>
   </div>
 
   <div class="flex items-center justify-between gap-3">

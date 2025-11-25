@@ -19,6 +19,10 @@ export class StarsLabelControlsComponent {
     this.state.updateStarsLabels({ visible });
   }
 
+  toggleBayerVisible(showBayer: boolean) {
+    this.state.updateStarsLabels({ showBayer });
+  }
+
   updateMagnitudeRange(index: 0 | 1, value: number, range: [number, number]) {
     const magnitudeRange = this.getValidateRange(index, range, Number(value));
     this.state.updateStarsLabels({ magnitudeRange });

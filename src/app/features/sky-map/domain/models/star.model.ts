@@ -1,4 +1,5 @@
 export interface Star {
+  bayer: string;
   id?: number | string;
   ra?: number;
   ra_deg?: number;

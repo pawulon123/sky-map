@@ -1,16 +1,13 @@
 <ng-container *ngIf="starsSettings$ | async as settings">
   <ng-container *ngIf="settings.labels.visible">
-    <ng-container *ngFor="let s of labeledStars">
-      <ng-container *ngIf="isInRange(s.mag, settings.labels.magnitudeRange)">
-        <svg:text
-          class="star-label"
-          [attr.x]="labelX(s)"
-          [attr.y]="labelY(s)"
-          [style.fontSize.px]="settings.labels.fontSize"
-        >
-          {{ s.name }}
-        </svg:text>
-      </ng-container>
+    <ng-container *ngFor="let label of computeLabelLayout(settings.labels)">
+      <svg:text class="star-label" [attr.x]="label.x" [attr.y]="label.y" [style.fontSize.px]="settings.labels.fontSize">
+        <ng-container *ngFor="let line of getLabelLines(label.star, settings.labels); let i = index">
+          <svg:tspan [attr.x]="label.x" [attr.dy]="i === 0 ? 0 : settings.labels.fontSize * 1.1">
+            {{ line }}
+          </svg:tspan>
+        </ng-container>
+      </svg:text>
     </ng-container>
   </ng-container>
 </ng-container>

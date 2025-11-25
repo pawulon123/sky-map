@@ -23,5 +23,6 @@ export const defaultStarsSettings: StarsLayerSettings = {
     borderColor: '#ffffff',
     textColor: '#ffffff',
     backgroundColor: '#000000',
+    showBayer: true,
   },
 };

@@ -1,8 +1,11 @@
 import { Component, inject, Input } from '@angular/core';
-import { Star } from '../../../domain/models/star.model';
 import { CommonModule } from '@angular/common';
+import { Star } from '../../../domain/models/star.model';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
-import { isInRange } from '../../../../../core/utils/utils-function';
+import { LabelPlacement, LabelBox, StarsLabelsSettings } from '../../../domain/models/stars-layer-settings.model';
+import { hasNameOrBayer, projected } from './helpers';
+import { buildLabelLines, firstLine } from './name-or-bayer';
+import { computeLabelLayout } from './compute-label-layou';
 
 @Component({
   selector: 'g[app-labels-layer]',
@@ -14,37 +17,21 @@ export class LabelsLayerComponent {
   @Input({ required: true }) stars: Star[] = [];
   @Input({ required: false }) radiusFn: (s: Star) => number = () => 2;
 
-  isInRange: (value: number, [min, max]: [number, number]) => boolean = isInRange;
   private state = inject(SkyMapStateService);
   starsSettings$ = this.state.starsLayerSettings$;
 
+  // definiujesz raz pipeline linii
+  private readonly labelLines = buildLabelLines(firstLine);
+
   get labeledStars(): Star[] {
-    return this.stars.filter((s) => {
-      // 1. nazwa jako string (jeśli to numer albo cokolwiek innego, zmieniamy na string)
-      const rawName = (s as any).name;
-      const nameStr = typeof rawName === 'string' ? rawName : rawName != null ? String(rawName) : '';
-
-      // 2. czy mamy coś do wyświetlenia?
-      if (!nameStr || nameStr.trim().length === 0) {
-        return false;
-      }
-
-      // 3. czy punkt ma współrzędne ekranowe?
-      if (!Array.isArray(s.__projected)) {
-        return false;
-      }
-
-      return true;
-    });
+    return this.stars.filter((s) => hasNameOrBayer(s)).filter((s) => projected(s));
   }
 
-  labelX(s: Star): number {
-    const p = s.__projected ?? [0, 0];
-    return p[0] + 3;
+  getLabelLines(star: Star, settings: StarsLabelsSettings): string[] {
+    return this.labelLines(star, settings);
   }
 
-  labelY(s: Star): number {
-    const p = s.__projected ?? [0, 0];
-    return p[1] - (this.radiusFn(s) + 2);
+  computeLabelLayout(settings: StarsLabelsSettings): LabelPlacement[] {
+    return computeLabelLayout(settings, this.labeledStars, this.getLabelLines.bind(this));
   }
 }

@@ -24,3 +24,13 @@ export function update<S extends Record<string, any>, K extends keyof S & string
     ...(partial as Partial<S>),
   };
 }
+type Fn<T> = (arg: T) => T;
+export const compose =
+  <T>(...fns: Fn<T>[]) =>
+  (initial: T): T =>
+    fns.reduceRight((acc, fn) => fn(acc), initial);
+
+export const partial =
+  (fn: Function, ...args: any[]) =>
+  (...restArgs: any[]) =>
+    fn(...args, ...restArgs);

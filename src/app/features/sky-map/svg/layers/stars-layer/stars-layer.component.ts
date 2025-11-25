@@ -24,6 +24,7 @@ export class StarsLayerComponent {
   @Input() showStars = true;
   stars = computed<Star[]>(() => {
     const all = this.svc.data().stars ?? [];
+
     // pokazuj tylko gwiazdy które mają wyliczone __projected = [x,y]
     let visible = all.filter((s) => Array.isArray(s.__projected));
 
@@ -32,6 +33,7 @@ export class StarsLayerComponent {
     if (limit != null) {
       visible = visible.filter((s) => s.mag == null || s.mag <= limit);
     }
+
     return [...visible].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
   });
 
