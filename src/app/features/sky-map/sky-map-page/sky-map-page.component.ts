@@ -4,12 +4,23 @@ import { SkyMapSvgComponent } from '../sky-map-svg/sky-map-svg.component';
 import { SkyMapStateService } from '../domain/services/sky-map-state/sky-map-state.service';
 import { SvgData } from '../../../core/common/svg-data';
 import { Subscription } from 'rxjs';
+import { MatSidenavModule, MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-sky-map-page',
-  imports: [SkyMapSvgComponent, SkyMapControlsComponent],
+  imports: [
+    SkyMapSvgComponent,
+    SkyMapControlsComponent,
+    MatSidenavContainer,
+    MatSidenav,
+    MatSidenavContent,
+    MatIconModule,
+  ],
   templateUrl: './sky-map-page.component.html',
   styleUrl: './sky-map-page.component.css',
+  standalone: true,
 })
 export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
   private stateProjectionSub!: Subscription;
