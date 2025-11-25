@@ -21,13 +21,12 @@ export interface StarsLabelsSettings {
   magnitudeRange: [number, number];
   position: StarLabelPosition;
   fontSize: number;
-  maxLines: number;
-  iconEnabled: boolean;
-  borderEnabled: boolean;
-  borderColor: string;
-  textColor: string;
-  backgroundColor: string;
   showBayer: boolean;
+  fontWeight: string;
+  stroke: string;
+  strokeWidth: number;
+  strokeOpacity: number;
+  fontFamily: string;
 }
 
 export interface StarsLayerSettings {

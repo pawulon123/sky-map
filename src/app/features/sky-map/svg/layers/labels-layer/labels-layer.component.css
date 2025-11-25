@@ -1,11 +1,11 @@
 .star-label {
-  font-family:
+  /* font-family:
     system-ui,
     -apple-system,
     Segoe UI,
     Roboto,
-    sans-serif;
-  font-size: 10px;
+    sans-serif; */
+  /* font-size: 10px;
   font-weight: 500;
   fill: #e49696;
 
@@ -17,5 +17,5 @@
   text-anchor: start;
 
   pointer-events: none;
-  user-select: none;
+  user-select: none; */
 }

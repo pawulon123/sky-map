@@ -1,139 +1,133 @@
-<div class="stars-label-controls space-y-3" *ngIf="starsSettings$ | async as starsSettings">
-  <div class="flex items-center justify-between">
-    <label class="font-semibold">Etykiety gwiazd</label>
+<div class="stars-label-controls space-y-4" *ngIf="starsSettings$ | async as starsSettings">
+  <!-- NAGŁÓWEK -->
+  <div class="font-semibold mb-2">Etykiety gwiazd</div>
 
-    <label class="flex items-center gap-2 text-sm">
-      <span>Widoczne</span>
-      <input type="checkbox" [ngModel]="starsSettings.labels.visible" (ngModelChange)="toggleLabelsVisible($event)" />
-    </label>
-    <label class="flex items-center gap-2 text-sm">
-      <span>Bayer</span>
-      <input type="checkbox" [ngModel]="starsSettings.labels.showBayer" (ngModelChange)="toggleBayerVisible($event)" />
-    </label>
-  </div>
+  <!-- WIDOCZNOŚĆ ETYKIET -->
+  <mat-slide-toggle [checked]="starsSettings.labels.visible" (change)="toggleLabelsVisible($event.checked)">
+    Widoczne
+  </mat-slide-toggle>
 
-  <div class="flex items-center justify-between gap-3">
-    <label class="text-sm whitespace-nowrap">Magnitudo od–do</label>
+  <!-- POKAZUJ BAYER -->
+  <mat-slide-toggle [checked]="starsSettings.labels.showBayer" (change)="toggleBayerVisible($event.checked)">
+    Pokaż Bayer
+  </mat-slide-toggle>
 
-    <div class="flex items-center gap-2">
-      <!-- OD -->
-      <input
-        type="number"
-        min="-5"
-        max="20"
-        class="w-20 border rounded px-2 py-1"
-        [ngModel]="starsSettings.labels.magnitudeRange[0]"
-        (ngModelChange)="updateMagnitudeRange(0, $event, starsSettings.labels.magnitudeRange)"
-      />
+  <!-- MAGNITUDO OD–DO -->
+  <div>
+    <div class="text-sm mb-1">Magnitudo od–do</div>
+    <div class="flex gap-2 items-center">
+      <mat-form-field appearance="outline" class="w-24">
+        <mat-label>Od</mat-label>
+        <input
+          matInput
+          type="number"
+          min="-5"
+          max="20"
+          [ngModel]="starsSettings.labels.magnitudeRange[0]"
+          (ngModelChange)="updateMagnitudeRange(0, $event, starsSettings.labels.magnitudeRange)"
+        />
+      </mat-form-field>
 
       <span>–</span>
 
-      <!-- DO -->
-      <input
-        type="number"
-        min="-5"
-        max="20"
-        class="w-20 border rounded px-2 py-1"
-        [ngModel]="starsSettings.labels.magnitudeRange[1]"
-        (ngModelChange)="updateMagnitudeRange(1, $event, starsSettings.labels.magnitudeRange)"
-      />
+      <mat-form-field appearance="outline" class="w-24">
+        <mat-label>Do</mat-label>
+        <input
+          matInput
+          type="number"
+          min="-5"
+          max="20"
+          [ngModel]="starsSettings.labels.magnitudeRange[1]"
+          (ngModelChange)="updateMagnitudeRange(1, $event, starsSettings.labels.magnitudeRange)"
+        />
+      </mat-form-field>
     </div>
   </div>
 
-  <input
-    type="range"
-    min="6"
-    max="50"
-    [ngModel]="starsSettings.labels.fontSize"
-    (ngModelChange)="updateLabelFontSize($event)"
-  />
-</div>
-
-<!-- <div class="field">
-    <label class="label">Położenie</label>
-    <select
-      class="input"
-      [ngModel]="(starsSettings$ | async)?.labels?.position"
-      (ngModelChange)="changePosition($event)"
-    >
-      <option value="top">Nad gwiazdą</option>
-      <option value="bottom">Pod gwiazdą</option>
-      <option value="left">Po lewej</option>
-      <option value="right">Po prawej</option>
-    </select>
+  <!-- ROZMIAR CZCIONKI (SLIDER) -->
+  <div>
+    <div class="flex justify-between items-center mb-1 text-sm">
+      <span>Rozmiar czcionki</span>
+      <span>{{ starsSettings.labels.fontSize }} px</span>
+    </div>
+    <mat-slider [min]="6" [max]="50" [step]="1">
+      <input
+        matSliderThumb
+        type="range"
+        [ngModel]="starsSettings.labels.fontSize"
+        (ngModelChange)="updateLabelFontSize($event)"
+      />
+    </mat-slider>
   </div>
 
-  <div class="field">
-    <label class="label">
-      Rozmiar czcionki
-      <span class="value">
-        {{ (starsSettings$ | async)?.labels?.fontSize ?? 10 }} px
-      </span>
-    </label>
-    <input
-      type="range"
-      min="6"
-      max="24"
-      step="1"
-      [ngModel]="(starsSettings$ | async)?.labels?.fontSize"
-      (ngModelChange)="changeFontSize($event)"
-    />
-  </div>
+  <!-- FONT WEIGHT -->
+  <mat-form-field appearance="outline">
+    <mat-label>Grubość czcionki (font-weight)</mat-label>
+    <mat-select [value]="starsSettings.labels.fontWeight" (selectionChange)="update('fontWeight', $event.value)">
+      <mat-option value="normal">Normal</mat-option>
+      <mat-option value="bold">Bold</mat-option>
+      <mat-option value="300">300</mat-option>
+      <mat-option value="500">500</mat-option>
+      <mat-option value="700">700</mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <div class="field">
-    <label class="label">Maks. liczba linii</label>
+  <!-- STROKE WIDTH -->
+  <mat-form-field appearance="outline">
+    <mat-label>Grubość obrysu (stroke-width)</mat-label>
     <input
+      matInput
       type="number"
-      class="input"
-      min="1"
-      max="4"
-      [ngModel]="(starsSettings$ | async)?.labels?.maxLines"
-      (ngModelChange)="changeMaxLines($event)"
+      min="0"
+      step="0.2"
+      [ngModel]="starsSettings.labels.strokeWidth"
+      (ngModelChange)="update('strokeWidth', $event)"
     />
-  </div>
+  </mat-form-field>
 
-  <label class="flex items-center gap-2 text-sm">
+  <!-- STROKE OPACITY -->
+  <mat-form-field appearance="outline">
+    <mat-label>Przezroczystość obrysu (stroke-opacity)</mat-label>
     <input
-      type="checkbox"
-      [ngModel]="(starsSettings$ | async)?.labels?.iconEnabled"
-      (ngModelChange)="toggleIcon($event)"
+      matInput
+      type="number"
+      min="0"
+      max="1"
+      step="0.05"
+      [ngModel]="starsSettings.labels.strokeOpacity"
+      (ngModelChange)="update('strokeOpacity', $event)"
     />
-    Ikona przy etykiecie
-  </label>
+  </mat-form-field>
 
-  <div class="grid grid-cols-[1fr_auto] gap-2 items-center">
-    <label class="flex items-center gap-2 text-sm">
-      <input
-        type="checkbox"
-        [ngModel]="(starsSettings$ | async)?.labels?.borderEnabled"
-        (ngModelChange)="toggleBorder($event)"
-      />
-      Obramowanie
-    </label>
+  <!-- STROKE COLOR -->
+  <mat-form-field appearance="outline">
+    <mat-label>Kolor obrysu</mat-label>
+    <input matInput type="color" [ngModel]="starsSettings.labels.stroke" (ngModelChange)="update('stroke', $event)" />
+  </mat-form-field>
 
-    <input
-      type="color"
-      [ngModel]="(starsSettings$ | async)?.labels?.borderColor || '#ffffff'"
-      (ngModelChange)="changeBorderColor($event)"
-    />
-  </div>
-
-  <div class="grid grid-cols-2 gap-2">
-    <div class="field">
-      <label class="label">Kolor tekstu</label>
-      <input
-        type="color"
-        [ngModel]="(starsSettings$ | async)?.labels?.textColor || '#ffffff'"
-        (ngModelChange)="changeTextColor($event)"
-      />
-    </div>
-    <div class="field">
-      <label class="label">Tło etykiety</label>
-      <input
-        type="color"
-        [ngModel]="(starsSettings$ | async)?.labels?.backgroundColor || '#000000'"
-        (ngModelChange)="changeBackgroundColor($event)"
-      />
-    </div>
-  </div> -->
-<!-- </div> -->
+  <!-- FONT FAMILY -->
+  <mat-form-field appearance="outline">
+    <mat-label>Font family</mat-label>
+    <mat-select [value]="starsSettings.labels.fontFamily" (selectionChange)="update('fontFamily', $event.value)">
+      <mat-option value="'Inter'">Inter</mat-option>
+      <mat-option value="'Roboto'">Roboto</mat-option>
+      <mat-option value="'Open Sans'">Open Sans</mat-option>
+      <mat-option value="'Noto Sans'">Noto Sans</mat-option>
+      <mat-option value="'Fira Sans'">Fira Sans</mat-option>
+      <mat-option value="'Source Sans Pro'">Source Sans Pro</mat-option>
+      <mat-option value="'Work Sans'">Work Sans</mat-option>
+      <mat-option value="'Lato'">Lato</mat-option>
+      <mat-option value="'Poppins'">Poppins</mat-option>
+      <mat-option value="'Montserrat'">Montserrat</mat-option>
+      <mat-option value="'IBM Plex Sans'">IBM Plex Sans</mat-option>
+      <mat-option value="'Roboto Condensed'">Roboto Condensed</mat-option>
+      <mat-option value="'Arial'">Arial</mat-option>
+      <mat-option value="'Helvetica'">Helvetica</mat-option>
+      <mat-option value="'Georgia'">Georgia</mat-option>
+      <mat-option value="'Times New Roman'">Times New Roman</mat-option>
+      <mat-option value="'Courier New'">Courier New</mat-option>
+      <mat-option value="'Verdana'">Verdana</mat-option>
+      <mat-option value="'Segoe UI'">Segoe UI</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

@@ -2,7 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Star } from '../../../domain/models/star.model';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
-import { LabelPlacement, LabelBox, StarsLabelsSettings } from '../../../domain/models/stars-layer-settings.model';
+import { LabelPlacement, StarsLabelsSettings } from '../../../domain/models/stars-layer-settings.model';
 import { hasNameOrBayer, projected } from './helpers';
 import { buildLabelLines, firstLine } from './name-or-bayer';
 import { computeLabelLayout } from './compute-label-layou';
@@ -20,7 +20,6 @@ export class LabelsLayerComponent {
   private state = inject(SkyMapStateService);
   starsSettings$ = this.state.starsLayerSettings$;
 
-  // definiujesz raz pipeline linii
   private readonly labelLines = buildLabelLines(firstLine);
 
   get labeledStars(): Star[] {

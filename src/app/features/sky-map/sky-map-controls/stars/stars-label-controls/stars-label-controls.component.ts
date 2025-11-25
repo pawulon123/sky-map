@@ -2,11 +2,27 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
+import { StarsLabelsSettings } from '../../../domain/models/stars-layer-settings.model';
+import { MatOptionModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-stars-label-controls',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatOptionModule,
+    MatSlideToggleModule,
+    MatSliderModule,
+  ],
   templateUrl: './stars-label-controls.component.html',
   styleUrls: ['./stars-label-controls.component.css'],
 })
@@ -35,35 +51,12 @@ export class StarsLabelControlsComponent {
     return [newMin, newMax];
   }
 
-  // changePosition(position: 'top' | 'bottom' | 'left' | 'right') {
-  //   this.state.updateStarsLabels({ position });
-  // }
-
   updateLabelFontSize(fontSize: number) {
     this.state.updateStarsLabels({ fontSize });
   }
-
-  // changeMaxLines(lines: number) {
-  //   this.state.updateStarsLabels({ maxLines: lines });
-  // }
-
-  // toggleIcon(enabled: boolean) {
-  //   this.state.updateStarsLabels({ iconEnabled: enabled });
-  // }
-
-  // toggleBorder(enabled: boolean) {
-  //   this.state.updateStarsLabels({ borderEnabled: enabled });
-  // }
-
-  // changeBorderColor(color: string) {
-  //   this.state.updateStarsLabels({ borderColor: color });
-  // }
-
-  // changeTextColor(color: string) {
-  //   this.state.updateStarsLabels({ textColor: color });
-  // }
-
-  // changeBackgroundColor(color: string) {
-  //   this.state.updateStarsLabels({ backgroundColor: color });
-  // }
+  update(prop: keyof StarsLabelsSettings, value: any) {
+    this.state.updateStarsLabels({
+      [prop]: value,
+    });
+  }
 }

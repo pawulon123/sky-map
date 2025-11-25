@@ -89,11 +89,6 @@ const superscript = (n: string) =>
     )
     .join('');
 
-/**
- * "alpha Ori"    -> "α Ori"
- * "alpha-1 Ori"  -> "α¹ Ori"
- * "beta 2 CMa"   -> "β² CMa"
- */
 export function toGreekBayer(bayer: string): string {
   const parts = bayer.trim().split(/\s+/);
   if (parts.length === 0) return bayer;
