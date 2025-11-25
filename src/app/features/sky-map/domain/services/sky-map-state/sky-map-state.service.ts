@@ -1,4 +1,4 @@
-import { effect, inject, Injectable } from '@angular/core';
+import { effect, ElementRef, inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { StarsLabelsSettings, StarsLayerSettings, StarsSymbolsSettings } from '../../models/stars-layer-settings.model';
 import { RefreshProjectionService } from '../projection/refresh-projection.service';
@@ -36,6 +36,7 @@ export class SkyMapStateService {
   readonly asterismLayerSettings$: Observable<AsterismSettings> = this.asterismLayerSettingsSubject.asObservable();
   readonly constellationLineSettings$: Observable<ConstellationLineSettings> =
     this.constellationLineSettingsSubject.asObservable();
+  svgRef: ElementRef<SVGSVGElement> | null = null;
 
   constructor() {
     this.updateProjection();
@@ -71,5 +72,9 @@ export class SkyMapStateService {
 
   updateConstellationLine(partial: Partial<ConstellationLineSettings>): void {
     updateEndNext(partial, this.constellationLineSettingsSubject);
+  }
+
+  setRefSvg(svgRef: ElementRef<SVGSVGElement>): void {
+    this.svgRef = svgRef;
   }
 }

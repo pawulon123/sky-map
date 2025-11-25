@@ -8,8 +8,8 @@
 
 <svg
   #skySvg
-  [attr.width]="(projectionSettings$ | async)?.width"
-  [attr.height]="(projectionSettings$ | async)?.height"
+  [attr.width]="(projectionSettings$ | async)?.width + 'mm'"
+  [attr.height]="(projectionSettings$ | async)?.height + 'mm'"
   [attr.viewBox]="'0 0 ' + (projectionSettings$ | async)?.width + ' ' + (projectionSettings$ | async)?.height"
 >
   <!-- obrys sfery / krawędź rzutu -->
@@ -42,4 +42,3 @@
   <!-- asterizmy -->
   <g app-asterisms-layer *ngIf="(asterismSettings$ | async)?.visible"></g>
 </svg>
-<button type="button" (click)="exportSvgForEngraving()">Eksportuj SVG do grawerki</button>

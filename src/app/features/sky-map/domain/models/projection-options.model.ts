@@ -1,3 +1,5 @@
+import { ElementRef } from '@angular/core';
+
 export type ProjectionName =
   | 'stereographic'
   | 'azimuthal' // azimuthal equidistant
