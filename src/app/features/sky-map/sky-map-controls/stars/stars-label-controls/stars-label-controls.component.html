@@ -2,24 +2,17 @@
   <!-- NAGŁÓWEK -->
   <div class="font-semibold mb-2">Etykiety gwiazd</div>
 
+  <app-font-label [settingsLabels]="starsSettings.labels" (updateFont)="updateFont($event)"></app-font-label>
 
-
-
-<app-font-label
- [settingsLabels] = "starsSettings.labels"
- (updateFont) = "updateFont($event)"
- ></app-font-label>
-<app-colision-label></app-colision-label>
-
-
+  <app-colision-label (updateColision)="updateColision($event)"></app-colision-label>
 
   <!-- WIDOCZNOŚĆ ETYKIET -->
-  <mat-slide-toggle [checked]="starsSettings.labels.visible" (change)="toggleLabelsVisible($event.checked)">
+  <mat-slide-toggle [checked]="starsSettings.labels.visible" (change)="update('visible', $event.checked)">
     Widoczne
   </mat-slide-toggle>
 
   <!-- POKAZUJ BAYER -->
-  <mat-slide-toggle [checked]="starsSettings.labels.showBayer" (change)="toggleBayerVisible($event.checked)">
+  <mat-slide-toggle [checked]="starsSettings.labels.showBayer" (change)="update('showBayer', $event.checked)">
     Pokaż Bayer
   </mat-slide-toggle>
 
@@ -52,29 +45,6 @@
           (ngModelChange)="updateMagnitudeRange(1, $event, starsSettings.labels.magnitudeRange)"
         />
       </mat-form-field>
-    </div>
-  </div>
-
-  <!-- ROZMIAR CZCIONKI (SLIDER) -->
- 
-
-  <!-- KOLIZJE ETYKIET -->
-  <div class="mt-4 space-y-1">
-    <!-- GŁÓWNY CHECKBOX -->
-    <mat-checkbox [checked]="collisionsMain" (change)="onCollisionsMainChange($event.checked)">
-      Kolizje etykiet z obiektami
-    </mat-checkbox>
-
-    <!-- PODRZĘDNE CHECKBOXY -->
-    <div class="ml-6 flex flex-col gap-1 text-sm">
-      <mat-checkbox
-        *ngFor="let opt of collisionOptions"
-        [checked]="opt.checked"
-        [disabled]="!collisionsMain"
-        (change)="onChildCollisionChange(opt.key, $event.checked)"
-      >
-        {{ opt.label }}
-      </mat-checkbox>
     </div>
   </div>
 </div>
