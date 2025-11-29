@@ -5,12 +5,14 @@ import { SkyMapPageComponent } from './features/sky-map/sky-map-page/sky-map-pag
 import { SvgData } from './core/common/svg-data';
 import { exportSvg } from './core/utils/export-svg';
 import { svgDataDefault } from './core/default/svg-data';
+import { log } from 'node:util';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, SkyMapPageComponent],
   templateUrl: './app.component.html',
+  styleUrl: './app.component.css',
 })
 export class AppComponent {
   svgData: SvgData = svgDataDefault;

@@ -1,46 +1,42 @@
-<div class="p-4 grid gap-4 md:grid-cols-[320px_1fr]">
-  <div class="space-y-4">
-    <section class="border rounded-xl p-3">
-      <h2 class="font-semibold text-lg mb-2">Rzut i wymiary</h2>
+<section class="wrap">
+  <h6>Rzut i wymiary</h6>
 
-      <div class="grid grid-cols-3 gap-2 mb-3">
-        <button class="btn" (click)="setProjection('stereographic')">Stereograficzny</button>
-        <button class="btn" (click)="setProjection('azimuthal')">Azymutalny (Equidistant)</button>
-        <button class="btn" (click)="setProjection('azimuthalEA')">Azymutalny (Equal-Area)</button>
-        <button class="btn" (click)="setProjection('orthographic')">Ortograficzny</button>
-        <button class="btn" (click)="setProjection('gnomonic')">Gnomoniczny</button>
-        <button class="btn" (click)="setProjection('mercator')">Mercatora</button>
-        <button class="btn" (click)="setProjection('equirect')">Równikowy</button>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2">
-        <label class="flex items-center gap-2">
-          Szerokość
-          <input
-            type="number"
-            class="input"
-            [value]="width()"
-            (input)="setSize($any($event.target).valueAsNumber || 1200, height())"
-          />
-        </label>
-
-        <label class="flex items-center gap-2">
-          Wysokość
-          <input
-            type="number"
-            class="input"
-            [value]="height()"
-            (input)="setSize(width(), $any($event.target).valueAsNumber || 1200)"
-          />
-        </label>
-
-        <label class="flex items-center gap-2 text-sm">
-          <span>Odbicie w osi pionowej</span>
-          <input type="checkbox" [ngModel]="projectionSv.settings().mirrorX" (ngModelChange)="toggleMirrorX($event)" />
-        </label>
-      </div>
-    </section>
+  <!-- SELECT PROJEKCJI – normalna wysokość -->
+  <div class="center-in">
+    <mat-form-field appearance="outline" class="projection-select-field">
+      <mat-label>Typ projekcji</mat-label>
+      <mat-select [value]="projectionSv.settings().projectionName" (selectionChange)="setProjection($event.value)">
+        <mat-option *ngFor="let p of projections" [value]="p.value">
+          {{ p.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
-  <div class="border rounded-xl overflow-auto p-2"></div>
-</div>
+  <div class="center-in">
+    <mat-form-field appearance="outline" class="projection-size-field">
+      <mat-label>Szerokość</mat-label>
+      <input
+        matInput
+        type="number"
+        [value]="width()"
+        (input)="setSize($any($event.target).valueAsNumber || 1200, height())"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="projection-size-field">
+      <mat-label>Wysokość</mat-label>
+      <input
+        matInput
+        type="number"
+        [value]="height()"
+        (input)="setSize(width(), $any($event.target).valueAsNumber || 1200)"
+      />
+    </mat-form-field>
+  </div>
+
+  <mat-checkbox [checked]="projectionSv.settings().mirrorX" (change)="toggleMirrorX($event.checked)">
+    Odbicie w osi pionowej
+  </mat-checkbox>
+</section>
+`

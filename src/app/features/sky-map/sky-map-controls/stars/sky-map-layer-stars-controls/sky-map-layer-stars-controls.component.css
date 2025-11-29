@@ -1,7 +1,13 @@
-.stars-layer-panel {
+/* .stars-layer-panel {
   h3 {
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
+} */
+.wrap {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 95%;
+  background-color: rgb(210, 134, 42);
 }

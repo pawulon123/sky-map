@@ -1,130 +1,126 @@
-<div class="stars-symbol-controls space-y-2">
+<div style="background-color: cadetblue;">
+  <!-- Nagłówek + widoczność -->
+
   <div class="flex items-center justify-between">
-    <label class="font-semibold">Symbole gwiazd</label>
+    <span class="font-semibold">Symbole gwiazd</span>
 
-    <label class="flex items-center gap-2 text-sm">
-      <span>Widoczne</span>
-      <input
-        type="checkbox"
-        [ngModel]="(starsSettings$ | async)?.symbols?.visible"
-        (ngModelChange)="toggleVisible($event)"
-      />
-    </label>
-  </div>
-
-  <!-- SUWAK RING -->
-  <ng-container *ngIf="starsSettings$ | async as settings">
-    <div class="flex items-center justify-between">
-      <label class="text-sm">Pierścień</label>
-
-      <div class="flex items-center gap-2">
-        <input
-          type="range"
-          min="0"
-          max="15"
-          step="0.1"
-          [ngModel]="settings.symbols.ring"
-          (ngModelChange)="updateRing($event)"
-        />
-
-        <!-- liczbowy podgląd wartości -->
-        <span class="text-sm w-10 text-right">
-          {{ settings.symbols.ring }}
-        </span>
-      </div>
-    </div>
-  </ng-container>
-  <ng-container *ngIf="starsSettings$ | async as settings">
-    <div class="flex items-center justify-between">
-      <label class="text-sm">Widoczność (magnitudo max)</label>
-
-      <div class="flex items-center gap-2">
-        <input
-          type="range"
-          min="-1"
-          max="15"
-          step="0.1"
-          [ngModel]="settings.symbols.magMax"
-          (ngModelChange)="updateMagMax($event)"
-        />
-
-        <!-- podgląd aktualnej wartości -->
-        <span class="text-sm w-10 text-right">
-          {{ settings.symbols.magMax }}
-        </span>
-      </div>
-    </div>
-  </ng-container>
-</div>
-
-<!-- <div class="field">
-    <label class="label">Kształt</label>
-    <select
-      class="input"
-      [ngModel]="(starsSettings$ | async)?.symbols?.shape"
-      (ngModelChange)="changeShape($event)"
+    <mat-slide-toggle
+      [checked]="(starsSettings$ | async)?.symbols?.visible"
+      (change)="toggleVisible($event.checked)"
+      color="primary"
+      class="text-sm"
     >
-      <option value="circle">Kółko</option>
-      <option value="cross">Krzyżyk</option>
-      <option value="square">Kwadrat</option>
-      <option value="icon">Ikona</option>
-    </select>
+      Widoczne
+    </mat-slide-toggle>
   </div>
 
-  <div class="field">
-    <label class="label">
-      Rozmiar
-      <span class="value">
-        {{ (starsSettings$ | async)?.symbols?.size ?? 1 }}
-      </span>
-    </label>
-    <input
-      type="range"
-      min="0.5"
-      max="5"
-      step="0.1"
-      [ngModel]="(starsSettings$ | async)?.symbols?.size"
-      (ngModelChange)="changeSize($event)"
-    />
+  <!-- SUWAK PIERŚCIENIA -->
+  <ng-container *ngIf="starsSettings$ | async as settings">
+    <div class="flex items-center justify-between">
+      <span class="text-sm">Pierścień</span>
+
+      <div class="flex items-center gap-3">
+        <mat-slider min="0" max="15" step="0.1" class="w-40">
+          <input matSliderThumb [ngModel]="settings.symbols.ring" (ngModelChange)="updateRing($event)" />
+        </mat-slider>
+
+        <span class="text-sm w-10 text-right">
+          {{ settings.symbols.ring | number: '1.1-1' }}
+        </span>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- SUWAK MAGNITUDO MAX -->
+  <ng-container *ngIf="starsSettings$ | async as settings">
+    <div class="flex items-center justify-between">
+      <span class="text-sm">Widoczność (magnitudo max)</span>
+
+      <div class="flex items-center gap-3">
+        <mat-slider min="-1" max="15" step="0.1" class="w-40">
+          <input matSliderThumb [ngModel]="settings.symbols.magMax" (ngModelChange)="updateMagMax($event)" />
+        </mat-slider>
+
+        <span class="text-sm w-10 text-right">
+          {{ settings.symbols.magMax | number: '1.1-1' }}
+        </span>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- KSZTAŁT -->
+  <div class="mt-3">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Kształt</mat-label>
+      <mat-select [ngModel]="(starsSettings$ | async)?.symbols?.shape" (ngModelChange)="changeShape($event)">
+        <mat-option value="circle">Kółko</mat-option>
+        <mat-option value="cross">Krzyżyk</mat-option>
+        <mat-option value="square">Kwadrat</mat-option>
+        <mat-option value="icon">Ikona</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
-  <div class="field">
-    <label class="label">Kolor wypełnienia</label>
-    <input
-      type="color"
-      [ngModel]="(starsSettings$ | async)?.symbols?.color || '#ffffff'"
-      (ngModelChange)="changeColor($event)"
-    />
-  </div>
+  <!-- ROZMIAR -->
+  <ng-container *ngIf="starsSettings$ | async as settings">
+    <div class="mt-2">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-sm">Rozmiar</span>
+        <span class="text-sm">
+          {{ settings.symbols.size | number: '1.1-1' }}
+        </span>
+      </div>
 
-  <div class="field grid grid-cols-[1fr_auto] items-center gap-2">
-    <div>
-      <label class="label">Grubość obramowania</label>
+      <mat-slider min="0.5" max="5" step="0.1" class="w-40">
+        <input matSliderThumb [ngModel]="settings.symbols.size" (ngModelChange)="changeSize($event)" />
+      </mat-slider>
+    </div>
+  </ng-container>
+
+  <!-- KOLOR WYPEŁNIENIA -->
+  <div class="mt-2">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Kolor wypełnienia</mat-label>
       <input
+        matInput
+        type="color"
+        [ngModel]="(starsSettings$ | async)?.symbols?.color || '#ffffff'"
+        (ngModelChange)="changeColor($event)"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- GRUBOŚĆ I KOLOR OBRAMOWANIA -->
+  <div class="mt-2 grid grid-cols-[1fr_auto] items-center gap-3">
+    <mat-form-field appearance="outline">
+      <mat-label>Grubość obramowania</mat-label>
+      <input
+        matInput
         type="number"
-        class="input"
         min="0"
         step="0.1"
         [ngModel]="(starsSettings$ | async)?.symbols?.strokeWidth"
         (ngModelChange)="changeStrokeWidth($event)"
       />
-    </div>
-    <div>
-      <label class="label">Kolor obramowania</label>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-28">
+      <mat-label>Kolor obramowania</mat-label>
       <input
+        matInput
         type="color"
         [ngModel]="(starsSettings$ | async)?.symbols?.strokeColor || '#ffffff'"
         (ngModelChange)="changeStrokeColor($event)"
       />
-    </div>
+    </mat-form-field>
   </div>
 
-  <label class="flex items-center gap-2 text-sm">
-    <input
-      type="checkbox"
-      [ngModel]="(starsSettings$ | async)?.symbols?.scaleByMagnitude"
-      (ngModelChange)="toggleScaleByMagnitude($event)"
-    />
+  <!-- SKALOWANIE ROZMIARU -->
+  <mat-checkbox
+    class="mt-2 text-sm"
+    [ngModel]="(starsSettings$ | async)?.symbols?.scaleByMagnitude"
+    (ngModelChange)="toggleScaleByMagnitude($event)"
+  >
     Skaluj rozmiar wg jasności (magnitudo)
-  </label> -->
-<!-- </div> -->
+  </mat-checkbox>
+</div>
