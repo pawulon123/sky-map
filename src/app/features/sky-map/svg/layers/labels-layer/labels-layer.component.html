@@ -1,6 +1,6 @@
 <ng-container *ngIf="starsSettings$ | async as settings">
   <ng-container *ngIf="settings.labels.visible">
-    <ng-container *ngFor="let label of computeLabelLayout(settings.labels)">
+    <ng-container *ngFor="let label of computeLabelLayout()">
       <svg:text
         class="star-label"
         [attr.x]="label.x"
@@ -11,9 +11,10 @@
         [attr.stroke]="settings.labels.stroke"
         [attr.stroke-width]="settings.labels.strokeWidth"
         [attr.stroke-opacity]="settings.labels.strokeOpacity"
+        [style.letter-spacing.px]="settings.labels.letterSpacing"
         [attr.paint-order]="'stroke'"
       >
-        <ng-container *ngFor="let line of getLabelLines(label.star, settings.labels); let i = index">
+        <ng-container *ngFor="let line of getLabelLines(label.star); let i = index">
           <svg:tspan [attr.x]="label.x" [attr.dy]="i === 0 ? 0 : settings.labels.fontSize * 1.1">
             {{ line }}
           </svg:tspan>

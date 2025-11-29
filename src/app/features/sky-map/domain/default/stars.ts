@@ -1,4 +1,4 @@
-import { StarsLayerSettings } from '../models/stars-layer-settings.model';
+import { PositionConfig, StarsLayerSettings } from '../models/stars-layer-settings.model';
 
 export const defaultStarsSettings: StarsLayerSettings = {
   symbols: {
@@ -23,5 +23,37 @@ export const defaultStarsSettings: StarsLayerSettings = {
     strokeWidth: 0,
     strokeOpacity: 1,
     fontFamily: 'Arial',
+    letterSpacing: 2,
+    colision: [],
   },
 };
+
+export const fontForLabelStars = [
+  'Inter',
+  'Roboto',
+  'Open Sans',
+  'Noto Sans',
+  'Fira Sans',
+  'Source Sans Pro',
+  'Work Sans',
+  'Lato',
+  'Poppins',
+  'Montserrat',
+  'IBM Plex Sans',
+  'Roboto Condensed',
+  'Arial',
+  'Helvetica',
+  'Georgia',
+  'Times New Roman',
+  'Courier New',
+  'Verdana',
+  'Segoe UI',
+];
+export const POSITION_CONFIGS: readonly PositionConfig[] = [
+  { key: 'right', dx: 1, dy: 0, align: 'left' },
+  { key: 'left', dx: -1, dy: 0, align: 'left' },
+  { key: 'top', dx: 0, dy: -1, align: 'center' },
+  { key: 'bottom', dx: 0, dy: 1, align: 'center' },
+] as const;
+
+export const LINE_SPACING = 1.1;

@@ -108,15 +108,13 @@ export function toGreekBayer(bayer: string): string {
   return rest.length > 0 ? `${greekWithIndex} ${rest.join(' ')}` : greekWithIndex;
 }
 
-// --- PIPELINE LINII ---
+// export type LabelLineFn = (star: Star, settings: StarsLabelsSettings) => string | null | undefined;
+export type LabelLineFn = (star: Star, settings: StarsLabelsSettings) => string | null | undefined;
 
-// funkcja, która zwraca jedną linię (albo null, jeśli ta linia ma się nie pojawić)
-export type LabelLineFn = (star: Star, settings: StarsLabelsSettings) => string | null;
-
-// kompozytor: przyjmuje wiele LabelLineFn i zwraca funkcję robiącą tablicę linii
 export const buildLabelLines =
   (...fns: LabelLineFn[]) =>
-  (star: Star, settings: StarsLabelsSettings): string[] =>
+  (settings: StarsLabelsSettings) =>
+  (star: Star): string[] =>
     fns.reduce<string[]>((acc, fn) => {
       const line = fn(star, settings);
       if (line && line.trim().length > 0) {
@@ -124,8 +122,6 @@ export const buildLabelLines =
       }
       return acc;
     }, []);
-
-// --- KONKRETNE FUNKCJE-LINIE ---
 
 // 1. Pierwsza linia: nazwa + ewentualnie Bayer w nawiasie
 export const firstLine: LabelLineFn = (star, settings) => {
@@ -158,19 +154,3 @@ export const firstLine: LabelLineFn = (star, settings) => {
 
   return null;
 };
-
-// 2. przykładowa linia: jasność (magnitudo)
-// export const magnitudeLine: LabelLineFn = (star, settings) => {
-//   if (!settings.showMagnitude) return null; // zależy, co masz w ustawieniach
-//   const mag = (star as any).mag;
-//   if (mag == null) return null;
-//   return `m = ${mag.toFixed(2)}`;
-// };
-
-// // 3. przykładowa linia: rozmiar (placeholder, dopasuj do swojego modelu)
-// export const sizeLine: LabelLineFn = (star, settings) => {
-//   if (!settings.showSize) return null;
-//   const size = (star as any).size;
-//   if (size == null) return null;
-//   return `size: ${size}`;
-// };

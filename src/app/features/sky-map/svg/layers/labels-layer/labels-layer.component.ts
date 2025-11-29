@@ -1,11 +1,11 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Star } from '../../../domain/models/star.model';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
-import { LabelPlacement, StarsLabelsSettings } from '../../../domain/models/stars-layer-settings.model';
-import { hasNameOrBayer, projected } from './helpers';
+import { LabelPlacement, StarsLayerSettings } from '../../../domain/models/stars-layer-settings.model';
+import { defaultStarsSettings } from '../../../domain/default/stars';
+import { LabelService } from './label.service';
 import { buildLabelLines, firstLine } from './name-or-bayer';
-import { computeLabelLayout } from './compute-label-layou';
 
 @Component({
   selector: 'g[app-labels-layer]',
@@ -13,24 +13,31 @@ import { computeLabelLayout } from './compute-label-layou';
   templateUrl: './labels-layer.component.html',
   styleUrl: './labels-layer.component.css',
 })
-export class LabelsLayerComponent {
-  @Input({ required: true }) stars: Star[] = [];
+export class LabelsLayerComponent implements OnInit {
   @Input({ required: false }) radiusFn: (s: Star) => number = () => 2;
 
+  private labelService = inject(LabelService);
   private state = inject(SkyMapStateService);
+
   starsSettings$ = this.state.starsLayerSettings$;
 
-  private readonly labelLines = buildLabelLines(firstLine);
+  private labelLinesFn!: (star: Star) => string[];
+  settings: StarsLayerSettings = defaultStarsSettings;
 
-  get labeledStars(): Star[] {
-    return this.stars.filter((s) => hasNameOrBayer(s)).filter((s) => projected(s));
+  ngOnInit(): void {
+    this.buildLabelLines();
   }
 
-  getLabelLines(star: Star, settings: StarsLabelsSettings): string[] {
-    return this.labelLines(star, settings);
+  private buildLabelLines(): void {
+    const settings = this.state.getStarSettings().labels;
+    this.labelLinesFn = buildLabelLines(firstLine)(settings);
   }
 
-  computeLabelLayout(settings: StarsLabelsSettings): LabelPlacement[] {
-    return computeLabelLayout(settings, this.labeledStars, this.getLabelLines.bind(this));
+  getLabelLines(star: Star): string[] {
+    return this.labelLinesFn(star);
+  }
+
+  computeLabelLayout(): LabelPlacement[] {
+    return this.labelService.computeLabelLayout(this.getLabelLines.bind(this));
   }
 }

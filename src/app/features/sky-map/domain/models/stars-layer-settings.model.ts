@@ -27,6 +27,8 @@ export interface StarsLabelsSettings {
   strokeWidth: number;
   strokeOpacity: number;
   fontFamily: string;
+  letterSpacing: number;
+  colision: string[] | null;
 }
 
 export interface StarsLayerSettings {
@@ -46,7 +48,14 @@ export interface LabelPlacement {
   star: Star;
   x: number;
   y: number;
-  positionKey: LabelStarPositionKey;
+  positionKey: PositionKey;
 }
 
-export type LabelStarPositionKey = 'right' | 'left' | 'top' | 'bottom';
+export type PositionKey = 'right' | 'left' | 'top' | 'bottom';
+
+export interface PositionConfig {
+  key: PositionKey;
+  dx: number;
+  dy: number;
+  align: 'left' | 'center';
+}

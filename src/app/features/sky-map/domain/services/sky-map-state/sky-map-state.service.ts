@@ -77,4 +77,8 @@ export class SkyMapStateService {
   setRefSvg(svgRef: ElementRef<SVGSVGElement>): void {
     this.svgRef = svgRef;
   }
+
+  getStarSettings() {
+    return this.starsLayerSettingsSubject.getValue();
+  }
 }
