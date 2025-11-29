@@ -2,6 +2,17 @@
   <!-- NAGŁÓWEK -->
   <div class="font-semibold mb-2">Etykiety gwiazd</div>
 
+
+
+
+<app-font-label
+ [settingsLabels] = "starsSettings.labels"
+ (updateFont) = "updateFont($event)"
+ ></app-font-label>
+<app-colision-label></app-colision-label>
+
+
+
   <!-- WIDOCZNOŚĆ ETYKIET -->
   <mat-slide-toggle [checked]="starsSettings.labels.visible" (change)="toggleLabelsVisible($event.checked)">
     Widoczne
@@ -45,92 +56,7 @@
   </div>
 
   <!-- ROZMIAR CZCIONKI (SLIDER) -->
-  <div>
-    <div class="flex justify-between items-center mb-1 text-sm">
-      <span>Rozmiar czcionki</span>
-      <span>{{ starsSettings.labels.fontSize }} px</span>
-    </div>
-    <mat-slider [min]="6" [max]="50" [step]="1">
-      <input
-        matSliderThumb
-        type="range"
-        [ngModel]="starsSettings.labels.fontSize"
-        (ngModelChange)="updateLabelFontSize($event)"
-      />
-    </mat-slider>
-  </div>
-
-  <!-- FONT WEIGHT -->
-  <mat-form-field appearance="outline">
-    <mat-label>Grubość czcionki (font-weight)</mat-label>
-    <mat-select [ngModel]="starsSettings.labels.fontWeight" (ngModelChange)="update('fontWeight', $event)">
-      <mat-option value="normal">Normal</mat-option>
-      <mat-option value="bold">Bold</mat-option>
-      <mat-option value="300">300</mat-option>
-      <mat-option value="500">500</mat-option>
-      <mat-option value="700">700</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <!-- STROKE WIDTH -->
-  <mat-form-field appearance="outline">
-    <mat-label>Grubość obrysu (stroke-width)</mat-label>
-    <input
-      matInput
-      type="number"
-      min="0"
-      step="0.2"
-      [ngModel]="starsSettings.labels.strokeWidth"
-      (ngModelChange)="update('strokeWidth', $event)"
-    />
-  </mat-form-field>
-
-  <!-- STROKE OPACITY -->
-  <mat-form-field appearance="outline">
-    <mat-label>Przezroczystość obrysu (stroke-opacity)</mat-label>
-    <input
-      matInput
-      type="number"
-      min="0"
-      max="1"
-      step="0.05"
-      [ngModel]="starsSettings.labels.strokeOpacity"
-      (ngModelChange)="update('strokeOpacity', $event)"
-    />
-  </mat-form-field>
-
-  <!-- STROKE COLOR -->
-  <mat-form-field appearance="outline">
-    <mat-label>Kolor obrysu</mat-label>
-    <input matInput type="color" [ngModel]="starsSettings.labels.stroke" (ngModelChange)="update('stroke', $event)" />
-  </mat-form-field>
-
-  <!-- FONT FAMILY -->
-  <mat-form-field appearance="outline">
-    <mat-label>Font family</mat-label>
-
-    <mat-select [ngModel]="starsSettings.labels.fontFamily" (ngModelChange)="update('fontFamily', $event)">
-      <mat-option *ngFor="let font of fonts">
-        {{ font }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <!-- LETTER SPACING (SLIDER) -->
-  <div>
-    <div class="flex justify-between items-center mb-1 text-sm">
-      <span>Odstęp między literami</span>
-      <span>{{ starsSettings.labels.letterSpacing }} px</span>
-    </div>
-
-    <mat-slider [min]="-5" [max]="20" [step]="0.5">
-      <input
-        matSliderThumb
-        type="range"
-        [ngModel]="starsSettings.labels.letterSpacing"
-        (ngModelChange)="update('letterSpacing', $event)"
-      />
-    </mat-slider>
-  </div>
+ 
 
   <!-- KOLIZJE ETYKIET -->
   <div class="mt-4 space-y-1">

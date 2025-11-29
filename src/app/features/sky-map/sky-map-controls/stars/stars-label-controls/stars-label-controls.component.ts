@@ -11,6 +11,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { fontForLabelStars } from '../../../domain/default/stars';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { FontLabelComponent } from "../font-label/font-label.component";
+import { ColisionLabelComponent } from "../colision-label/colision-label.component";
 type CollisionKey = 'boundaries' | 'star-symbol' | string;
 
 interface CollisionOption {
@@ -31,11 +33,17 @@ interface CollisionOption {
     MatSlideToggleModule,
     MatSliderModule,
     MatCheckbox,
-  ],
+    FontLabelComponent,
+    ColisionLabelComponent
+],
   templateUrl: './stars-label-controls.component.html',
   styleUrls: ['./stars-label-controls.component.css'],
 })
 export class StarsLabelControlsComponent {
+
+  updateFont(font: StarsLabelsSettings) {
+  this.state.updateStarsLabels(font);
+}
   collisionsMain = true;
 
   collisionOptions: CollisionOption[] = [
@@ -77,7 +85,7 @@ export class StarsLabelControlsComponent {
   }
 
   private state = inject(SkyMapStateService);
-  fonts = fontForLabelStars;
+  // fonts = fontForLabelStars;
 
   starsSettings$ = this.state.starsLayerSettings$;
 
@@ -106,8 +114,6 @@ export class StarsLabelControlsComponent {
   }
 
   update(prop: keyof StarsLabelsSettings, value: any) {
-    this.state.updateStarsLabels({
-      [prop]: value,
-    });
+    this.state.updateStarsLabels({[prop]: value});
   }
 }
