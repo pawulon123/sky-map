@@ -113,10 +113,11 @@ export type LabelLineFn = (star: Star, settings: StarsLabelsSettings) => string 
 
 export const buildLabelLines =
   (...fns: LabelLineFn[]) =>
-  (settings: StarsLabelsSettings) =>
+  (getSettings: Function) =>
   (star: Star): string[] =>
     fns.reduce<string[]>((acc, fn) => {
-      const line = fn(star, settings);
+      const setingsLabel = getSettings();
+      const line = fn(star, setingsLabel);
       if (line && line.trim().length > 0) {
         acc.push(line);
       }

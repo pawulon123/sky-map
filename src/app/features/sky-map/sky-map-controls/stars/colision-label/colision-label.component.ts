@@ -32,7 +32,6 @@ export class ColisionLabelComponent {
     this.collisionsMain = checked;
 
     if (!checked) {
-      // wyłączenie -> odznaczyć podrzędne
       this.collisionOptions = this.collisionOptions.map((opt) => ({
         ...opt,
         checked: false,
@@ -56,6 +55,5 @@ export class ColisionLabelComponent {
       : this.collisionOptions.filter((opt) => opt.checked).map((opt) => opt.key);
 
     this.updateColision.emit({ colision: this.collisionTargets });
-    // this.update('colision', this.collisionTargets);
   }
 }

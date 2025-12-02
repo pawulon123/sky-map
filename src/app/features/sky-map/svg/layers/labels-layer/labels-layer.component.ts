@@ -6,6 +6,8 @@ import { LabelPlacement, StarsLayerSettings } from '../../../domain/models/stars
 import { defaultStarsSettings } from '../../../domain/default/stars';
 import { LabelService } from './label.service';
 import { buildLabelLines, firstLine } from './name-or-bayer';
+import { tap } from 'rxjs';
+import { SvgTooltipComponent } from '../../../../../core/tooltip/tooltip.component';
 
 @Component({
   selector: 'g[app-labels-layer]',
@@ -29,8 +31,8 @@ export class LabelsLayerComponent implements OnInit {
   }
 
   private buildLabelLines(): void {
-    const settings = this.state.getStarSettings().labels;
-    this.labelLinesFn = buildLabelLines(firstLine)(settings);
+    const getLabelsSetting = () => this.state.getStarSettings().labels;
+    this.labelLinesFn = buildLabelLines(firstLine)(getLabelsSetting);
   }
 
   getLabelLines(star: Star): string[] {

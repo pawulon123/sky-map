@@ -81,4 +81,7 @@ export class SkyMapStateService {
   getStarSettings() {
     return this.starsLayerSettingsSubject.getValue();
   }
+  getProjectionSettings() {
+    return this.projectionSettingsSubject.getValue();
+  }
 }

@@ -6,11 +6,12 @@ import { SvgData } from './core/common/svg-data';
 import { exportSvg } from './core/utils/export-svg';
 import { svgDataDefault } from './core/default/svg-data';
 import { log } from 'node:util';
+import { SvgTooltipComponent } from './core/tooltip/tooltip.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, SkyMapPageComponent],
+  imports: [CommonModule, SkyMapPageComponent, SvgTooltipComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })

@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
 import { tap } from 'rxjs/operators';
 import { ProjectionSettings } from '../../domain/models/projection-options.model';
+import { SvgTooltipComponent } from '../../../../core/tooltip/tooltip.component';
+import { SvgTooltipRootDirective } from '../../../../core/tooltip/tooltip.directive';
 
 @Component({
   selector: 'app-root-svg',
@@ -16,6 +18,7 @@ import { ProjectionSettings } from '../../domain/models/projection-options.model
     AsterismsLayerComponent,
     BoundariesLayerComponent,
     ConstellationLinesLayerComponent /*, GridLayerComponent*/,
+    SvgTooltipRootDirective,
   ],
   templateUrl: './root-svg.component.html',
   styleUrl: './root-svg.component.css',

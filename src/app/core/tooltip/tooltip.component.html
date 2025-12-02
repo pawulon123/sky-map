@@ -1,0 +1,5 @@
+<ng-container *ngIf="tooltip.state$ | async as state">
+  <div *ngIf="state.visible && state.text" class="svg-tooltip" [style.left.px]="state.x" [style.top.px]="state.y">
+    {{ state.text }}
+  </div>
+</ng-container>

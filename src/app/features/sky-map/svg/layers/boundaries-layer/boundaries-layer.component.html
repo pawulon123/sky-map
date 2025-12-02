@@ -1,8 +1,16 @@
-<svg:g id="layer-boundaries">
+<svg:g id="layer-boundaries" appSvgTooltipRoot>
   <ng-container *ngIf="boundariesSettings$ | async as settings">
     <ng-container *ngIf="settings.visible">
-      <ng-container *ngFor="let d of paths()">
-        <path [attr.d]="d" stroke="#000" stroke-width="0.6" fill="none"></path>
+      <ng-container *ngFor="let item of paths()">
+        <path
+          [attr.d]="item.d"
+          fill="none"
+          [attr.stroke]="isHovered(item.boundary) ? '#ff6600' : '#000000'"
+          [attr.stroke-width]="isHovered(item.boundary) ? 1.5 : 0.6"
+          [attr.data-tooltip]="getTooltip(item.boundary, item.d)"
+          (mouseenter)="onBoundaryEnter(item.boundary)"
+          (mouseleave)="onBoundaryLeave()"
+        ></path>
       </ng-container>
     </ng-container>
   </ng-container>

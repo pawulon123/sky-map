@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit } from '@angular/core';
-import { BoundariesService } from '../../../domain/services/boundaries/boundaries.service';
-import { ProjectionService } from '../../../domain/services/projection/projection.service';
+import { Component, computed, inject } from '@angular/core';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
+import { getComputedBoundary } from './get-computed-boundary';
+import { Boundary, BoundaryPath } from '../../../domain/models/boundary.model';
+import { BoundaryPathService } from './boundary-path.service';
+import { Signal } from '@angular/core';
 
 @Component({
   selector: 'g[app-boundaries-layer]',
@@ -13,157 +15,39 @@ import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-m
     '[attr.transform]': 'transform()',
   },
 })
-export class BoundariesLayerComponent implements OnInit {
-  private svc = inject(BoundariesService);
+export class BoundariesLayerComponent {
+  private boundaryPathSv = inject(BoundaryPathService);
   private state = inject(SkyMapStateService);
 
   boundariesSettings$ = this.state.boundariesLayerSettings$;
-  private proj = inject(ProjectionService);
   transform = this.reflectOnTheVerticalAxis();
 
-  ngOnInit() {
-    this.svc.loadOnce();
+  hoveredAbbrev: string | null = null;
+
+  paths: Signal<BoundaryPath[]> = this.boundaryPathSv.paths;
+
+  onBoundaryEnter(boundary: Boundary | undefined): void {
+    this.hoveredAbbrev = boundary?.abbrev ?? null;
   }
+
+  onBoundaryLeave(): void {
+    this.hoveredAbbrev = null;
+  }
+
+  isHovered(boundary?: Boundary): boolean {
+    return boundary?.abbrev === this.hoveredAbbrev;
+  }
+
   private reflectOnTheVerticalAxis() {
     return computed(() => {
-      let { width, mirrorX } = this.proj.settings();
+      let { width, mirrorX } = this.state.getProjectionSettings();
       mirrorX = !mirrorX;
       if (!mirrorX) return null;
       return `translate(${width},0) scale(-1,1)`;
     });
   }
-  /**
-   * Rzutuje punkt RA/Dec na ekran w pikselach.
-   * Odbicie X robimy na poziomie <g> przez transform, nie tutaj.
-   */
-  private projectStarStyle(raDeg: number, decDeg: number): [number, number] | null {
-    const p = this.proj.getProjectionByLonLat(raDeg, decDeg);
-    if (!p) return null;
 
-    // przedtem było:
-    // const w = this.proj.settings().width;
-    // let [x, y] = p;
-    // x = w - x;
-
-    return p; // [x, y] bez zmian
+  getTooltip(boundary: Boundary, pathD: string): string {
+    return getComputedBoundary(boundary, pathD);
   }
-
-  /**
-   * Rzutuje punkt RA/Dec na ekran w pikselach, z takim samym mirrorem X,
-   * jak robimy dla gwiazd.
-   */
-  // private projectStarStyle(raDeg: number, decDeg: number): [number, number] | null {
-  //   const p = this.proj.getProjectionByLonLat(raDeg, decDeg);
-  //   if (!p) return null;
-
-  //   const w = this.proj.settings().width;
-  //   let [x, y] = p;
-  //   x = w - x; // RA rośnie w lewo, tak jak w warstwie gwiazd
-  //   return [x, y];
-  // }
-
-  /**
-   * Dany segment granicy to tablica punktów [ [ra,dec], [ra,dec], ... ].
-   *
-   * Zwracamy tablicę POD-ścieżek, ale już w przestrzeni ekranu:
-   * [
-   *   [ [x0,y0], [x1,y1], ... ],
-   *   [ [xk,yk], [xk+1,yk+1], ... ],
-   *   ...
-   * ]
-   *
-   * Robimy własne cięcie tam, gdzie następuje wrap przez brzeg mapy:
-   * jeśli |x - prevX| > width * 0.5 → nowa pod-ścieżka.
-   */
-  private segmentToScreenChunks(segRaDec: [number, number][]): [number, number][][] {
-    const w = this.proj.settings().width;
-    const maxJump = w * 0.5;
-
-    const chunks: [number, number][][] = [];
-    let current: [number, number][] = [];
-
-    let prevPt: [number, number] | null = null;
-
-    for (const [ra, dec] of segRaDec) {
-      const screenPt = this.projectStarStyle(ra, dec);
-      if (!screenPt) {
-        // punkt wypadł poza projekcję -> przerwij bieżącą kreskę
-        if (current.length) {
-          chunks.push(current);
-          current = [];
-        }
-        prevPt = null;
-        continue;
-      }
-
-      const [x, y] = screenPt;
-
-      if (prevPt) {
-        const [px, py] = prevPt;
-        const dx = Math.abs(x - px);
-
-        // jeśli skok po X jest ogromny, traktujemy to jako przejście
-        // przez +/-180° i zaczynamy nowy pod-segment
-        if (dx > maxJump) {
-          if (current.length) {
-            chunks.push(current);
-          }
-          current = [];
-        }
-      }
-
-      current.push([x, y]);
-      prevPt = [x, y];
-    }
-
-    if (current.length) {
-      chunks.push(current);
-    }
-
-    return chunks;
-  }
-
-  /**
-   * Na podstawie chunków [ [x,y], ...] budujemy atrybut d="M...L..."
-   */
-  private chunkToPathD(chunkXY: [number, number][]): string {
-    if (chunkXY.length < 2) return '';
-    let d = `M${chunkXY[0][0]},${chunkXY[0][1]}`;
-    for (let i = 1; i < chunkXY.length; i++) {
-      d += `L${chunkXY[i][0]},${chunkXY[i][1]}`;
-    }
-    return d;
-  }
-
-  /**
-   * Główne computed: lista pathów gotowych do <path d="..."/>.
-   *
-   * Ważne:
-   * - NIE rozbijamy już segmentów po różnicy RA (to było niestabilne po mirrorze).
-   * - Rozbijamy po różnicy X na ekranie (dx > połowa szerokości),
-   *   więc "teleport" w mercatorze/equirect już nie zrobi potwornego
-   *   cięcia przez cały widok.
-   * - Używamy dokładnie takiego samego mirrora X jak gwiazdy.
-   */
-  paths = computed(() => {
-    const boundaries = this.svc.data().boundaries ?? [];
-    const out: string[] = [];
-
-    for (const boundary of boundaries) {
-      const segs = boundary.segments ?? [];
-
-      for (const segRaDec of segs) {
-        // rzutuj ten segment do przestrzeni ekranu i potnij wg dużych skoków
-        const chunks = this.segmentToScreenChunks(segRaDec);
-
-        // każdy chunk zamieniamy na jedną ścieżkę SVG
-        for (const c of chunks) {
-          const d = this.chunkToPathD(c);
-          if (d) out.push(d);
-        }
-      }
-    }
-
-    return out;
-  });
 }
