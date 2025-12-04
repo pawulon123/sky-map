@@ -1,13 +1,13 @@
-<button mat-icon-button class="hamburger-btn" (click)="drawer.toggle()" aria-label="Menu">
-  <mat-icon>menu</mat-icon>
+<button mat-flat-button color="primary" class="hamburger-btn" *ngIf="!isMenuOpen" (click)="isMenuOpen = true">
+  <span style="margin-left: 4px">Menu</span>
 </button>
 
-<mat-sidenav-container class="layout" [hasBackdrop]="false">
-  <mat-sidenav #drawer mode="over" class="side-menu">
+<mat-sidenav-container [hasBackdrop]="true">
+  <mat-sidenav #drawer mode="over" class="side-menu" [(opened)]="isMenuOpen" (backdropClick)="isMenuOpen = false">
     <app-sky-map-controls></app-sky-map-controls>
   </mat-sidenav>
 
-  <mat-sidenav-content class="map-container">
+  <mat-sidenav-content>
     <app-sky-map-svg></app-sky-map-svg>
   </mat-sidenav-content>
 </mat-sidenav-container>

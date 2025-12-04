@@ -5,9 +5,18 @@
     letter-spacing: 0.05em;
   }
 } */
-.wrap {
+/* .wrap {
   margin-left: 10px;
   margin-right: 10px;
   width: 95%;
   background-color: rgb(210, 134, 42);
+} */
+.stars-panels {
+  display: flex;
+  gap: 12px;
+}
+
+.panel-card {
+  flex: 1;
+  padding: 8px;
 }

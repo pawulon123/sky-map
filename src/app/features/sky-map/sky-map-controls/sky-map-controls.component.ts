@@ -5,10 +5,12 @@ import { RefreshProjectionService } from '../domain/services/projection/refresh-
 import { AsterismControlsComponent } from './asterism-controls/asterism-controls.component';
 import { ConstellationLineControlsComponent } from './constellation-line-controls/constellation-line-controls.component';
 import { BoundariesControllsComponent } from './boundaries-controls/boundaries-controlls/boundaries-controlls.component';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-sky-map-controls',
   imports: [
+    MatExpansionModule,
     SkyMapLayerStarsControlsComponent,
     ProjectionControlsComponent,
     AsterismControlsComponent,
@@ -19,6 +21,12 @@ import { BoundariesControllsComponent } from './boundaries-controls/boundaries-c
   styleUrl: './sky-map-controls.component.css',
 })
 export class SkyMapControlsComponent implements OnInit {
+  activePanel: 'projection' | 'stars' | 'boundaries' | 'constellationLines' | 'asterisms' = 'projection';
+
+  setActivePanel(panel: typeof this.activePanel) {
+    this.activePanel = panel;
+  }
+
   private refreshProjectionSv = inject(RefreshProjectionService);
   ngOnInit(): void {
     this.refreshProjectionSv.loadOnceEndRefresh();

@@ -1,6 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
 import { BoundariesService } from '../../../domain/services/boundaries/boundaries.service';
-import { Boundary } from '../../../domain/models/boundary.model';
 import { ProjectionService } from '../../../domain/services/projection/projection.service';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { createBoundaryName } from '../boundaries-layer/create-boundary-name';
@@ -64,9 +63,6 @@ export class LabelBoundariesLayerComponent {
         let cx = sumX / count;
         const cy = sumY / count;
 
-        // jeśli rodzic ma translate(width) scale(-1,1),
-        // to my dajemy scale(-1,1) + x = -cx, żeby finalnie
-        // pozycja była ta sama, ale tekst nie był lustrzany
         if (applyMirror) {
           cx = -cx;
         }

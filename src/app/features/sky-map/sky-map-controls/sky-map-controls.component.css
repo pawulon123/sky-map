@@ -1,0 +1,38 @@
+::ng-deep .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+.mat-expansion-panel-header:not([aria-disabled='true']) {
+  cursor: pointer;
+  padding: 5px; /* ← poprawione */
+  margin: 0;
+  height: 35px;
+}
+
+/* Kompaktowy nagłówek — zawsze stała wysokość */
+::ng-deep .mat-expansion-panel-header {
+  min-height: 35px !important;
+  height: 35px !important;
+  padding: 4px 8px !important;
+  margin: 0 !important;
+}
+
+/* Zapobiega powiększaniu się po rozwinięciu */
+::ng-deep .mat-expansion-panel-header.mat-expanded {
+  min-height: 35px !important;
+  height: 35px !important;
+  padding: 4px 8px !important;
+  margin: 0 !important;
+}
+
+/* Ikona nie może wymuszać dodatkowej wysokości */
+::ng-deep .mat-expansion-indicator {
+  height: 24px !important;
+  width: 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.controls-wrapper {
+  max-width: 360px;
+  background-color: rgb(42, 40, 90);
+  color: white;
+}

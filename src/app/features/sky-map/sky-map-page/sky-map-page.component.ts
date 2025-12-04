@@ -4,13 +4,15 @@ import { SkyMapSvgComponent } from '../sky-map-svg/sky-map-svg.component';
 import { SkyMapStateService } from '../domain/services/sky-map-state/sky-map-state.service';
 import { SvgData } from '../../../core/common/svg-data';
 import { Subscription } from 'rxjs';
-import { MatSidenavModule, MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
-import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
+
 import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sky-map-page',
   imports: [
+    CommonModule,
     SkyMapSvgComponent,
     SkyMapControlsComponent,
     MatSidenavContainer,
@@ -26,6 +28,7 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
   private stateProjectionSub!: Subscription;
   readonly state = inject(SkyMapStateService);
   readonly projectionSettings$ = this.state.projectionSettings$;
+  isMenuOpen = false;
 
   @Output() svgData = new EventEmitter<SvgData>();
 
@@ -40,6 +43,14 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
   private sendSvgData({ width, height }: Partial<SvgData>): void {
     const svgRef = this.state.svgRef;
     this.svgData.emit({ width, height, svgRef });
+  }
+
+  openMenu() {
+    this.isMenuOpen = true;
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false;
   }
 
   ngOnDestroy(): void {

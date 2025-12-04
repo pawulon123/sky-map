@@ -1,22 +1,16 @@
-.hamburger-btn {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 5000;
-}
-
+/* kontener na mapę + menu zajmuje całe okno */
 .layout {
-  height: 100%;
+  height: 100vh; /* pełne okno */
 }
 
-.map-container {
-  height: 100%;
-  overflow: auto;
+/* pozycja hamburgera */
+.hamburger-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
 }
-
-.side-menu {
-  width: 280px;
-  max-width: 80vw;
-  height: 100%;
-  overflow: auto;
+::ng-deep .hamburger-btn.mat-mdc-button-base {
+  padding-inline: 10px 14px;
+  height: 36px;
 }
