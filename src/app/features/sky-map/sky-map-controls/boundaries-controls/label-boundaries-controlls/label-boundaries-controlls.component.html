@@ -1,0 +1,115 @@
+<div class="stars-symbol-controls space-y-4">
+  <div class="flex items-center justify-between">
+    <label class="font-semibold">Etykiety gwiazdozbiorów</label>
+
+    <mat-slide-toggle
+      [checked]="(boundariesSettings$ | async)?.labels?.visible"
+      (change)="update('visible', $event.checked)"
+    >
+      Pokaż etykiety
+    </mat-slide-toggle>
+  </div>
+
+  <!-- ROZMIAR CZCIONKI -->
+  <div class="flex items-center justify-between">
+    <label class="text-sm">Rozmiar czcionki</label>
+    <mat-slider min="8" max="28" step="1" style="width: 180px">
+      <input
+        matSliderThumb
+        [ngModel]="(boundariesSettings$ | async)?.labels?.fontSize"
+        (ngModelChange)="update('fontSize', $event)"
+      />
+    </mat-slider>
+    <span class="text-sm w-8 text-right"> {{ (boundariesSettings$ | async)?.labels?.fontSize }}px </span>
+  </div>
+
+  <!-- ODSTĘP MIĘDZY LITERAMI -->
+  <div class="flex items-center justify-between">
+    <label class="text-sm">Odstęp liter</label>
+    <mat-slider min="0" max="8" step="0.5" style="width: 180px">
+      <input
+        matSliderThumb
+        [ngModel]="(boundariesSettings$ | async)?.labels?.letterSpacing"
+        (ngModelChange)="update('letterSpacing', $event)"
+      />
+    </mat-slider>
+    <span class="text-sm w-8 text-right"> {{ (boundariesSettings$ | async)?.labels?.letterSpacing }}px </span>
+  </div>
+
+  <!-- RODZAJ CZCIONKI -->
+  <div class="flex items-center justify-between">
+    <label class="text-sm">Czcionka</label>
+
+    <mat-form-field appearance="fill" style="width: 180px">
+      <mat-select
+        [value]="(boundariesSettings$ | async)?.labels?.fontFamily"
+        (selectionChange)="update('fontFamily', $event.value)"
+      >
+        <mat-option value="'Roboto', sans-serif">Roboto</mat-option>
+        <mat-option value="'Inter', sans-serif">Inter</mat-option>
+        <mat-option value="'Georgia', serif">Georgia</mat-option>
+        <mat-option value="'Times New Roman', serif"> Times New Roman </mat-option>
+        <mat-option value="'Courier New', monospace"> Courier New </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <!-- GRUBOŚĆ CZCIONKI -->
+  <div class="flex items-center justify-between">
+    <label class="text-sm">Grubość czcionki</label>
+
+    <mat-form-field appearance="fill" style="width: 180px">
+      <mat-select
+        [value]="(boundariesSettings$ | async)?.labels?.fontWeight"
+        (selectionChange)="update('fontWeight', $event.value)"
+      >
+        <mat-option value="300">Light</mat-option>
+        <mat-option value="400">Normal</mat-option>
+        <mat-option value="500">Medium</mat-option>
+        <mat-option value="600">Semi-bold</mat-option>
+        <mat-option value="700">Bold</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <label class="text-sm">Kolor obrysu</label>
+
+    <input
+      type="color"
+      class="w-10 h-6 border rounded cursor-pointer"
+      [ngModel]="(boundariesSettings$ | async)?.labels?.stroke"
+      (ngModelChange)="update('stroke', $event)"
+    />
+  </div>
+
+  <!-- GRUBOŚĆ OBRYSU -->
+  <div class="flex items-center justify-between">
+    <label class="text-sm">Grubość obrysu</label>
+    <mat-slider min="0" max="4" step="0.1" style="width: 180px">
+      <input
+        matSliderThumb
+        [ngModel]="(boundariesSettings$ | async)?.labels?.strokeWidth"
+        (ngModelChange)="update('strokeWidth', $event)"
+      />
+    </mat-slider>
+    <span class="text-sm w-8 text-right">
+      {{ (boundariesSettings$ | async)?.labels?.strokeWidth }}
+    </span>
+  </div>
+
+  <!-- PRZEZROCZYSTOŚĆ OBRYSU -->
+  <div class="flex items-center justify-between">
+    <label class="text-sm">Przezroczystość obrysu</label>
+    <mat-slider min="0" max="1" step="0.05" style="width: 180px">
+      <input
+        matSliderThumb
+        [ngModel]="(boundariesSettings$ | async)?.labels?.strokeOpacity"
+        (ngModelChange)="update('strokeOpacity', $event)"
+      />
+    </mat-slider>
+    <span class="text-sm w-8 text-right">
+      {{ (boundariesSettings$ | async)?.labels?.strokeOpacity | number: '1.2-2' }}
+    </span>
+  </div>
+</div>

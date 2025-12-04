@@ -1,8 +1,25 @@
-export interface BoundarySettings {
+export type Lines = {
   visible: boolean;
   color: string;
-}
+};
+export type BoundaryLabels = {
+  visible: boolean;
+  language: BoundaryLanguage;
+  fontSize: number;
+  letterSpacing: number;
+  fontFamily: string;
+  fontWeight: string;
+  stroke: string;
+  strokeWidth: number;
+  strokeOpacity: number;
+};
 
+export interface BoundaryLayerSettings {
+  lines: Lines;
+  labels: BoundaryLabels;
+}
+export type BoundaryKey = 'lines' | 'labels';
+export type BoundaryLanguage = 'latin' | 'polish';
 export interface BoundaryPath {
   d: string;
   boundary: Boundary;

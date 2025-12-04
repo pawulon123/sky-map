@@ -13,7 +13,7 @@ export const defaultStarsSettings: StarsLayerSettings = {
     scaleByMagnitude: true,
   },
   labels: {
-    visible: true,
+    visible: false,
     magnitudeRange: [-1, 6],
     position: 'top',
     fontSize: 10,

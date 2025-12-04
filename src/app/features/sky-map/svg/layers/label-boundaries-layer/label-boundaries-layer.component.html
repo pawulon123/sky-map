@@ -1,0 +1,23 @@
+<svg:g id="layer-label-boundaries">
+  <ng-container *ngIf="boundariesSettings$ | async as settings">
+    <ng-container *ngFor="let label of labels()">
+      <text
+        [attr.x]="label.x"
+        [attr.y]="label.y"
+        text-anchor="middle"
+        dy="4"
+        [attr.font-size]="settings.labels.fontSize"
+        [attr.letter-spacing]="settings.labels.letterSpacing"
+        [attr.font-family]="settings.labels.fontFamily"
+        [attr.font-weight]="settings.labels.fontWeight"
+        [attr.stroke]="settings.labels.stroke"
+        [attr.stroke-width]="settings.labels.strokeWidth"
+        [attr.stroke-opacity]="settings.labels.strokeOpacity"
+        fill="#555"
+        style="pointer-events: none"
+      >
+        {{ label.name || label.abbrev }}
+      </text>
+    </ng-container>
+  </ng-container>
+</svg:g>

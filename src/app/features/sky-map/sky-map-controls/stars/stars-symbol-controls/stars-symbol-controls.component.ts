@@ -31,8 +31,6 @@ type Shape = 'circle' | 'cross' | 'square' | 'icon';
 export class StarsSymbolControlsComponent {
   private state = inject(SkyMapStateService);
 
-  // Strumień z ustawieniami warstwy gwiazd (całość),
-  // w template korzystamy tylko z części "symbols".
   starsSettings$ = this.state.starsLayerSettings$;
 
   toggleVisible(visible: boolean) {

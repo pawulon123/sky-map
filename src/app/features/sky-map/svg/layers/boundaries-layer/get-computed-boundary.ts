@@ -1,13 +1,15 @@
-import { Boundary } from '../../../domain/models/boundary.model';
+import { boundaryDefaultSettings } from '../../../domain/default/boundary';
+import { Boundary, BoundaryLanguage } from '../../../domain/models/boundary.model';
+import { createBoundaryName } from './create-boundary-name';
 
-export const getComputedBoundary = (boundary: Boundary, pathD: string) => {
+export const getComputedBoundary = (boundary: Boundary, pathD: string, language: BoundaryLanguage) => {
   const PX_TO_MM = 0.2645833;
   const bbox = computePathBoundingBox(pathD);
 
   const widthMm = bbox.width * PX_TO_MM;
   const heightMm = bbox.height * PX_TO_MM;
 
-  const name = boundary.name ?? boundary.abbrev ?? 'Nieznany gwiazdozbiór';
+  const name = createBoundaryName(boundary.abbrev)[language] ?? boundaryDefaultSettings.labels.language;
 
   return `${name}
 szerokość = ${widthMm.toFixed(1)} mm

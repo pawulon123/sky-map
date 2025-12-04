@@ -1,0 +1,6 @@
+<mat-slide-toggle
+  [checked]="(boundariesSettings$ | async)?.lines?.visible"
+  (change)="update('visible', $event.checked)"
+>
+  Pokaż granice
+</mat-slide-toggle>

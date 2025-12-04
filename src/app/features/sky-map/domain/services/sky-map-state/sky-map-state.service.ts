@@ -8,12 +8,12 @@ import { defaultStarsSettings } from '../../default/stars';
 import { defaultProjectionSettings } from '../../default/projection';
 import { ProjectionSettings } from '../../models/projection-options.model';
 import { boundaryDefaultSettings } from '../../default/boundary';
-import { BoundarySettings } from '../../models/boundary.model';
 import { AsterismSettings } from '../../models/asterisms.model';
 import { asterismDefaultSettings } from '../../default/asterism';
 import { ConstellationLineSettings } from '../../models/constellation-line.model';
 import { constellationLineDefaultSettings } from '../../default/constellation-line';
 import { updateEndNext } from '../../../../../core/utils/update-end-next';
+import { BoundaryLayerSettings } from '../../models/boundary.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class SkyMapStateService {
 
   private readonly starsLayerSettingsSubject = new BehaviorSubject<StarsLayerSettings>(defaultStarsSettings);
   private readonly projectionSettingsSubject = new BehaviorSubject<ProjectionSettings>(defaultProjectionSettings);
-  private readonly boundariesLayerSettingsSubject = new BehaviorSubject<BoundarySettings>(boundaryDefaultSettings);
+  private readonly boundariesLayerSettingsSubject = new BehaviorSubject<BoundaryLayerSettings>(boundaryDefaultSettings);
   private readonly asterismLayerSettingsSubject = new BehaviorSubject<AsterismSettings>(asterismDefaultSettings);
   private readonly constellationLineSettingsSubject = new BehaviorSubject<ConstellationLineSettings>(
     constellationLineDefaultSettings
@@ -32,7 +32,8 @@ export class SkyMapStateService {
 
   readonly starsLayerSettings$: Observable<StarsLayerSettings> = this.starsLayerSettingsSubject.asObservable();
   readonly projectionSettings$: Observable<ProjectionSettings> = this.projectionSettingsSubject.asObservable();
-  readonly boundariesLayerSettings$: Observable<BoundarySettings> = this.boundariesLayerSettingsSubject.asObservable();
+  readonly boundariesLayerSettings$: Observable<BoundaryLayerSettings> =
+    this.boundariesLayerSettingsSubject.asObservable();
   readonly asterismLayerSettings$: Observable<AsterismSettings> = this.asterismLayerSettingsSubject.asObservable();
   readonly constellationLineSettings$: Observable<ConstellationLineSettings> =
     this.constellationLineSettingsSubject.asObservable();
@@ -61,9 +62,11 @@ export class SkyMapStateService {
   updateStarsLabels(partialLabels: Partial<StarsLabelsSettings>): void {
     updateEndNext(partialLabels, this.starsLayerSettingsSubject, 'labels');
   }
-
-  updateBoundary(partial: Partial<BoundarySettings>): void {
-    updateEndNext(partial, this.boundariesLayerSettingsSubject);
+  updateBoundaryLabel(partialLabels: Partial<StarsLabelsSettings>): void {
+    updateEndNext(partialLabels, this.boundariesLayerSettingsSubject, 'labels');
+  }
+  updateBoundaryLines(partialLabels: Partial<StarsLabelsSettings>): void {
+    updateEndNext(partialLabels, this.boundariesLayerSettingsSubject, 'lines');
   }
 
   updateAsterism(partial: Partial<AsterismSettings>): void {
@@ -83,5 +86,9 @@ export class SkyMapStateService {
   }
   getProjectionSettings() {
     return this.projectionSettingsSubject.getValue();
+  }
+
+  getBoundariesSettings(): BoundaryLayerSettings {
+    return this.boundariesLayerSettingsSubject.getValue();
   }
 }
