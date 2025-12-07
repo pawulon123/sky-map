@@ -1,26 +1,23 @@
-<div class="stars-label-controls space-y-4" *ngIf="starsSettings$ | async as starsSettings">
-  <!-- NAGŁÓWEK -->
-  <div class="font-semibold mb-2">Etykiety gwiazd</div>
-
+<div style="" *ngIf="starsSettings$ | async as starsSettings">
+  <mat-slide-toggle [checked]="starsSettings.labels.visible" (change)="update('visible', $event.checked)">
+    Widoczne
+  </mat-slide-toggle>
+  <mat-slide-toggle [checked]="starsSettings.labels.showBayer" (change)="update('showBayer', $event.checked)">
+    Pokaż Bayer
+  </mat-slide-toggle>
   <app-font-label [settingsLabels]="starsSettings.labels" (updateFont)="updateFont($event)"></app-font-label>
 
   <app-colision-label (updateColision)="updateColision($event)"></app-colision-label>
 
   <!-- WIDOCZNOŚĆ ETYKIET -->
-  <mat-slide-toggle [checked]="starsSettings.labels.visible" (change)="update('visible', $event.checked)">
-    Widoczne
-  </mat-slide-toggle>
 
   <!-- POKAZUJ BAYER -->
-  <mat-slide-toggle [checked]="starsSettings.labels.showBayer" (change)="update('showBayer', $event.checked)">
-    Pokaż Bayer
-  </mat-slide-toggle>
 
   <!-- MAGNITUDO OD–DO -->
   <div>
-    <div class="text-sm mb-1">Magnitudo od–do</div>
-    <div class="flex gap-2 items-center">
-      <mat-form-field appearance="outline" class="w-24">
+    <div class="">Magnitudo od–do</div>
+    <div class="">
+      <mat-form-field appearance="outline" class="">
         <mat-label>Od</mat-label>
         <input
           matInput
@@ -34,7 +31,7 @@
 
       <span>–</span>
 
-      <mat-form-field appearance="outline" class="w-24">
+      <mat-form-field appearance="outline" class="">
         <mat-label>Do</mat-label>
         <input
           matInput

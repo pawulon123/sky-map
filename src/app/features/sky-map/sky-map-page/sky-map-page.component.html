@@ -1,13 +1,19 @@
-<button mat-flat-button color="primary" class="hamburger-btn" *ngIf="!isMenuOpen" (click)="isMenuOpen = true">
-  <span style="margin-left: 4px">Menu</span>
-</button>
-
 <mat-sidenav-container [hasBackdrop]="true">
-  <mat-sidenav #drawer mode="over" class="side-menu" [(opened)]="isMenuOpen" (backdropClick)="isMenuOpen = false">
+  <mat-sidenav #drawer mode="over" [(opened)]="isMenuOpen" (backdropClick)="isMenuOpen = false">
     <app-sky-map-controls></app-sky-map-controls>
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <app-sky-map-svg></app-sky-map-svg>
+    <!-- przycisk menu, jak miałeś -->
+    <button class="menu-btn" *ngIf="!isMenuOpen" (click)="isMenuOpen = true">
+      <span>Menu</span>
+    </button>
+
+    <!-- KONTENER NA MAPĘ ZE SCROLLEM -->
+    <div class="map-scroll-container">
+      <div class="map-inner">
+        <app-sky-map-svg></app-sky-map-svg>
+      </div>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

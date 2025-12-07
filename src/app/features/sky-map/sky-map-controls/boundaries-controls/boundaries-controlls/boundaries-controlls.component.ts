@@ -7,5 +7,6 @@ import { MatTabGroup, MatTab } from '@angular/material/tabs';
   selector: 'app-boundaries-controls',
   imports: [LabelBoundariesControllsComponent, LinesBoundariesControllsComponent, MatTabGroup, MatTab],
   templateUrl: './boundaries-controlls.component.html',
+  styleUrls: ['./boundaries-controlls.component.css'],
 })
 export class BoundariesControllsComponent {}

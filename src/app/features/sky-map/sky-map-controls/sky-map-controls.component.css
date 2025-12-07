@@ -1,38 +1,43 @@
+/* Nagłówki */
+::ng-deep .mat-expansion-panel-header {
+  cursor: pointer;
+  height: 45px;
+  min-height: 45px;
+  margin: 0 !important;
+  background-color: #37474f !important;
+  border-bottom: 2px solid black;
+}
+
+/* Po rozwinięciu ten sam styl (lub inny kolor jeśli chcesz) */
+::ng-deep .mat-expansion-panel-header.mat-expanded {
+  background-color: #37474f !important;
+}
+
+/* Usunięcie separatora */
+::ng-deep .mat-expansion-panel-header::after {
+  display: none !important;
+}
+
+/* Usunięcie marginesów paneli */
+::ng-deep .mat-expansion-panel {
+  margin: 0 !important;
+}
 ::ng-deep .mat-expansion-panel-body {
   padding: 0 !important;
 }
-.mat-expansion-panel-header:not([aria-disabled='true']) {
-  cursor: pointer;
-  padding: 5px; /* ← poprawione */
-  margin: 0;
-  height: 35px;
+
+.panel-body-scroll {
+  background: #48555c;
+  height: calc(100vh - 6 * 45px); /* stała wysokość contentu */
+
+  overflow-y: auto; /* pionowy */
+  overflow-x: auto; /* poziomy */
+
+  box-sizing: border-box;
+  width: 100%; /* NIE 100vw! */
+  /* padding: 15px 0 0px 5px; */
 }
 
-/* Kompaktowy nagłówek — zawsze stała wysokość */
-::ng-deep .mat-expansion-panel-header {
-  min-height: 35px !important;
-  height: 35px !important;
-  padding: 4px 8px !important;
-  margin: 0 !important;
-}
-
-/* Zapobiega powiększaniu się po rozwinięciu */
-::ng-deep .mat-expansion-panel-header.mat-expanded {
-  min-height: 35px !important;
-  height: 35px !important;
-  padding: 4px 8px !important;
-  margin: 0 !important;
-}
-
-/* Ikona nie może wymuszać dodatkowej wysokości */
-::ng-deep .mat-expansion-indicator {
-  height: 24px !important;
-  width: 24px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
 .controls-wrapper {
-  max-width: 360px;
-  background-color: rgb(42, 40, 90);
   color: white;
 }

@@ -23,12 +23,12 @@ import { MatExpansionModule } from '@angular/material/expansion';
 export class SkyMapControlsComponent implements OnInit {
   activePanel: 'projection' | 'stars' | 'boundaries' | 'constellationLines' | 'asterisms' = 'projection';
 
+  ngOnInit(): void {
+    this.refreshProjectionSv.loadOnceEndRefresh();
+  }
   setActivePanel(panel: typeof this.activePanel) {
     this.activePanel = panel;
   }
 
   private refreshProjectionSv = inject(RefreshProjectionService);
-  ngOnInit(): void {
-    this.refreshProjectionSv.loadOnceEndRefresh();
-  }
 }

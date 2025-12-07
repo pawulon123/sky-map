@@ -1,16 +1,29 @@
-/* kontener na mapę + menu zajmuje całe okno */
-.layout {
-  height: 100vh; /* pełne okno */
-}
-
 /* pozycja hamburgera */
-.hamburger-btn {
-  position: absolute;
+.menu-btn {
+  position: fixed;
   top: 8px;
   left: 8px;
   z-index: 1000;
 }
-::ng-deep .hamburger-btn.mat-mdc-button-base {
-  padding-inline: 10px 14px;
-  height: 36px;
+
+.map-scroll-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+}
+
+/* Wewnętrzny obszar mapy – większy niż okno */
+.map-inner {
+  width: 3000px; /* przykładowo, większe niż ekran */
+  height: 3000px; /* wtedy wymusi scroll w obu kierunkach */
+}
+
+/* Sama mapa niech się dopasuje do tego obszaru */
+app-sky-map-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
 }

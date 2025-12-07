@@ -10,12 +10,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;700&display=swap');
-
 html,
 body {
-  height: 100%;
   margin: 0;
-  overflow: hidden;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* żadnych scrolli na całej stronie */
+}
+
+app-root {
+  height: 100%;
+}
+
+mat-sidenav-container {
+  height: 100vh;
+}
+
+mat-sidenav-content {
+  height: 100%;
+  overflow: hidden; /* tu też bez scrolla */
+  position: relative;
+}
+mat-sidenav {
+  height: 100%;
+  overflow: hidden !important; /* brak scrolla */
+}
+
+/* rzeczywiste wnętrze sidenavu – też bez scrolla */
+::ng-deep .mat-drawer-inner-container {
+  height: 100%;
+  overflow: hidden !important; /* tu właśnie powstaje ten większy scroll */
+}
+
+/* rzeczywisty content w środku sidenavu */
+.mat-drawer-content,
+.mat-mdc-sidenav-content {
+  height: 100%;
+  overflow: hidden !important;
+  position: relative;
 }
 
 mat-sidenav-container {

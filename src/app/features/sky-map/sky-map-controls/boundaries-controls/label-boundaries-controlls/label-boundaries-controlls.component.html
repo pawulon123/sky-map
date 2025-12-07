@@ -1,7 +1,5 @@
 <div class="stars-symbol-controls space-y-4">
-  <div class="flex items-center justify-between">
-    <label class="font-semibold">Etykiety gwiazdozbiorów</label>
-
+  <div class=" ">
     <mat-slide-toggle
       [checked]="(boundariesSettings$ | async)?.labels?.visible"
       (change)="update('visible', $event.checked)"
@@ -11,7 +9,7 @@
   </div>
 
   <!-- ROZMIAR CZCIONKI -->
-  <div class="flex items-center justify-between">
+  <div class=" ">
     <label class="text-sm">Rozmiar czcionki</label>
     <mat-slider min="8" max="28" step="1" style="width: 180px">
       <input
@@ -24,7 +22,7 @@
   </div>
 
   <!-- ODSTĘP MIĘDZY LITERAMI -->
-  <div class="flex items-center justify-between">
+  <div class=" ">
     <label class="text-sm">Odstęp liter</label>
     <mat-slider min="0" max="8" step="0.5" style="width: 180px">
       <input
@@ -37,7 +35,7 @@
   </div>
 
   <!-- RODZAJ CZCIONKI -->
-  <div class="flex items-center justify-between">
+  <div class=" ">
     <label class="text-sm">Czcionka</label>
 
     <mat-form-field appearance="fill" style="width: 180px">
@@ -55,7 +53,7 @@
   </div>
 
   <!-- GRUBOŚĆ CZCIONKI -->
-  <div class="flex items-center justify-between">
+  <div class=" ">
     <label class="text-sm">Grubość czcionki</label>
 
     <mat-form-field appearance="fill" style="width: 180px">
@@ -72,7 +70,7 @@
     </mat-form-field>
   </div>
 
-  <div class="flex items-center justify-between">
+  <div class=" ">
     <label class="text-sm">Kolor obrysu</label>
 
     <input
@@ -84,7 +82,7 @@
   </div>
 
   <!-- GRUBOŚĆ OBRYSU -->
-  <div class="flex items-center justify-between">
+  <div class=" ">
     <label class="text-sm">Grubość obrysu</label>
     <mat-slider min="0" max="4" step="0.1" style="width: 180px">
       <input
@@ -99,7 +97,7 @@
   </div>
 
   <!-- PRZEZROCZYSTOŚĆ OBRYSU -->
-  <div class="flex items-center justify-between">
+  <div class=" ">
     <label class="text-sm">Przezroczystość obrysu</label>
     <mat-slider min="0" max="1" step="0.05" style="width: 180px">
       <input

@@ -1,22 +1,21 @@
-/* .stars-layer-panel {
-  h3 {
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-} */
-/* .wrap {
-  margin-left: 10px;
-  margin-right: 10px;
-  width: 95%;
-  background-color: rgb(210, 134, 42);
-} */
-.stars-panels {
-  display: flex;
-  gap: 12px;
+:host ::ng-deep .custom-tabs .mat-mdc-tab {
+  background: #9ba1a3;
+  /* overflow: hidden !important; */
 }
 
-.panel-card {
-  flex: 1;
-  padding: 8px;
+:host ::ng-deep .custom-tabs .mat-mdc-tab.mdc-tab--active {
+  background: #455a64;
+}
+
+:host ::ng-deep .custom-tabs .mat-mdc-tab-header {
+  position: sticky;
+  top: 0;
+  z-index: 100; /* żeby headery nie chowały się pod treść */
+  background: #1f1f1f; /* tło, żeby nie prześwitywały */
+}
+:host ::ng-deep .mat-mdc-tab-body-content {
+  overflow: hidden !important;
+}
+:host ::ng-deep .mdc-tab-indicator__content--underline {
+  border: none !important;
 }
