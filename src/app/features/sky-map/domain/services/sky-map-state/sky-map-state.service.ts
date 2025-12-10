@@ -91,4 +91,7 @@ export class SkyMapStateService {
   getBoundariesSettings(): BoundaryLayerSettings {
     return this.boundariesLayerSettingsSubject.getValue();
   }
+  getConstalationLinesSettings(): ConstellationLineSettings {
+    return this.constellationLineSettingsSubject.getValue();
+  }
 }

@@ -1,13 +1,76 @@
-<div class="stars-symbol-controls space-y-2">
-  <div class=" ">
-    <label class="font-semibold">Linie konstelacji</label>
-    <label class="gap-2 text-sm">
-      <span>Widoczne</span>
+<div class="constellation-line-controls" *ngIf="constellationLineSettings$ | async as settings">
+  <!-- Widoczność -->
+  <mat-checkbox color="primary" [checked]="settings.visible" (change)="update('visible', $event.checked)">
+    Linie konstelacji widoczne
+  </mat-checkbox>
+
+  <!-- Styl linii -->
+  <div class="mt-3">
+    <div class="mb-1 font-semibold">Styl linii</div>
+
+    <mat-radio-group
+      name="constellationLineStyle"
+      [value]="settings.style"
+      (change)="update('style', $event.value)"
+      class="flex flex-col gap-1"
+    >
+      <mat-radio-button value="solid"> Ciągła </mat-radio-button>
+
+      <mat-radio-button value="dashed"> Przerywana </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <!-- Kolor linii -->
+  <div class="mt-3">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Kolor linii</mat-label>
+      <input matInput type="color" [value]="settings.color" (input)="update('color', $any($event.target).value)" />
+    </mat-form-field>
+  </div>
+
+  <!-- Grubość linii -->
+  <div class="mt-3">
+    <div class="mb-1 font-semibold">Grubość linii: {{ settings.lineWidth }}</div>
+
+    <mat-slider min="0.1" max="3" step="0.1">
+      <input matSliderThumb [value]="settings.lineWidth" (input)="update('lineWidth', +$any($event.target).value)" />
+    </mat-slider>
+  </div>
+
+  <!-- Przezroczystość linii -->
+  <div class="mt-3">
+    <div class="mb-1 font-semibold">Przezroczystość linii: {{ settings.strokeOpacity }}</div>
+
+    <mat-slider min="0" max="1" step="0.05">
       <input
-        type="checkbox"
-        [ngModel]="(constellationLineSettings$ | async)?.visible"
-        (ngModelChange)="toggleVisible($event)"
+        matSliderThumb
+        [value]="settings.strokeOpacity"
+        (input)="update('strokeOpacity', +$any($event.target).value)"
       />
-    </label>
+    </mat-slider>
+  </div>
+
+  <!-- Rozmiar kreska–odstęp (tylko dla stylu przerywanego) -->
+  <div class="mt-3">
+    <div class="mb-1 font-semibold">Rozmiar kreski / odstępu: {{ settings.dashSize }}</div>
+
+    <mat-slider min="1" max="30" step="1" [disabled]="settings.style !== 'dashed'">
+      <input matSliderThumb [value]="settings.dashSize" (input)="update('dashSize', +$any($event.target).value)" />
+    </mat-slider>
+
+    <div class="flex items-center gap-2 mt-1">
+      <input
+        matInput
+        type="number"
+        min="1"
+        max="100"
+        step="1"
+        class="w-20"
+        [value]="settings.dashSize"
+        (input)="update('dashSize', +$any($event.target).value)"
+        [disabled]="settings.style !== 'dashed'"
+      />
+      <span class="text-sm text-gray-600">jednostki SVG</span>
+    </div>
   </div>
 </div>
