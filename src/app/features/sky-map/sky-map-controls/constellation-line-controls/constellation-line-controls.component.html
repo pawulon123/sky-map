@@ -50,9 +50,9 @@
     </mat-slider>
   </div>
 
-  <!-- Rozmiar kreska–odstęp (tylko dla stylu przerywanego) -->
+  <!-- Rozmiar kreska–odstęp (stroke-dasharray) -->
   <div class="mt-3">
-    <div class="mb-1 font-semibold">Rozmiar kreski / odstępu: {{ settings.dashSize }}</div>
+    <div class="mb-1 font-semibold">Rozmiar kreski / odstępu (dashSize): {{ settings.dashSize }}</div>
 
     <mat-slider min="1" max="30" step="1" [disabled]="settings.style !== 'dashed'">
       <input matSliderThumb [value]="settings.dashSize" (input)="update('dashSize', +$any($event.target).value)" />
@@ -71,6 +71,29 @@
         [disabled]="settings.style !== 'dashed'"
       />
       <span class="text-sm text-gray-600">jednostki SVG</span>
+    </div>
+  </div>
+
+  <!-- NOWA KONTROLKA: odstęp przy gwiazdach (nodeGap) -->
+  <div class="mt-3">
+    <div class="mb-1 font-semibold">Odstęp przy gwiazdach (nodeGap): {{ settings.nodeGap }}</div>
+
+    <mat-slider min="0" max="20" step="0.5">
+      <input matSliderThumb [value]="settings.nodeGap" (input)="update('nodeGap', +$any($event.target).value)" />
+    </mat-slider>
+
+    <div class="flex items-center gap-2 mt-1">
+      <input
+        matInput
+        type="number"
+        min="0"
+        max="50"
+        step="0.5"
+        class="w-20"
+        [value]="settings.nodeGap"
+        (input)="update('nodeGap', +$any($event.target).value)"
+      />
+      <span class="text-sm text-gray-600">px (w przestrzeni SVG)</span>
     </div>
   </div>
 </div>

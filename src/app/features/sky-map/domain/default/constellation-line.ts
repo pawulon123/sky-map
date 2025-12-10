@@ -11,4 +11,5 @@ export const constellationLineDefaultSettings: ConstellationLineSettings = {
   strokeLinecap: 'dashed',
   linejoin: 'miter',
   strokeOpacity: 0.7,
+  nodeGap: 10,
 };

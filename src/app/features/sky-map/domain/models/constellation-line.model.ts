@@ -9,6 +9,7 @@ export interface ConstellationLineSettings {
   strokeLinecap: StrokeLinecap;
   linejoin: Linejoin;
   strokeOpacity: number;
+  nodeGap: number;
 }
 export type StyleConstalationLines = 'dashed' | 'solid';
 export type StrokeLinecap = 'round' | 'dashed' | 'butt';
