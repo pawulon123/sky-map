@@ -10,9 +10,6 @@ import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-m
   standalone: true,
   imports: [CommonModule],
   templateUrl: 'constellation-lines-layer.component.html',
-  host: {
-    '[attr.transform]': 'transform()',
-  },
 })
 export class ConstellationLinesLayerComponent implements OnInit {
   private svc = inject(ConstellationLinesService);
@@ -20,18 +17,10 @@ export class ConstellationLinesLayerComponent implements OnInit {
   private state = inject(SkyMapStateService);
   constellationLineSettings$ = this.state.constellationLineSettings$;
 
-  transform = this.reflectOnTheVerticalAxis();
-
   ngOnInit() {
     this.svc.loadOnce();
   }
-  private reflectOnTheVerticalAxis() {
-    return computed(() => {
-      const { width, mirrorX } = this.proj.settings();
-      if (!mirrorX) return null;
-      return `translate(${width},0) scale(-1,1)`;
-    });
-  }
+
   private isRectangular = (n: ProjectionName) => n === 'equirect' || n === 'mercator';
   private raToLonForProj(n: ProjectionName, ra: number) {
     return this.isRectangular(n) ? ((((ra + 180) % 360) + 360) % 360) - 180 : ra;

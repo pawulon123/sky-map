@@ -9,6 +9,8 @@ import { tap } from 'rxjs/operators';
 import { ProjectionSettings } from '../../domain/models/projection-options.model';
 import { SvgTooltipComponent } from '../../../../core/tooltip/tooltip.component';
 import { SvgTooltipRootDirective } from '../../../../core/tooltip/tooltip.directive';
+import { ReflectOnVerticalAxisDirective } from '../../common/reflect-on-vertical-axis.directive';
+import { LayersSvg } from '../../domain/models/layers-svg';
 
 @Component({
   selector: 'app-root-svg',
@@ -19,6 +21,7 @@ import { SvgTooltipRootDirective } from '../../../../core/tooltip/tooltip.direct
     BoundariesLayerComponent,
     ConstellationLinesLayerComponent /*, GridLayerComponent*/,
     SvgTooltipRootDirective,
+    ReflectOnVerticalAxisDirective,
   ],
   templateUrl: './root-svg.component.html',
   styleUrl: './root-svg.component.css',
@@ -36,6 +39,8 @@ export class RootSvgComponent implements AfterViewInit {
   @Input() maxIntensity: number | null = null;
 
   @ViewChild('skySvg', { static: false }) svgRef!: ElementRef<SVGSVGElement>;
+
+  layersSvg = LayersSvg;
 
   ngAfterViewInit(): void {
     this.state.setRefSvg(this.svgRef);

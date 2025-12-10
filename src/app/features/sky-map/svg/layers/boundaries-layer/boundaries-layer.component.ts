@@ -12,9 +12,9 @@ import { LabelBoundariesLayerComponent } from '../label-boundaries-layer/label-b
   standalone: true,
   imports: [CommonModule, LabelBoundariesLayerComponent],
   templateUrl: 'boundaries-layer.component.html',
-  host: {
-    '[attr.transform]': 'transform()',
-  },
+  // host: {
+  //   '[attr.transform]': 'transform()',
+  // },
 })
 export class BoundariesLayerComponent {
   private boundaryPathSv = inject(BoundaryPathService);
@@ -22,7 +22,7 @@ export class BoundariesLayerComponent {
   private proj = inject(ProjectionService);
 
   boundariesSettings$ = this.state.boundariesLayerSettings$;
-  transform = this.reflectOnTheVerticalAxis();
+  // transform = this.reflectOnTheVerticalAxis();
 
   hoveredAbbrev: string | null = null;
 
@@ -40,14 +40,14 @@ export class BoundariesLayerComponent {
     return boundary?.abbrev === this.hoveredAbbrev;
   }
 
-  private reflectOnTheVerticalAxis() {
-    return computed(() => {
-      let { width, mirrorX } = this.proj.settings();
-      mirrorX = !mirrorX;
-      if (!mirrorX) return null;
-      return `translate(${width},0) scale(-1,1)`;
-    });
-  }
+  // private reflectOnTheVerticalAxis() {
+  //   return computed(() => {
+  //     let { width, mirrorX } = this.proj.settings();
+  //     mirrorX = !mirrorX;
+  //     if (!mirrorX) return null;
+  //     return `translate(${width},0) scale(-1,1)`;
+  //   });
+  // }
 
   getTooltip(boundary: Boundary, pathD: string): string {
     const language = this.state.getBoundariesSettings().labels.language;

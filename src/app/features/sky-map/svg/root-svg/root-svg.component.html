@@ -1,11 +1,3 @@
-<!-- <app-stars-layer></app-stars-layer>
-<app-constellation-lines-layer></app-constellation-lines-layer>
-<app-boundaries-layer></app-boundaries-layer>
-<app-labels-layer></app-labels-layer>
-<app-grid-layer></app-grid-layer>
-<app-asterisms-layer></app-asterisms-layer> -->
-<!-- src/app/svg/root-svg/root-svg.component.html -->
-
 <svg
   appSvgTooltipRoot
   #skySvg
@@ -13,33 +5,19 @@
   [attr.height]="(projectionSettings$ | async)?.height + 'mm'"
   [attr.viewBox]="'0 0 ' + (projectionSettings$ | async)?.width + ' ' + (projectionSettings$ | async)?.height"
 >
-  <!-- obrys sfery / krawędź rzutu -->
-  <!-- <path
-    [attr.d]="spherePath()"
-    fill="none"
-    stroke="#222"
-    [attr.stroke-width]="0.6"
-  ></path> -->
-
-  <!-- siatka współrzędnych -->
-  <!-- <g *ngIf="showGrid">
-    <path
-      [attr.d]="graticulePath()"
-      fill="none"
-      stroke="#bbb"
-      [attr.stroke-width]="0.4"
-    ></path>
-  </g> -->
-
-  <!-- GWIAZDY -->
   <g app-stars-layer [showStars]="showStars" [showLabels]="showLabels" [maxMag]="6.5"></g>
 
-  <!-- linie konstelacji -->
-  <g app-constellation-lines-layer *ngIf="showConstellationLines"></g>
+  <g
+    app-constellation-lines-layer
+    *ngIf="showConstellationLines"
+    [appReflectOnVerticalAxis]="layersSvg.constellationLines"
+  ></g>
 
-  <!-- granice gwiazdozbiorów -->
-  <g app-boundaries-layer *ngIf="showBoundaries"></g>
+  <g app-boundaries-layer *ngIf="showBoundaries" [appReflectOnVerticalAxis]="layersSvg.boundaries"></g>
 
-  <!-- asterizmy -->
-  <g app-asterisms-layer *ngIf="(asterismSettings$ | async)?.visible"></g>
+  <g
+    app-asterisms-layer
+    *ngIf="(asterismSettings$ | async)?.visible"
+    [appReflectOnVerticalAxis]="layersSvg.asterisms"
+  ></g>
 </svg>

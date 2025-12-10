@@ -18,6 +18,7 @@ export class LabelBoundariesControllsComponent {
   private state = inject(SkyMapStateService);
 
   boundariesSettings$ = this.state.boundariesLayerSettings$;
+
   update(key: keyof BoundaryLabels, value: any) {
     this.state.updateBoundaryLabel({ [key]: value });
   }
