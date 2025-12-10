@@ -4,6 +4,14 @@ export const boundaryDefaultSettings: BoundaryLayerSettings = {
   lines: {
     visible: true,
     color: 'blue',
+    hitWidth: 1,
+    lineWidth: 2,
+    hoverColor: 'red',
+    dashSize: 50,
+    strokeOpacity: 0.5,
+    style: 'dashed',
+    hoverScale: 1,
+    dasharray: '',
   },
   labels: {
     visible: true,

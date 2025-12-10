@@ -1,6 +1,14 @@
 export type Lines = {
   visible: boolean;
   color: string;
+  hitWidth: number;
+  lineWidth: number;
+  hoverColor: string;
+  dashSize: number;
+  strokeOpacity: number;
+  style: string;
+  hoverScale: number;
+  dasharray: string | null;
 };
 export type BoundaryLabels = {
   visible: boolean;

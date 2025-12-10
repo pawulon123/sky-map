@@ -2,7 +2,6 @@ import { AfterViewInit, Component, ElementRef, inject, Input, ViewChild } from '
 import { StarsLayerComponent } from '../layers/stars-layer/stars-layer.component';
 import { AsterismsLayerComponent } from '../layers/asterisms-layer/asterisms-layer.component';
 import { BoundariesLayerComponent } from '../layers/boundaries-layer/boundaries-layer.component';
-import { ConstellationLinesLayerComponent } from '../layers/constellation-lines-layer/constellation-lines-layer.component';
 import { CommonModule } from '@angular/common';
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
 import { tap } from 'rxjs/operators';
@@ -11,6 +10,7 @@ import { SvgTooltipComponent } from '../../../../core/tooltip/tooltip.component'
 import { SvgTooltipRootDirective } from '../../../../core/tooltip/tooltip.directive';
 import { ReflectOnVerticalAxisDirective } from '../../common/reflect-on-vertical-axis.directive';
 import { LayersSvg } from '../../domain/models/layers-svg';
+import { ConstellationLinesLayerComponent } from '../layers/constellation-lines-layer/constellation-lines-layer.component';
 
 @Component({
   selector: 'app-root-svg',
@@ -19,7 +19,7 @@ import { LayersSvg } from '../../domain/models/layers-svg';
     StarsLayerComponent,
     AsterismsLayerComponent,
     BoundariesLayerComponent,
-    ConstellationLinesLayerComponent /*, GridLayerComponent*/,
+    ConstellationLinesLayerComponent,
     SvgTooltipRootDirective,
     ReflectOnVerticalAxisDirective,
   ],

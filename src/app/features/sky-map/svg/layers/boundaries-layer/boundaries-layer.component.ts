@@ -1,32 +1,51 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, Signal } from '@angular/core';
+import { Component, inject, Signal } from '@angular/core';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { getComputedBoundary } from './get-computed-boundary';
-import { Boundary, BoundaryPath } from '../../../domain/models/boundary.model';
+import {
+  Boundary,
+  BoundaryLabels,
+  BoundaryLayerSettings,
+  BoundaryPath,
+  Lines,
+} from '../../../domain/models/boundary.model';
 import { BoundaryPathService } from './boundary-path.service';
-import { ProjectionService } from '../../../domain/services/projection/projection.service';
 import { LabelBoundariesLayerComponent } from '../label-boundaries-layer/label-boundaries-layer.component';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'g[app-boundaries-layer]',
   standalone: true,
   imports: [CommonModule, LabelBoundariesLayerComponent],
   templateUrl: 'boundaries-layer.component.html',
-  // host: {
-  //   '[attr.transform]': 'transform()',
-  // },
 })
 export class BoundariesLayerComponent {
   private boundaryPathSv = inject(BoundaryPathService);
   private state = inject(SkyMapStateService);
-  private proj = inject(ProjectionService);
 
-  boundariesSettings$ = this.state.boundariesLayerSettings$;
-  // transform = this.reflectOnTheVerticalAxis();
+  private readonly boundariesSettings$ = this.state.boundariesLayerSettings$;
 
-  hoveredAbbrev: string | null = null;
+  readonly boundariesSettingsView$: Observable<BoundaryLayerSettings> = this.boundariesSettings$.pipe(
+    map((settings) => this.scratchDashed(settings))
+  );
 
-  paths: Signal<BoundaryPath[]> = this.boundaryPathSv.paths;
+  readonly paths: Signal<BoundaryPath[]> = this.boundaryPathSv.paths;
+
+  private hoveredAbbrev: string | null = null;
+
+  private scratchDashed(settings: BoundaryLayerSettings): BoundaryLayerSettings {
+    const { lines } = settings;
+
+    const dasharray = lines.style === 'dashed' && lines.dashSize > 0 ? `${lines.dashSize} ${lines.dashSize}` : null;
+
+    return {
+      ...settings,
+      lines: {
+        ...lines,
+        dasharray,
+      },
+    };
+  }
 
   onBoundaryEnter(boundary: Boundary | undefined): void {
     this.hoveredAbbrev = boundary?.abbrev ?? null;
@@ -39,15 +58,6 @@ export class BoundariesLayerComponent {
   isHovered(boundary?: Boundary): boolean {
     return boundary?.abbrev === this.hoveredAbbrev;
   }
-
-  // private reflectOnTheVerticalAxis() {
-  //   return computed(() => {
-  //     let { width, mirrorX } = this.proj.settings();
-  //     mirrorX = !mirrorX;
-  //     if (!mirrorX) return null;
-  //     return `translate(${width},0) scale(-1,1)`;
-  //   });
-  // }
 
   getTooltip(boundary: Boundary, pathD: string): string {
     const language = this.state.getBoundariesSettings().labels.language;

@@ -1,19 +1,37 @@
 <svg:g id="layer-boundaries" appSvgTooltipRoot>
-  <ng-container *ngIf="boundariesSettings$ | async as settings">
+  <ng-container *ngIf="boundariesSettingsView$ | async as settings">
     <ng-container *ngIf="settings.lines.visible">
       <ng-container *ngFor="let item of paths()">
+        <!-- WARSTWA 1: niewidoczna linia do hover/tooltip (solid, bez dasharray) -->
         <path
           [attr.d]="item.d"
           fill="none"
-          [attr.stroke]="isHovered(item.boundary) ? '#ff6600' : '#000000'"
-          [attr.stroke-width]="isHovered(item.boundary) ? 1.5 : 0.6"
+          stroke="transparent"
+          [attr.stroke-width]="settings.lines.hitWidth * 4"
+          [attr.pointer-events]="'stroke'"
           [attr.data-tooltip]="getTooltip(item.boundary, item.d)"
           (mouseenter)="onBoundaryEnter(item.boundary)"
           (mouseleave)="onBoundaryLeave()"
         ></path>
+
+        <path
+          [attr.d]="item.d"
+          fill="none"
+          [attr.stroke]="
+            isHovered(item.boundary) ? settings.lines.hoverColor || settings.lines.color : settings.lines.color
+          "
+          [attr.stroke-width]="
+            isHovered(item.boundary) ? settings.lines.lineWidth * settings.lines.hoverScale : settings.lines.lineWidth
+          "
+          [attr.stroke-opacity]="settings.lines.strokeOpacity"
+          [attr.stroke-dasharray]="settings.lines.dasharray"
+          stroke-linecap="butt"
+          stroke-linejoin="round"
+          vector-effect="non-scaling-stroke"
+        ></path>
       </ng-container>
     </ng-container>
+
     <g *ngIf="settings.labels.visible" app-label-boundaries-layer></g>
   </ng-container>
 </svg:g>
-<svg></svg>
