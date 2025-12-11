@@ -5,12 +5,16 @@ export const defaultStarsSettings: StarsLayerSettings = {
     visible: true,
     ring: 0,
     magMax: 7,
-    shape: 'circle',
+    shape: 'star',
     size: 1.5,
     color: '#4205e8ff',
     strokeWidth: 0.2,
     strokeColor: '#1c7138ff',
     scaleByMagnitude: true,
+
+    // mnożnik wielkości (1 = bez zmian)
+    fillOpacity: 0.5, // 0–1
+    strokeOpacity: 0.5, // 0–1
   },
   labels: {
     visible: false,

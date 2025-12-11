@@ -2,7 +2,6 @@
   <ng-container *ngIf="boundariesSettingsView$ | async as settings">
     <ng-container *ngIf="settings.lines.visible">
       <ng-container *ngFor="let item of paths()">
-        <!-- WARSTWA 1: niewidoczna linia do hover/tooltip (solid, bez dasharray) -->
         <path
           [attr.d]="item.d"
           fill="none"

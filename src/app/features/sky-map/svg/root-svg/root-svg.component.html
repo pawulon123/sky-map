@@ -5,7 +5,7 @@
   [attr.height]="(projectionSettings$ | async)?.height + 'mm'"
   [attr.viewBox]="'0 0 ' + (projectionSettings$ | async)?.width + ' ' + (projectionSettings$ | async)?.height"
 >
-  <g app-stars-layer [showStars]="showStars" [showLabels]="showLabels" [maxMag]="6.5"></g>
+  <g app-stars-layer [showLabels]="showLabels" [maxMag]="6.5"></g>
 
   <g
     app-constellation-lines-layer

@@ -32,7 +32,6 @@ export class RootSvgComponent implements AfterViewInit {
   readonly asterismSettings$ = this.state.asterismLayerSettings$;
 
   @Input() showGrid = true;
-  @Input() showStars = true;
   @Input() showBoundaries = true;
   @Input() showConstellationLines = true;
   @Input() showLabels = true;

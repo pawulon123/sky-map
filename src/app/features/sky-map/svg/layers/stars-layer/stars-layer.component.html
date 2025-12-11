@@ -2,19 +2,142 @@
   <ng-container *ngIf="starsSettings$ | async as settings">
     <ng-container *ngIf="settings.symbols.visible">
       <ng-container *ngFor="let s of stars()">
-        <ng-container *ngIf="s.mag <= settings.symbols.magMax">
-          <circle
-            [attr.cx]="starCx(s)"
-            [attr.cy]="starCy(s)"
-            [attr.r]="radius(s)"
-            [attr.fill]="settings.symbols.ring === 0 ? settings.symbols.color : 'none'"
-            [attr.stroke]="settings.symbols.ring === 0 ? 'none' : settings.symbols.color"
-            [attr.stroke-width]="settings.symbols.ring === 0 ? null : radius(s) * settings.symbols.ring"
-          />
-        </ng-container>
+        <!-- <ng-container *ngIf="s.mag <= settings.symbols.magMax"> -->
+        <!-- <ng-container *ngIf="s.propSvg as propSvg"> -->
+        <g
+          [attr.transform]="'translate(' + s.starCx + ',' + s.starCy + ')'"
+          [attr.fill]="settings.symbols.shape === 'ring' ? 'none' : settings.symbols.color"
+          [attr.fill-opacity]="s.fillOpacity"
+          [attr.stroke]="s.strokeColor"
+          [attr.stroke-opacity]="s.strokeOpacity"
+        >
+          <ng-container [ngSwitch]="settings.symbols.shape">
+            <ng-container
+              *ngSwitchCase="'circle'"
+              [ngTemplateOutlet]="circleTpl"
+              [ngTemplateOutletContext]="{ s: s, settings: settings }"
+            ></ng-container>
+
+            <ng-container
+              *ngSwitchCase="'ring'"
+              [ngTemplateOutlet]="ringTpl"
+              [ngTemplateOutletContext]="{ s: s, settings: settings }"
+            ></ng-container>
+
+            <ng-container
+              *ngSwitchCase="'star'"
+              [ngTemplateOutlet]="starTpl"
+              [ngTemplateOutletContext]="{ s: s, settings: settings }"
+            ></ng-container>
+
+            <ng-container
+              *ngSwitchCase="'cross'"
+              [ngTemplateOutlet]="crossTpl"
+              [ngTemplateOutletContext]="{ s: s, settings: settings }"
+            ></ng-container>
+
+            <ng-container
+              *ngSwitchCase="'square'"
+              [ngTemplateOutlet]="squareTpl"
+              [ngTemplateOutletContext]="{ s: s, settings: settings }"
+            ></ng-container>
+
+            <ng-container
+              *ngSwitchCase="'triangle'"
+              [ngTemplateOutlet]="triangleTpl"
+              [ngTemplateOutletContext]="{ s: s, settings: settings }"
+            ></ng-container>
+
+            <ng-container
+              *ngSwitchCase="'custom'"
+              [ngTemplateOutlet]="customTpl"
+              [ngTemplateOutletContext]="{ s: s, settings: settings }"
+            ></ng-container>
+
+            <ng-container
+              *ngSwitchDefault
+              [ngTemplateOutlet]="circleTpl"
+              [ngTemplateOutletContext]="{ s: s, settings: settings }"
+            ></ng-container>
+          </ng-container>
+        </g>
+        <!-- </ng-container> -->
+        <!-- </ng-container> -->
       </ng-container>
     </ng-container>
 
     <g app-labels-layer *ngIf="showLabels()" [radiusFn]="radius.bind(this)"></g>
   </ng-container>
+
+  <!-- TEMPLATES Kształtów -->
+
+  <!-- 1. Kółko pełne -->
+  <ng-template #circleTpl let-s="s" let-settings="settings">
+    <circle [attr.r]="s.scaledRadius" [attr.stroke-width]="s.baseStrokeWidth" />
+  </ng-template>
+
+  <!-- 2. Pierścień -->
+  <ng-template #ringTpl let-s="s" let-settings="settings">
+    <circle [attr.r]="s.scaledRadius" fill="none" [attr.stroke-width]="s.ringStrokeWidth" />
+  </ng-template>
+
+  <!-- 3. Gwiazda -->
+  <ng-template #starTpl let-s="s" let-settings="settings">
+    <polygon
+      [attr.points]="s.starPoints"
+      [attr.stroke-width]="s.baseStrokeWidth"
+      [attr.fill]="settings.symbols.fillOpacity ? settings.symbols.color : 'none'"
+      stroke-linejoin="round"
+    ></polygon>
+  </ng-template>
+
+  <!-- 4. Krzyżyk -->
+  <ng-template #crossTpl let-s="s" let-settings="settings">
+    <line
+      [attr.x1]="-s.scaledRadius"
+      y1="0"
+      [attr.x2]="s.scaledRadius"
+      y2="0"
+      fill="none"
+      [attr.stroke-width]="s.crossStrokeWidth"
+      stroke-linecap="round"
+    ></line>
+    <line
+      x1="0"
+      [attr.y1]="-s.scaledRadius"
+      x2="0"
+      [attr.y2]="s.scaledRadius"
+      fill="none"
+      [attr.stroke-width]="s.crossStrokeWidth"
+      stroke-linecap="round"
+    ></line>
+  </ng-template>
+
+  <!-- 5. Kwadrat -->
+  <ng-template #squareTpl let-s="s" let-settings="settings">
+    <polygon
+      [attr.points]="s.squarePoints"
+      [attr.stroke-width]="s.baseStrokeWidth"
+      [attr.fill]="settings.symbols.fillOpacity ? settings.symbols.color : 'none'"
+    ></polygon>
+  </ng-template>
+
+  <!-- 6. Trójkąt -->
+  <ng-template #triangleTpl let-s="s" let-settings="settings">
+    <polygon
+      [attr.points]="s.trianglePoints"
+      [attr.stroke-width]="s.baseStrokeWidth"
+      [attr.fill]="settings.symbols.fillOpacity"
+    ></polygon>
+  </ng-template>
+
+  <!-- 7. Własne SVG (path) -->
+  <ng-template #customTpl let-s="s" let-settings="settings">
+    <path
+      [attr.d]="settings.symbols.customSvgPath"
+      [attr.transform]="s.customSvgTransform"
+      [attr.stroke-width]="s.baseStrokeWidth"
+      [attr.fill]="settings.symbols.fillOpacity ? settings.symbols.color : 'none'"
+    ></path>
+  </ng-template>
 </svg:g>
