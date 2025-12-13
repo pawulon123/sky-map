@@ -6,8 +6,6 @@ import { LabelPlacement, StarsLayerSettings } from '../../../domain/models/stars
 import { defaultStarsSettings } from '../../../domain/default/stars';
 import { LabelService } from './label.service';
 import { buildLabelLines, firstLine } from './name-or-bayer';
-import { tap } from 'rxjs';
-import { SvgTooltipComponent } from '../../../../../core/tooltip/tooltip.component';
 
 @Component({
   selector: 'g[app-labels-layer]',
@@ -16,8 +14,6 @@ import { SvgTooltipComponent } from '../../../../../core/tooltip/tooltip.compone
   styleUrl: './labels-layer.component.css',
 })
 export class LabelsLayerComponent implements OnInit {
-  @Input({ required: false }) radiusFn: (s: Star) => number = () => 2;
-
   private labelService = inject(LabelService);
   private state = inject(SkyMapStateService);
 

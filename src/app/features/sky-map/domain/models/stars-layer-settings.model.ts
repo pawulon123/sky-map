@@ -65,3 +65,26 @@ export interface PositionConfig {
 }
 // np. domain/models/sky-map-settings.model.ts
 export type StarSymbolShape = 'circle' | 'ring' | 'star' | 'cross' | 'square' | 'triangle' | 'custom';
+export interface RenderStar {
+  star: Star;
+  cx: number;
+  cy: number;
+  mag: number | null;
+
+  shape: StarSymbolShape;
+
+  // geometria
+  r: number;
+  ringStrokeWidth: number;
+  baseStrokeWidth: number;
+  crossStrokeWidth: number;
+  polygonPoints?: string;
+  customTransform?: string;
+
+  // styl
+  fillColor: string;
+  fillOpacity: number;
+  strokeColor: string;
+  strokeOpacity: number;
+  hasFill: boolean;
+}

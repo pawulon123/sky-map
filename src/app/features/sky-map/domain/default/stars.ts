@@ -6,7 +6,7 @@ export const defaultStarsSettings: StarsLayerSettings = {
     ring: 0,
     magMax: 7,
     shape: 'star',
-    size: 1.5,
+    size: 3.5,
     color: '#4205e8ff',
     strokeWidth: 0.2,
     strokeColor: '#1c7138ff',
