@@ -24,6 +24,7 @@ export class BoundariesLayerComponent {
   private state = inject(SkyMapStateService);
 
   private readonly boundariesSettings$ = this.state.boundariesLayerSettings$;
+  readonly projectionSettings$ = this.state.projectionSettings$;
 
   readonly boundariesSettingsView$: Observable<BoundaryLayerSettings> = this.boundariesSettings$.pipe(
     map((settings) => this.scratchDashed(settings))

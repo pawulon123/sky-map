@@ -2,10 +2,12 @@ import { Injectable, inject, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 export interface ConstellationLine {
+  id: string;
   abbrev: string;
   name?: string;
   segments: [number, number][][];
   label?: { ra_deg: number; dec: number } | null;
+  constelationId: string;
 }
 export interface ConstellationLinesData {
   meta?: any;
@@ -46,13 +48,14 @@ export class ConstellationLinesService {
     const gj = await res.json();
 
     const items: ConstellationLine[] = (gj || []).map((f: any) => {
+      const constelationId = f.id;
       const p = f.properties || {};
       const name = p.name || p.n || p.abbr;
       const abbrev = p.abbr || p.a || name?.slice(0, 3)?.toUpperCase?.();
       const segments = this.featureToSegments(f);
       const first = segments?.[0]?.[0] || null;
       const label = first ? { ra_deg: first[0], dec: first[1] } : null;
-      return { abbrev, name, segments, label };
+      return { constelationId, abbrev, name, segments, label };
     });
 
     this._data.set({ meta: { source: 'd3-celestial constellation lines' }, items });

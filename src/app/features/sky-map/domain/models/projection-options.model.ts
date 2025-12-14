@@ -14,4 +14,5 @@ export interface ProjectionSettings {
   width: number;
   projectionName: ProjectionName;
   mirrorX: boolean;
+  selected: string[];
 }

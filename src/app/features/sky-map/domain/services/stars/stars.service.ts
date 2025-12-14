@@ -41,6 +41,7 @@ export class StarsService {
     const meta = Array.isArray(json) ? { source: 'assets' } : (json.meta ?? {});
 
     // Normalizacja pól - dbamy o ra_deg (w stopniach), dec (w stopniach), mag
+
     const stars: Star[] = starsRaw.map((raw): any => {
       // RA:
       // - jeśli mamy ra_deg (0..360) to bierzemy
@@ -59,6 +60,7 @@ export class StarsService {
       // Zwracamy nowy obiekt typu Star (plus nasze techniczne pole __projected)
       const s: Star = {
         ...raw,
+        constelationId: raw.con,
         ra_deg: raDeg,
         dec: decDeg,
         mag: magVal,

@@ -5,11 +5,11 @@ export const constellationLineDefaultSettings: ConstellationLineSettings = {
   color: 'red',
   style: 'dashed',
   dasharray: null,
-  dashSize: 3,
+  dashSize: 0,
   lineWidth: 0.5,
   dashOffset: 0,
   strokeLinecap: 'dashed',
   linejoin: 'miter',
   strokeOpacity: 0.7,
-  nodeGap: 10,
+  nodeGap: 0,
 };

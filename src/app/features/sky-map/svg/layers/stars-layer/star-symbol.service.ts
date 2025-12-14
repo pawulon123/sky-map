@@ -16,6 +16,19 @@ export class StarSymbolService {
   private readonly settingsSig = toSignal(this.state.starsLayerSettings$, {
     initialValue: defaultStarsSettings,
   });
+  private readonly visibleStars = computed<Star[]>(() => {
+    const all = this.svc.data().stars ?? [];
+
+    const symbolSettings = this.settingsSig().symbols;
+    let visible = all.filter((s) => Array.isArray(s.__projected));
+    const filteredMag = visible.filter(({ mag }) => symbolSettings.magMax >= mag);
+
+    const selectedConstelation = this.state.getProjectionSettings().selected;
+
+    const finelyStars = filteredMag.filter(({ con }) => selectedConstelation?.includes(con));
+
+    return [...finelyStars].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
+  });
 
   readonly starSynbols = computed<RenderStar[]>(() => {
     const settings = this.settingsSig();
@@ -87,14 +100,6 @@ export class StarSymbolService {
     }
     return propForShape;
   }
-
-  private readonly visibleStars = computed<Star[]>(() => {
-    const all = this.svc.data().stars ?? [];
-    const symbolSettings = this.settingsSig().symbols;
-    let visible = all.filter((s) => Array.isArray(s.__projected));
-    const filteredMag = visible.filter(({ mag }) => symbolSettings.magMax >= mag);
-    return [...filteredMag].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
-  });
 
   private radius(s: Star, rMin = 0.2, rMax = 2.8): number {
     const mag = s.mag;

@@ -1,9 +1,4 @@
 export interface Star {
-  strokeOpacity: any;
-  strokeColor: any;
-  fillOpacity: any;
-  starCy: any;
-  starCx: any;
   bayer: string;
   id?: number | string;
   ra?: number;
@@ -14,8 +9,9 @@ export interface Star {
   spect?: string | null;
   dist_pc?: number | null;
   __projected?: [number, number] | null; // ważne: może być null
-
+  con: string;
   propSvg: any;
+  constelationId: string;
 }
 
 export interface StarsData {

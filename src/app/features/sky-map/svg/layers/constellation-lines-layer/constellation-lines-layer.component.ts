@@ -19,6 +19,7 @@ export class ConstellationLinesLayerComponent {
   private state = inject(SkyMapStateService);
 
   constellationLineSettings$ = this.state.constellationLineSettings$.pipe(map(this.scratchDashed.bind(this)));
+
   paths = this.svc.paths;
 
   scratchDashed({ style, dashSize, ...settings }: ConstellationLineSettings) {

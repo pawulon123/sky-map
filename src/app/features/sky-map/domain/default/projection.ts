@@ -5,6 +5,7 @@ export const defaultProjectionSettings: ProjectionSettings = {
   height: 700,
   projectionName: 'stereographic',
   mirrorX: false,
+  selected: ['And'],
 };
 export const projections = [
   { value: 'stereographic', label: 'Stereograficzny' },

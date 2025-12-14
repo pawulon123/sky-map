@@ -2,6 +2,7 @@ import { Injectable, signal, computed } from '@angular/core';
 import { defaultProjectionSettings } from '../../default/projection';
 import { projectionCore } from './projection-core';
 import { ProjectionSettings } from '../../models/projection-options.model';
+import { Boundary } from '../../models/boundary.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProjectionService {

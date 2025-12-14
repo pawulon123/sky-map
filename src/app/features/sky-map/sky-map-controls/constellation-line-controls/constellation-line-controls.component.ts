@@ -22,8 +22,6 @@ export class ConstellationLineControlsComponent {
   constellationLineSettings$ = this.state.constellationLineSettings$;
 
   update<K extends keyof ConstellationLineSettings>(key: K, value: ConstellationLineSettings[K]) {
-    // console.log(key, value);
-
     this.state.updateConstellationLine({ [key]: value } as Partial<ConstellationLineSettings>);
   }
 }

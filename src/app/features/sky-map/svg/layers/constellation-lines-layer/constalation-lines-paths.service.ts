@@ -6,6 +6,7 @@ import { ProjectionService } from '../../../domain/services/projection/projectio
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { ConstellationLineSettings } from '../../../domain/models/constellation-line.model';
 import { constellationLineDefaultSettings } from '../../../domain/default/constellation-line';
+import { SelectedIdService } from '../../../domain/services/sky-map-state/allowed-ids-policy.service';
 
 type RaDec = [number, number];
 type LonDec = [number, number];
@@ -18,38 +19,34 @@ export class ConstalationLinesPathsService {
   private svc = inject(ConstellationLinesService);
   private proj = inject(ProjectionService);
   private state = inject(SkyMapStateService);
-
+  private selectedId = inject(SelectedIdService);
   constructor() {
     this.svc.loadOnce();
   }
 
-  // Sygnał z ustawieniami linii konstelacji (oparty na BehaviorSubject → Observable)
   private readonly lineSettings = toSignal(this.state.constellationLineSettings$, {
     initialValue: {
       nodeGap: constellationLineDefaultSettings.nodeGap,
     } as ConstellationLineSettings,
   });
 
-  // Główna lista ścieżek. ZALEŻY od lineSettings(), więc reaguje m.in. na nodeGap.
-  readonly paths = computed(() => {
-    const projectionName = this.proj.settings().projectionName as ProjectionName;
 
+  readonly paths = computed(() => {
+    const { projectionName } = this.proj.settings();
     const settings = this.lineSettings();
     const nodeGap = settings.nodeGap ?? 0;
-    const gap = Math.max(0, nodeGap); // bez wartości ujemnych
+    const gap = Math.max(0, nodeGap);
 
     const items = this.svc.data().items ?? [];
 
-    return items
-      .flatMap((c) => c.segments ?? []) // wszystkie segmenty RA/Dec
-      .flatMap((seg) => this.splitByDateline(projectionName, seg)) // pocięte na kawałki przy dateline
-      .flatMap((chunk) => this.makeShortenedSegmentPaths(chunk, gap)); // każdy kawałek pocięty przy węzłach
+    const filteredItems = this.selectedId.filter(items);
+
+    return filteredItems
+      .flatMap((c) => c.segments ?? [])
+      .flatMap((seg) => this.splitByDateline(projectionName, seg))
+      .flatMap((chunk) => this.makeShortenedSegmentPaths(chunk, gap));
   });
 
-  /**
-   * Z ciągu punktów [lon,dec] tworzy listę "uciętych" odcinków:
-   * linia nie dochodzi do węzłów (gwiazd), odstęp = gap.
-   */
   private makeShortenedSegmentPaths(pts: LonDec[], gap: number): string[] {
     if (pts.length < 2) return [];
 

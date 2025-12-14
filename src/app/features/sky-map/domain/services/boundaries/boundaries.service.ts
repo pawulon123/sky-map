@@ -64,7 +64,8 @@ export class BoundariesService {
       const segments = this.featureToSegments(f);
       const first = segments?.[0]?.[0] || null;
       const label = first ? { ra_deg: first[0], dec: first[1] } : null;
-      return { abbrev, name, segments, label };
+      const constelationId = f.id;
+      return { constelationId, abbrev, name, segments, label };
     });
 
     this._data.set({ meta: { source: 'IAU via d3-celestial', epoch: 'J2000' }, boundaries });

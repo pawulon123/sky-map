@@ -37,6 +37,7 @@ export interface Boundary {
   name?: string;
   segments: [number, number][][]; // [[ [ra°,dec], ... ], ...]
   label?: { ra_deg: number; dec: number } | null;
+  constelationId: string;
 }
 export interface BoundariesData {
   meta?: any;
