@@ -10,37 +10,49 @@ import {
 
 interface TryPlaceLabelForStarParams {
   star: Star;
-  settings: StarsLabelsSettings;
+  // settingssssss: StarsLabelsSettings;
   fontSize: number;
   letterSpacing: number;
   cellSize: number;
   grid: Map<string, LabelBox[]> | null;
   getLabelLines: (star: Star) => string[];
   collisionsEnabled: boolean;
+  offsetPx: number;
 }
 
 export function tryPlaceLabelForStar(params: TryPlaceLabelForStarParams): LabelPlacement | null {
-  const { star, fontSize, letterSpacing, cellSize, grid, getLabelLines, collisionsEnabled } = params;
+  const { star, fontSize, letterSpacing, cellSize, grid, getLabelLines, collisionsEnabled, offsetPx } = params;
 
   const lines = getLabelLines(star);
   if (lines.length === 0) return null;
 
   const [sx, sy] = starPx(star);
+
   const { textWidth, textHeight } = computeLabelDimensions(lines, fontSize, letterSpacing);
-  const labelOffset = computeLabelOffset(star);
+
+  // NOWE: labelOffset = promień gwiazdy + odstęp użytkownika
+  const labelOffset = computeLabelOffset(star, offsetPx);
 
   for (const position of POSITION_CONFIGS) {
     const { anchorX, anchorY } = computeAnchorPoint(sx, sy, labelOffset, position);
-    const { x, y } = computeLabelPositionForConfig(position.key, anchorX, anchorY, sx, sy, textWidth, textHeight, star);
+
+    // NOWE: przekaż offsetPx dalej, żeby prawa/lewa strona też używała odstępu
+    const { x, y } = computeLabelPositionForConfig(
+      position.key,
+      anchorX,
+      anchorY,
+      sx,
+      sy,
+      textWidth,
+      textHeight,
+      star,
+      offsetPx
+    );
 
     const box = createLabelBox(x, y, textWidth, textHeight);
 
-    // --- kolizje wyłączone: bierzemy pierwszą pasującą pozycję bez sprawdzania gridu
-    if (!collisionsEnabled) {
-      return { star, x, y, positionKey: position.key };
-    }
+    if (!collisionsEnabled) return { star, x, y, positionKey: position.key };
 
-    // --- kolizje włączone
     if (grid && !collidesWithGrid(box, grid, cellSize)) {
       insertBoxToGrid(box, grid, cellSize);
       return { star, x, y, positionKey: position.key };
@@ -49,6 +61,7 @@ export function tryPlaceLabelForStar(params: TryPlaceLabelForStarParams): LabelP
 
   return null;
 }
+
 const starPx = (s: Star): [number, number] => {
   const p = s.__projected ?? [0, 0];
   return [p[0], p[1]];
@@ -130,37 +143,29 @@ const computeLabelPositionForConfig = (
   sy: number,
   textWidth: number,
   textHeight: number,
-  star: Star
+  star: Star,
+  offsetPx: number
 ): { x: number; y: number } => {
+  const dy = radiusFn(star) + offsetPx;
+
   if (key === 'right') {
-    return {
-      x: anchorX,
-      y: sy - (radiusFn(star) + 2),
-    };
+    return { x: anchorX, y: sy - dy };
   }
 
   if (key === 'left') {
-    return {
-      x: anchorX - textWidth,
-      y: sy - (radiusFn(star) + 2),
-    };
+    return { x: anchorX - textWidth, y: sy - dy };
   }
 
   if (key === 'top') {
-    return {
-      x: anchorX - textWidth / 2,
-      y: anchorY - textHeight / 2,
-    };
+    return { x: anchorX - textWidth / 2, y: anchorY - textHeight / 2 };
   }
 
-  // 'bottom'
-  return {
-    x: anchorX - textWidth / 2,
-    y: anchorY + textHeight,
-  };
+  // bottom
+  return { x: anchorX - textWidth / 2, y: anchorY + textHeight };
 };
+
 const radiusFn: (s: Star) => number = () => 2;
-const computeLabelOffset = (star: Star): number => radiusFn(star) + 2;
+const computeLabelOffset = (star: Star, offsetPx: number): number => radiusFn(star) + 2;
 const computeAnchorPoint = (
   sx: number,
   sy: number,

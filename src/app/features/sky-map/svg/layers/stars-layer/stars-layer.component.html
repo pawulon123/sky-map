@@ -1,9 +1,13 @@
-<svg:g id="layer-stars">
+<svg:g id="layer-stars" appSvgTooltipRoot>
   <!-- widoczność warstwy -->
   <ng-container *ngIf="starsSettings.symbols.visible">
     <!-- prekomputowane gwiazdy -->
     <ng-container *ngFor="let rs of starSynbols(); trackBy: trackByStar">
-      <g *ngIf="showStars" [attr.transform]="'translate(' + rs.cx + ',' + rs.cy + ')'">
+      <g
+        *ngIf="showStars"
+        [attr.transform]="'translate(' + rs.cx + ',' + rs.cy + ')'"
+        [attr.data-tooltip]="getTooltip(rs)"
+      >
         <ng-container [ngSwitch]="rs.shape">
           <!-- 1. Kółko -->
           <circle

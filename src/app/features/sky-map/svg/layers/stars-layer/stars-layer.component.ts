@@ -43,4 +43,8 @@ export class StarsLayerComponent {
   trackByStar(index: number, rs: RenderStar): number {
     return index;
   }
+
+  getTooltip(star: RenderStar): string {
+    return star.star.name ?? '';
+  }
 }

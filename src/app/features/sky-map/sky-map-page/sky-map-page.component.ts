@@ -40,7 +40,7 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
     return this.projectionSettings$.subscribe(this.sendSvgData.bind(this));
   }
 
-  private sendSvgData({ width, height }: Partial<SvgData>): void {
+  private sendSvgData({ width, height }: SvgData): void {
     const svgRef = this.state.svgRef;
     this.svgData.emit({ width, height, svgRef });
   }

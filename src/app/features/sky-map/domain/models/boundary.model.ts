@@ -1,3 +1,5 @@
+import { RaDec } from './constellation-line.model';
+
 export type Lines = {
   visible: boolean;
   color: string;
@@ -51,3 +53,15 @@ export type ChunkWithBoundary = {
   chunk: ScreenChunk;
   boundary: Boundary;
 };
+export type LabelBoundary = {
+  x: number;
+  y: number;
+  abbrev: string;
+  name: string;
+};
+export type PieceState = {
+  pieces: RaDec[][];
+  current: RaDec[];
+};
+
+export type Segments = Boundary['segments'];

@@ -18,6 +18,13 @@ export function computeLabelLayoutEngine(params: LabelLayoutEngineParams): Label
 
   const fontSize = settings.fontSize ?? defaultStarsSettings.labels.fontSize;
   const letterSpacing = settings.letterSpacing ?? 0;
+
+  // NOWE: zawsze licz liczbę, nigdy undefined
+  const offsetPxRaw = (settings as any).offsetPx; // jeśli typ jeszcze nie ma pola
+  const offsetPx = Number.isFinite(offsetPxRaw)
+    ? Number(offsetPxRaw)
+    : ((defaultStarsSettings.labels as any).offsetPx ?? 4);
+
   const cellSize = fontSize * 8;
 
   const grid = collisionsEnabled ? new Map<string, LabelBox[]>() : null;
@@ -28,22 +35,21 @@ export function computeLabelLayoutEngine(params: LabelLayoutEngineParams): Label
   for (const star of candidates) {
     const placement = tryPlaceLabelForStar({
       star,
-      settings,
       fontSize,
       letterSpacing,
       cellSize,
+      offsetPx,
       grid,
       getLabelLines,
       collisionsEnabled,
     });
 
-    if (placement) {
-      placements.push(placement);
-    }
+    if (placement) placements.push(placement);
   }
 
   return placements;
 }
+
 const filterAndSortCandidateStars = (labeledStars: Star[], settings: StarsLabelsSettings): Star[] => {
   const { magnitudeRange } = settings;
   return [...labeledStars].filter((star) => isInRange(star.mag, magnitudeRange)).sort((a, b) => a.mag - b.mag);

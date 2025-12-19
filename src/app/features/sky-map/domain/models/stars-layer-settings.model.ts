@@ -11,7 +11,7 @@ export interface StarsSymbolsSettings {
   color: string;
   strokeWidth: number;
   strokeColor: string;
-  scaleByMagnitude: boolean;
+  scaleByMagnitude: number;
   customSvgPath?: string; // zawartość atrybutu d z <path>
   customSvgScale?: number;
   // mnożnik wielkości (1 = bez zmian)
@@ -21,6 +21,7 @@ export interface StarsSymbolsSettings {
 }
 
 export interface StarsLabelsSettings {
+  offsetPx: number;
   visible: boolean;
   magnitudeRange: [number, number];
   position: StarLabelPosition;
@@ -53,6 +54,7 @@ export interface LabelPlacement {
   x: number;
   y: number;
   positionKey: PositionKey;
+  // offsetPx:number
 }
 
 export type PositionKey = 'right' | 'left' | 'top' | 'bottom';

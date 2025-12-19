@@ -29,10 +29,12 @@
           vector-effect="non-scaling-stroke"
         ></path>
       </ng-container>
- 
     </ng-container>
 
-    <g *ngIf="settings.labels.visible" app-label-boundaries-layer></g>
-
+    <g
+      *ngIf="settings.labels.visible"
+      app-label-boundaries-layer
+      [appReflectOnVerticalAxis]="layersSvg.labelBoundaries"
+    ></g>
   </ng-container>
 </svg:g>

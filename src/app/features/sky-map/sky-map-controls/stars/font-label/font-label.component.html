@@ -12,6 +12,20 @@
     />
   </mat-slider>
 </div>
+<div>
+  <div class="">
+    <span>Odległość od gwiazdy</span>
+    <span>{{ settingsLabels.offsetPx }} px</span>
+  </div>
+  <mat-slider [min]="0" [max]="500" [step]="1">
+    <input
+      matSliderThumb
+      type="range"
+      [ngModel]="settingsLabels.offsetPx"
+      (ngModelChange)="update('offsetPx', $event)"
+    />
+  </mat-slider>
+</div>
 
 <!-- FONT WEIGHT -->
 <mat-form-field appearance="outline">

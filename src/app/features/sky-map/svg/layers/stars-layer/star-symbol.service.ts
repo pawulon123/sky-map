@@ -16,19 +16,6 @@ export class StarSymbolService {
   private readonly settingsSig = toSignal(this.state.starsLayerSettings$, {
     initialValue: defaultStarsSettings,
   });
-  private readonly visibleStars = computed<Star[]>(() => {
-    const all = this.svc.data().stars ?? [];
-
-    const symbolSettings = this.settingsSig().symbols;
-    let visible = all.filter((s) => Array.isArray(s.__projected));
-    const filteredMag = visible.filter(({ mag }) => symbolSettings.magMax >= mag);
-
-    const selectedConstelation = this.state.getProjectionSettings().selected;
-
-    const finelyStars = filteredMag.filter(({ con }) => selectedConstelation?.includes(con));
-
-    return [...finelyStars].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
-  });
 
   readonly starSynbols = computed<RenderStar[]>(() => {
     const settings = this.settingsSig();
@@ -37,20 +24,27 @@ export class StarSymbolService {
     return this.visibleStars().map((star) => {
       const [cx, cy] = star.__projected ?? [0, 0];
       const mag = star.mag ?? null;
-
+      // sym.scaleByMagnitude: number od 0 do 50
       const rBase = this.radius(star);
-      const r = rBase * (sym.size ?? 1);
 
-      const baseStrokeWidth = rBase * 0.25 * (sym.strokeWidth ?? 1);
-      const ringStrokeWidth = rBase * (sym.strokeWidth ?? 0.4);
-      const crossStrokeWidth = rBase * 0.3 * (sym.strokeWidth ?? 1);
+      // sym.scaleByMagnitude: number 0..50
+      const magScale = this.magnitudeScale(star.mag, sym.scaleByMagnitude ?? 0);
+
+      const scale = (sym.size ?? 1) * magScale;
+      const r = rBase * scale;
+
+      // Grubości licz od r (żeby wszystko było proporcjonalne do realnego rozmiaru)
+      const baseStrokeWidth = r * 0.25 * (sym.strokeWidth ?? 1);
+      const ringStrokeWidth = r * (sym.strokeWidth ?? 0.4);
+      const crossStrokeWidth = r * 0.3 * (sym.strokeWidth ?? 1);
+
+      const { polygonPoints, customTransform } = this.getPropForShape(sym.shape, r);
 
       const fillOpacity = sym.fillOpacity ?? 1;
       const strokeOpacity = sym.strokeOpacity ?? 1;
       const strokeColor = sym.strokeColor ?? sym.color;
       const fillColor = sym.shape === 'ring' ? 'none' : sym.color;
       const hasFill = !!sym.fillOpacity;
-      const { polygonPoints, customTransform } = this.getPropForShape(sym.shape, r);
 
       return {
         star,
@@ -73,6 +67,20 @@ export class StarSymbolService {
         hasFill,
       };
     });
+  });
+
+  private readonly visibleStars = computed<Star[]>(() => {
+    const all = this.svc.data().stars ?? [];
+
+    const symbolSettings = this.settingsSig().symbols;
+    let visible = all.filter((s) => Array.isArray(s.__projected));
+    const filteredMag = visible.filter(({ mag }) => symbolSettings.magMax >= mag);
+
+    const selectedConstelation = this.state.getProjectionSettings().selected;
+
+    const finelyStars = filteredMag.filter(({ con }) => selectedConstelation?.includes(con));
+
+    return [...finelyStars].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
   });
 
   private getPropForShape(shape: string, r: number): { polygonPoints: string; customTransform: string } {
@@ -127,5 +135,31 @@ export class StarSymbolService {
 
   private trianglePoints(r: number): string {
     return `0,${-r} ${-r},${r} ${r},${r}`;
+  }
+  private magnitudeScale(
+    mag: number | null | undefined,
+    strength0to50: number,
+    minMag = -1.5,
+    maxMag = 8,
+    minScale = 0.35, // było 0.65
+    maxScale = 3.2, // było 1.85
+    gamma = 2.9 // NOWE: >1 = mocniej rozróżnia jasne vs słabe
+  ): number {
+    const strength = Math.max(0, Math.min(50, strength0to50));
+    if (strength === 0) return 1;
+
+    const m = Math.max(minMag, Math.min(maxMag, mag ?? 6));
+
+    // t: 0..1 (0 = najsłabsze, 1 = najjaśniejsze)
+    let t = (maxMag - m) / (maxMag - minMag);
+
+    // nieliniowe wzmocnienie kontrastu
+    t = Math.pow(t, gamma);
+
+    const base = minScale + t * (maxScale - minScale);
+
+    // siła 0..50 -> 0..1 i „mieszanie” z 1
+    const k = strength / 50;
+    return 1 + k * (base - 1);
   }
 }

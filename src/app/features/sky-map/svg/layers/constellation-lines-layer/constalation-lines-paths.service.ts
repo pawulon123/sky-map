@@ -30,7 +30,6 @@ export class ConstalationLinesPathsService {
     } as ConstellationLineSettings,
   });
 
-
   readonly paths = computed(() => {
     const { projectionName } = this.proj.settings();
     const settings = this.lineSettings();

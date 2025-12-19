@@ -70,6 +70,17 @@ export class ProjectionControlsComponent implements OnInit, OnDestroy {
     this.projectionSv.setSettings({ mirrorX });
   }
 
+  selectAllConstellations(): void {
+    const all = this.CONSTELLATION_PL.map((c) => c.value);
+
+    // bez emitEvent:false — chcemy, żeby valueChanges odpaliło i zaktualizowało ProjectionService
+    this.constellationsCtrl.setValue(all);
+  }
+
+  clearAllConstellations(): void {
+    this.constellationsCtrl.setValue([]);
+  }
+
   ngOnDestroy(): void {
     if (this.constalationSelectSub) this.constalationSelectSub.unsubscribe();
   }

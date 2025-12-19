@@ -3,4 +3,5 @@ export enum LayersSvg {
   asterisms = 'asterisms',
   constellationLines = 'constellationLines',
   stars = 'stars',
+  labelBoundaries = 'labelBoundaries',
 }

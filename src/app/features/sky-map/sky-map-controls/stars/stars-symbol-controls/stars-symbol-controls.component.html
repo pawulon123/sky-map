@@ -1,125 +1,123 @@
-<!-- Nagłówek + widoczność -->
-<div class=" ">
-  <mat-slide-toggle
-    [checked]="(starsSettings$ | async)?.symbols?.visible"
-    (change)="update('visible', $event.checked)"
-    color="primary"
-    class=""
-  >
-    Widoczne
-  </mat-slide-toggle>
-</div>
-
-<!-- SUWAK MAGNITUDO MAX -->
 <ng-container *ngIf="starsSettings$ | async as settings">
-  <div class=" ">
-    <span class="">Widoczność (magnitudo max)</span>
+  <!-- Nagłówek + widoczność -->
+  <div>
+    <mat-slide-toggle [checked]="settings.symbols.visible" (change)="update('visible', $event.checked)" color="primary">
+      Widoczne
+    </mat-slide-toggle>
+  </div>
+
+  <!-- SUWAK MAGNITUDO MAX -->
+  <div>
+    <span>Widoczność (magnitudo max)</span>
 
     <div class="gap-3">
-      <mat-slider min="-1" max="15" step="0.1" class="">
+      <mat-slider min="-1" max="15" step="0.1">
         <input matSliderThumb [ngModel]="settings.symbols.magMax" (ngModelChange)="update('magMax', +$event)" />
       </mat-slider>
 
-      <span class=" ">
+      <span>
         {{ settings.symbols.magMax | number: '1.1-1' }}
       </span>
     </div>
   </div>
-</ng-container>
 
-<!-- KSZTAŁT -->
-<div class="">
-  <mat-form-field appearance="outline" class="">
-    <mat-label>Kształt</mat-label>
-    <mat-select [ngModel]="(starsSettings$ | async)?.symbols?.shape" (ngModelChange)="update('shape', $event)">
-      <mat-option value="star">Gwiazda</mat-option>
-      <mat-option value="circle">Kółko</mat-option>
-      <mat-option value="cross">Krzyżyk</mat-option>
-      <mat-option value="square">Kwadrat</mat-option>
-      <mat-option value="triangle">Trójkąt</mat-option>
-      <mat-option value="ring">Pierścień</mat-option>
-      <mat-option value="icon">Ikona</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+  <!-- KSZTAŁT -->
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Kształt</mat-label>
+      <mat-select [ngModel]="settings.symbols.shape" (ngModelChange)="update('shape', $event)">
+        <mat-option value="star">Gwiazda</mat-option>
+        <mat-option value="circle">Kółko</mat-option>
+        <mat-option value="cross">Krzyżyk</mat-option>
+        <mat-option value="square">Kwadrat</mat-option>
+        <mat-option value="triangle">Trójkąt</mat-option>
+        <mat-option value="ring">Pierścień</mat-option>
+        <mat-option value="icon">Ikona</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
-<!-- ROZMIAR -->
-<ng-container *ngIf="starsSettings$ | async as settings">
-  <div class="">
-    <div class="">
-      <span class="">Rozmiar</span>
-      <span class="">
-        {{ settings.symbols.size | number: '1.1-1' }}
-      </span>
+  <!-- ROZMIAR -->
+  <div>
+    <div>
+      <span>Rozmiar</span>
+      <span>{{ settings.symbols.size | number: '1.1-1' }}</span>
     </div>
 
-    <mat-slider min="0.5" max="5" step="0.1" class="">
+    <mat-slider min="0.5" max="25" step="0.4">
       <input matSliderThumb [ngModel]="settings.symbols.size" (ngModelChange)="update('size', +$event)" />
     </mat-slider>
   </div>
-</ng-container>
 
-<!-- KOLOR WYPEŁNIENIA -->
-<div class="">
-  <mat-form-field appearance="outline" class="">
-    <mat-label>Kolor wypełnienia</mat-label>
-    <input
-      matInput
-      type="color"
-      [ngModel]="(starsSettings$ | async)?.symbols?.color"
-      (ngModelChange)="update('color', $event)"
-    />
-  </mat-form-field>
-</div>
-
-<!-- GRUBOŚĆ I KOLOR OBRAMOWANIA -->
-<div class="">
-  <mat-form-field appearance="outline">
-    <mat-label>Grubość obramowania</mat-label>
-    <input
-      matInput
-      type="number"
-      min="0"
-      step="0.1"
-      [ngModel]="(starsSettings$ | async)?.symbols?.strokeWidth"
-      (ngModelChange)="update('strokeWidth', +$event)"
-    />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline" class="">
-    <mat-label>Kolor obramowania</mat-label>
-    <input
-      matInput
-      type="color"
-      [ngModel]="(starsSettings$ | async)?.symbols?.strokeColor"
-      (ngModelChange)="update('strokeColor', $event)"
-    />
-  </mat-form-field>
-</div>
-
-<!-- PRZEŹROCZYSTOŚĆ WYPEŁNIENIA -->
-<ng-container *ngIf="starsSettings$ | async as settings">
-  <div class="">
-    <div class="">
-      <span class="">Przezroczystość wypełnienia</span>
-      <span class=""> {{ settings.symbols.fillOpacity * 100 | number: '1.0-0' }}% </span>
+  <!-- SKALUJ WG MAGNITUDO -->
+  <div>
+    <div>
+      <span> Skaluj rozmiar wg jasności (magnitudo)</span>
+      <span>{{ settings.symbols.scaleByMagnitude | number: '1.1-1' }}</span>
     </div>
 
-    <mat-slider min="0" max="1" step="0.01" class="">
+    <mat-slider min="-125" max="125" step="10.4">
+      <input matSliderThumb [ngModel]="settings.symbols.size" (ngModelChange)="update('scaleByMagnitude', +$event)" />
+    </mat-slider>
+  </div>
+
+  <!-- <mat-checkbox [ngModel]="settings.symbols.scaleByMagnitude" (ngModelChange)="update('scaleByMagnitude', $event)">
+    Skaluj rozmiar wg jasności (magnitudo)
+  </mat-checkbox> -->
+
+  <!-- KOLOR WYPEŁNIENIA -->
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Kolor wypełnienia</mat-label>
+      <input matInput type="color" [ngModel]="settings.symbols.color" (ngModelChange)="update('color', $event)" />
+    </mat-form-field>
+  </div>
+
+  <!-- GRUBOŚĆ I KOLOR OBRAMOWANIA -->
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label>Grubość obramowania</mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        step="0.1"
+        [ngModel]="settings.symbols.strokeWidth"
+        (ngModelChange)="update('strokeWidth', +$event)"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Kolor obramowania</mat-label>
+      <input
+        matInput
+        type="color"
+        [ngModel]="settings.symbols.strokeColor"
+        (ngModelChange)="update('strokeColor', $event)"
+      />
+    </mat-form-field>
+  </div>
+
+  <!-- PRZEŹROCZYSTOŚĆ WYPEŁNIENIA -->
+  <div>
+    <div>
+      <span>Przezroczystość wypełnienia</span>
+      <span>{{ settings.symbols.fillOpacity * 100 | number: '1.0-0' }}%</span>
+    </div>
+
+    <mat-slider min="0" max="1" step="0.01">
       <input matSliderThumb [ngModel]="settings.symbols.fillOpacity" (ngModelChange)="update('fillOpacity', +$event)" />
     </mat-slider>
   </div>
-</ng-container>
 
-<!-- PRZEŹROCZYSTOŚĆ OBRAMOWANIA -->
-<ng-container *ngIf="starsSettings$ | async as settings">
-  <div class="">
-    <div class="">
-      <span class="">Przezroczystość obramowania</span>
-      <span class=""> {{ settings.symbols.strokeOpacity * 100 | number: '1.0-0' }}% </span>
+  <!-- PRZEŹROCZYSTOŚĆ OBRAMOWANIA -->
+  <div>
+    <div>
+      <span>Przezroczystość obramowania</span>
+      <span>{{ settings.symbols.strokeOpacity * 100 | number: '1.0-0' }}%</span>
     </div>
 
-    <mat-slider min="0" max="1" step="0.01" class="">
+    <mat-slider min="0" max="1" step="0.01">
       <input
         matSliderThumb
         [ngModel]="settings.symbols.strokeOpacity"
@@ -128,12 +126,3 @@
     </mat-slider>
   </div>
 </ng-container>
-
-<!-- SKALOWANIE ROZMIARU -->
-<mat-checkbox
-  class=""
-  [ngModel]="(starsSettings$ | async)?.symbols?.scaleByMagnitude"
-  (ngModelChange)="update('scaleByMagnitude', $event)"
->
-  Skaluj rozmiar wg jasności (magnitudo)
-</mat-checkbox>

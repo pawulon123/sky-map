@@ -31,6 +31,21 @@
       />
     </mat-form-field>
   </div>
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>Konstelacje</mat-label>
+
+    <mat-select [formControl]="constellationsCtrl" multiple>
+      <mat-option *ngFor="let c of CONSTELLATION_PL" [value]="c.value">
+        {{ c.label }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+  <div class="constellations-toolbar">
+    <button mat-stroked-button type="button" (click)="selectAllConstellations()">Zaznacz wszystkie</button>
+
+    <button mat-stroked-button type="button" (click)="clearAllConstellations()">Odznacz wszystkie</button>
+  </div>
+
   <mat-form-field appearance="fill">
     <mat-label>Konstelacje</mat-label>
 

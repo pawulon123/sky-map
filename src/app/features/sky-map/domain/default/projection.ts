@@ -1,11 +1,12 @@
+import { svgDataDefault } from '../../../../core/default/svg-data';
 import { ProjectionSettings } from '../models/projection-options.model';
 
 export const defaultProjectionSettings: ProjectionSettings = {
-  width: 700,
-  height: 700,
-  projectionName: 'stereographic',
+  width: svgDataDefault.width,
+  height: svgDataDefault.height,
+  projectionName: 'equirect',
   mirrorX: false,
-  selected: ['And'],
+  selected: ['And', 'Ori'],
 };
 export const projections = [
   { value: 'stereographic', label: 'Stereograficzny' },

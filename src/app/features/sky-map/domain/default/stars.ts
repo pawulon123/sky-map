@@ -5,30 +5,31 @@ export const defaultStarsSettings: StarsLayerSettings = {
     visible: true,
     ring: 0,
     magMax: 7,
-    shape: 'star',
-    size: 3.5,
+    shape: 'ring',
+    size: 7,
     color: '#4205e8ff',
     strokeWidth: 0.2,
     strokeColor: '#1c7138ff',
-    scaleByMagnitude: true,
+    scaleByMagnitude: 0.4,
 
     // mnożnik wielkości (1 = bez zmian)
     fillOpacity: 0.5, // 0–1
     strokeOpacity: 0.5, // 0–1
   },
   labels: {
-    visible: false,
+    visible: true,
     magnitudeRange: [-1, 6],
     position: 'top',
-    fontSize: 10,
-    showBayer: true,
+    fontSize: 21,
+    showBayer: false,
     fontWeight: 'normal',
     stroke: '#000000',
     strokeWidth: 0,
     strokeOpacity: 1,
     fontFamily: 'Arial',
-    letterSpacing: 2,
+    letterSpacing: 7.5,
     colision: [],
+    offsetPx: 15,
   },
 };
 
