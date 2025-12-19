@@ -1,4 +1,4 @@
-import { SvgData } from '../common/svg-data';
+import { SvgData } from '../../core/common/svg-data';
 
 export function exportSvg({ svgRef, width, height }: SvgData) {
   const svgEl = svgRef?.nativeElement;

@@ -1,48 +1,55 @@
-import { AfterViewInit, Component, EventEmitter, inject, OnDestroy, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+
+import { MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+
 import { SkyMapControlsComponent } from '../sky-map-controls/sky-map-controls.component';
-import { SkyMapSvgComponent } from '../sky-map-svg/sky-map-svg.component';
 import { SkyMapStateService } from '../domain/services/sky-map-state/sky-map-state.service';
 import { SvgData } from '../../../core/common/svg-data';
-import { Subscription } from 'rxjs';
-import { MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
-
-import { MatIconModule } from '@angular/material/icon';
-import { CommonModule } from '@angular/common';
+import { RootSvgComponent } from '../svg/root-svg/root-svg.component';
 
 @Component({
   selector: 'app-sky-map-page',
+  standalone: true,
   imports: [
     CommonModule,
-    SkyMapSvgComponent,
     SkyMapControlsComponent,
     MatSidenavContainer,
     MatSidenav,
     MatSidenavContent,
     MatIconModule,
+    RootSvgComponent,
   ],
   templateUrl: './sky-map-page.component.html',
   styleUrl: './sky-map-page.component.css',
-  standalone: true,
 })
 export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
-  private stateProjectionSub!: Subscription;
+  private stateProjectionSub?: Subscription;
+
   readonly state = inject(SkyMapStateService);
   readonly projectionSettings$ = this.state.projectionSettings$;
+
   isMenuOpen = false;
 
-  @Output() svgData = new EventEmitter<SvgData>();
+  // Dane SVG do App (jak masz obecnie)
+  // @Output() svgData = new EventEmitter<SvgData>();
+
+  // --- PRZEPUST: eventy z RootSvg -> App ---
+  // @Output() svgClick = new EventEmitter<MouseEvent>();
+  // @Output() svgWheel = new EventEmitter<WheelEvent>();
+  ////////
+  @Output() dataFromSvg = new EventEmitter<SvgData>();
+  @Input() set eventFromCommonMenu(ev: any) {
+    this.state.updateRender(ev);
+  }
 
   ngAfterViewInit(): void {
-    this.stateProjectionSub = this.subscriptionProjection();
-  }
-
-  private subscriptionProjection(): Subscription {
-    return this.projectionSettings$.subscribe(this.sendSvgData.bind(this));
-  }
-
-  private sendSvgData({ width, height }: SvgData): void {
-    const svgRef = this.state.svgRef;
-    this.svgData.emit({ width, height, svgRef });
+    this.stateProjectionSub = this.projectionSettings$.subscribe(({ width, height }) => {
+      const svgRef = this.state.svgRef;
+      this.dataFromSvg.emit({ width, height, svgRef });
+    });
   }
 
   openMenu() {
@@ -54,6 +61,6 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.stateProjectionSub.unsubscribe();
+    this.stateProjectionSub?.unsubscribe();
   }
 }

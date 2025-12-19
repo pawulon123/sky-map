@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SkyMapSvgComponent } from './sky-map-svg.component';
+import { ImageSizeComponent } from './image-size.component';
 
-describe('SkyMapSvgComponent', () => {
-  let component: SkyMapSvgComponent;
-  let fixture: ComponentFixture<SkyMapSvgComponent>;
+describe('ImageSizeComponent', () => {
+  let component: ImageSizeComponent;
+  let fixture: ComponentFixture<ImageSizeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkyMapSvgComponent],
+      imports: [ImageSizeComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SkyMapSvgComponent);
+    fixture = TestBed.createComponent(ImageSizeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

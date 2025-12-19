@@ -4,3 +4,14 @@
   right: 0;
   z-index: 1000;
 }
+:host {
+  display: block;
+  height: 100dvh;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  align-items: center;
+}

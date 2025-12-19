@@ -15,15 +15,16 @@
   overflow: auto;
 }
 
-/* Wewnętrzny obszar mapy – większy niż okno */
-.map-inner {
-  width: 3000px; /* przykładowo, większe niż ekran */
-  height: 3000px; /* wtedy wymusi scroll w obu kierunkach */
-}
-
 /* Sama mapa niech się dopasuje do tego obszaru */
 app-sky-map-svg {
   display: block;
   width: 100%;
   height: 100%;
+}
+
+.stage {
+  height: calc(100dvh - 48px); /* dopasuj do realnej wysokości toolbara */
+  overflow: hidden;
+  display: grid;
+  place-items: start; /* przy "real size" nie centruje na siłę */
 }

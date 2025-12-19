@@ -3,7 +3,15 @@
   #skySvg
   [attr.width]="(projectionSettings$ | async)?.width + 'mm'"
   [attr.height]="(projectionSettings$ | async)?.height + 'mm'"
-  [attr.viewBox]="'0 0 ' + (projectionSettings$ | async)?.width + ' ' + (projectionSettings$ | async)?.height"
+  [attr.viewBox]="
+    viewBox && viewBox.length
+      ? viewBox
+      : '0 0 ' + (projectionSettings$ | async)?.width + ' ' + (projectionSettings$ | async)?.height
+  "
+  preserveAspectRatio="xMidYMid meet"
+  [style.width.px]="(renderSettings$ | async)?.innerWidth"
+  [style.height.px]="(renderSettings$ | async)?.innerHeight"
+  style="display: block"
 >
   <g app-stars-layer [showLabels]="showLabels" [maxMag]="6.5"></g>
 

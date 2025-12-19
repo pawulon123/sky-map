@@ -1,3 +1,3 @@
-<app-sky-map-page (svgData)="setSvgData($event)"></app-sky-map-page>
-<button class="over-menu-button" type="button" (click)="exportSvg()">Eksportuj SVG do grawerki</button>
+<app-sky-map-page [eventFromCommonMenu]="eventFromCommonMenu" (dataFromSvg)="dataFromSvg = $event"></app-sky-map-page>
+<app-common-menu [dataFromSvg]="dataFromSvg" (eventFromCommonMenu)="eventFromCommonMenu = $event"></app-common-menu>
 <app-svg-tooltip></app-svg-tooltip>

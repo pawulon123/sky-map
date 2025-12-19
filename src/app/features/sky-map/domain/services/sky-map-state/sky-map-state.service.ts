@@ -14,6 +14,8 @@ import { ConstellationLineSettings } from '../../models/constellation-line.model
 import { constellationLineDefaultSettings } from '../../default/constellation-line';
 import { updateEndNext } from '../../../../../core/utils/update-end-next';
 import { BoundaryLayerSettings } from '../../models/boundary.model';
+import { RenderSettings } from '../../models/render.model';
+import { renderDefaultSettings } from '../../default/render-default';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +31,7 @@ export class SkyMapStateService {
   private readonly constellationLineSettingsSubject = new BehaviorSubject<ConstellationLineSettings>(
     constellationLineDefaultSettings
   );
+  private readonly renderSettingsSubject = new BehaviorSubject<RenderSettings>(renderDefaultSettings);
 
   readonly starsLayerSettings$: Observable<StarsLayerSettings> = this.starsLayerSettingsSubject.asObservable();
   readonly projectionSettings$: Observable<ProjectionSettings> = this.projectionSettingsSubject.asObservable();
@@ -37,7 +40,9 @@ export class SkyMapStateService {
   readonly asterismLayerSettings$: Observable<AsterismSettings> = this.asterismLayerSettingsSubject.asObservable();
   readonly constellationLineSettings$: Observable<ConstellationLineSettings> =
     this.constellationLineSettingsSubject.asObservable();
+
   svgRef: ElementRef<SVGSVGElement> | null = null;
+  readonly renderSettings$: Observable<RenderSettings> = this.renderSettingsSubject.asObservable();
 
   constructor() {
     this.updateProjection();
@@ -75,6 +80,10 @@ export class SkyMapStateService {
 
   updateConstellationLine(partial: Partial<ConstellationLineSettings>): void {
     updateEndNext(partial, this.constellationLineSettingsSubject);
+  }
+
+  updateRender(partial: Partial<RenderSettings>): void {
+    updateEndNext(partial, this.renderSettingsSubject);
   }
 
   setRefSvg(svgRef: ElementRef<SVGSVGElement>): void {
