@@ -1,8 +1,8 @@
-<div class="">
+<div>
   <button (click)="fitToWindow()">Dopasuj do okna</button>
   <button (click)="resetToRealSize()">Rzeczywisty rozmiar</button>
 
-  <button (click)="setZoomMode('in')">Zoom +</button>
-  <button (click)="setZoomMode('out')">Zoom -</button>
-  <button (click)="resetViewBox()">Reset zoom</button>
+  <button (click)="toggleZoom('in')">Zoom +</button>
+
+  <button (click)="toggleZoom('out')">Zoom -</button>
 </div>

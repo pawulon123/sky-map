@@ -25,8 +25,10 @@ export class SvgTooltipService {
   }
 
   hide() {
-    const prev = this._state$.value;
-    if (!prev.visible) return;
-    this._state$.next({ ...prev, visible: false });
+    setTimeout(() => {
+      const prev = this._state$.value;
+      if (!prev.visible) return;
+      this._state$.next({ ...prev, visible: false });
+    }, 9000);
   }
 }

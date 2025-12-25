@@ -2,8 +2,7 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { SvgData } from '../../core/common/svg-data';
 import { svgDataDefault } from '../../core/default/svg-data';
 import { CommonMenuService } from '../common-menu.service';
-import { log } from 'console';
-type ZoomMode = 'none' | 'in' | 'out';
+import { ZoomMode } from '../../core/common/event-common-menu';
 
 @Component({
   selector: 'app-image-size',
@@ -15,25 +14,26 @@ export class ImageSizeComponent implements OnInit {
   @Input() dataFromSvg: SvgData = svgDataDefault;
   readonly svc = inject(CommonMenuService);
 
-  private vb = { x: 0, y: 0, w: this.dataFromSvg.width, h: this.dataFromSvg.height };
-  zoomMode: string = '';
+  zoomMode: ZoomMode = 'none';
+
   ngOnInit(): void {
     this.resetToRealSize();
-    this.resetViewBox();
   }
 
   resetToRealSize(): void {
     this.svc.emitEv({ name: 'resetToRealSize' });
   }
 
-  resetViewBox(): void {
-    this.vb = { x: 0, y: 0, w: this.dataFromSvg.width, h: this.dataFromSvg.height };
-  }
-
   fitToWindow(): void {
     this.svc.emitEv({ name: 'fitToWindow' });
   }
-  setZoomMode(mode: ZoomMode): void {
-    this.zoomMode = mode;
+
+  toggleZoom(mode: ZoomMode): void {
+    this.zoomMode = this.zoomMode === mode ? 'none' : mode;
+
+    this.svc.emitEv({
+      name: 'toggleZoom',
+      zoomMode: this.zoomMode,
+    });
   }
 }

@@ -33,13 +33,6 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
 
   isMenuOpen = false;
 
-  // Dane SVG do App (jak masz obecnie)
-  // @Output() svgData = new EventEmitter<SvgData>();
-
-  // --- PRZEPUST: eventy z RootSvg -> App ---
-  // @Output() svgClick = new EventEmitter<MouseEvent>();
-  // @Output() svgWheel = new EventEmitter<WheelEvent>();
-  ////////
   @Output() dataFromSvg = new EventEmitter<SvgData>();
   @Input() set eventFromCommonMenu(ev: any) {
     this.state.updateRender(ev);

@@ -3,6 +3,7 @@ import { StarsLabelsSettings } from '../../../domain/models/stars-layer-settings
 
 const GREEK: Record<string, string> = {
   alpha: 'α',
+  alp: 'α',
   alf: 'α',
   a: 'α',
   beta: 'β',
@@ -63,6 +64,7 @@ const GREEK: Record<string, string> = {
   ch: 'χ',
   psi: 'ψ',
   ps: 'ψ',
+  ome: 'ω',
   omega: 'ω',
   omg: 'ω',
   w: 'ω',
@@ -101,6 +103,7 @@ export function toGreekBayer(bayer: string): string {
 
   const [, latin, index] = match;
   const greek = GREEK[latin.toLowerCase()];
+
   if (!greek) return bayer;
 
   const greekWithIndex = index ? greek + superscript(index.replace('-', '')) : greek;
