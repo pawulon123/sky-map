@@ -101,7 +101,7 @@ export class AppComponent {
   private readonly maxZoomOut = 6; // np. 6x – ustaw jak chcesz
 
   private onSvgClick(evt: MouseEvent) {
-    console.log('Svgclick');
+    
     if (this.zoomMode === 'none') return;
 
     const svg = this.dataFromSvg.svgRef?.nativeElement;

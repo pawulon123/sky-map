@@ -10,7 +10,7 @@ export function exportSvg({ svgRef, width, height }: SvgData) {
   // upewniamy się, że są sensowne atrybuty (dla programów od grawerki)
   clone.removeAttribute('ng-reflect-ng-if'); // jakby coś leciało z Angulara
   clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-
+clone.setAttribute('viewBox', `0 0 ${width} ${height}`);
   // opcjonalnie: ustaw rozmiar w mm (wiele grawerek lubi mm)
   // np. 1px = 0.264583 mm (96 dpi), możesz dopasować do swojego workflow
   const mmWidth = width * 0.264583;
