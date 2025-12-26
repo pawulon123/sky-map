@@ -1,123 +1,156 @@
 import { Injectable } from '@angular/core';
-import { SvgData } from '../common/svg-data';
+import { SvgData, SvgRef } from '../common/svg-data';
 import { svgDataDefault } from '../default/svg-data';
-import { EventCommonMenu, ZoomMode } from '../common/event-common-menu';
-import { BehaviorSubject } from 'rxjs';
-import { ZoomTool } from '../../features/sky-map/svg/root-svg/zoom-svg.service';
-export interface ViewBox {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
+import { ZoomMode } from '../common/event-common-menu';
+
 @Injectable({
   providedIn: 'root',
 })
 export class SvgDataService {
-  svgData: SvgData = svgDataDefault;
-  mouseEvent!: any;
-  resetToRealSize() {
-    if (this.svgData.svgRef) {
-      this.svgData.svgRef.nativeElement.style.height = this.svgData.height + 'px';
-      this.svgData.svgRef.nativeElement.style.width = this.svgData.width + 'px';
-    }
+  private svgData: SvgData = svgDataDefault;
+  private svgNativeEl: SVGSVGElement | null = null;
+
+  private viewBox = { x: 0, y: 0, w: 0, h: 0 };
+
+  private clickHandler: ((e: MouseEvent) => void) | null = null;
+
+  setSvgRef(svgRef: SvgRef) {
+    this.svgNativeEl = svgRef?.nativeElement ?? null;
   }
-  fitToWindow({ innerHeight, innerWidth }: EventCommonMenu) {
-    if (this.svgData.svgRef) {
-      const toolbarH = 48;
 
-      const maxW = innerWidth;
-      const maxH = Math.max(0, innerHeight ?? 0 - toolbarH);
-
-      const s = Math.min(maxW ?? 0 / this.svgData.width, maxH / this.svgData.height);
-
-      this.svgData.svgRef.nativeElement.style.height = Math.floor(this.svgData.height * s) + 'px';
-      this.svgData.svgRef.nativeElement.style.width = Math.floor(this.svgData.width * s) + 'px';
-    }
-  }
-  add(svgData: SvgData, eventFromCommonMenu: EventCommonMenu) {
+  setSvgData(svgData: SvgData) {
     this.svgData = svgData;
-    if (this.svgData.svgRef) this.createClickEv(this.svgData.svgRef.nativeElement, eventFromCommonMenu.zoomMode);
+    this.resize();
   }
-  createClickEv(nativeElement: SVGSVGElement, zoomMode: ZoomMode) {
-    nativeElement.addEventListener('click', (mouseEv) => {
-      this.mouseEvent = mouseEv;
-      // this.zoomAtClientPoint(zoomMode)
-    });
+  toggleZoom(mode: ZoomMode) {
+    this.detachClick();
+
+    if (!this.svgNativeEl || mode === 'none') {
+      this.clickHandler = null;
+      return;
+    }
+
+    this.clickHandler = (e: MouseEvent) => this.onSvgClick(e, mode);
+    this.svgNativeEl.addEventListener('click', this.clickHandler);
   }
 
-  private projWidth = 100;
-  private projHeight = 100;
-
-  private readonly zoomToolSub = new BehaviorSubject<ZoomTool>('none');
-  toggleZoom(tool: ZoomTool) {
-    this.zoomToolSub.next(tool);
+  private detachClick() {
+    if (!this.svgNativeEl || !this.clickHandler) return;
+    this.svgNativeEl.removeEventListener('click', this.clickHandler);
   }
-  private readonly viewBoxSub = new BehaviorSubject<ViewBox>({ x: 0, y: 0, w: 100, h: 100 });
 
-  get viewBoxValue(): ViewBox {
-    return this.viewBoxSub.value;
+  getSvgNativeEl() {
+    return this.svgNativeEl;
   }
-  zoomAtClientPoint(direction: ZoomMode, factor = 1.4) {
-    // console.log(clientX);
-    const clientX = this.mouseEvent.clientX;
-    const clientY = this.mouseEvent.clientY;
-    if (!this.svgData.svgRef) return;
 
-    const svg = this.svgData.svgRef.nativeElement;
-    const vb = this.viewBoxValue;
+  private onSvgClick(evt: MouseEvent, zoomMode: ZoomMode) {
+    if (zoomMode === 'none') return;
 
+    const maxZoomOut = 6;
+    const zoomFactor = 1.25;
+
+    const svg = this.svgNativeEl;
+    if (!svg) return;
+
+    const p = this.clientPointToSvg(svg, evt.clientX, evt.clientY);
+
+    const contentW = this.svgData.width;
+    const contentH = this.svgData.height;
+
+    let w2 = this.viewBox.w;
+    let h2 = this.viewBox.h;
+
+    if (zoomMode === 'in') {
+      w2 = this.viewBox.w / zoomFactor;
+      h2 = this.viewBox.h / zoomFactor;
+    } else if (zoomMode === 'out') {
+      w2 = this.viewBox.w * zoomFactor;
+      h2 = this.viewBox.h * zoomFactor;
+    }
+
+    const minSize = 10;
+    const maxW = contentW * maxZoomOut;
+    const maxH = contentH * maxZoomOut;
+
+    w2 = Math.max(minSize, Math.min(w2, maxW));
+    h2 = Math.max(minSize, Math.min(h2, maxH));
+
+    const rx = (p.x - this.viewBox.x) / this.viewBox.w;
+    const ry = (p.y - this.viewBox.y) / this.viewBox.h;
+
+    let x2 = p.x - rx * w2;
+    let y2 = p.y - ry * h2;
+
+    const minX = Math.min(0, contentW - w2);
+    const maxX = Math.max(0, contentW - w2);
+    const minY = Math.min(0, contentH - h2);
+    const maxY = Math.max(0, contentH - h2);
+
+    x2 = Math.max(minX, Math.min(x2, maxX));
+    y2 = Math.max(minY, Math.min(y2, maxY));
+
+    this.viewBox = { x: x2, y: y2, w: w2, h: h2 };
+    this.setViewBox(`${x2} ${y2} ${w2} ${h2}`);
+  }
+
+  private clientPointToSvg(svg: SVGSVGElement, clientX: number, clientY: number) {
     const pt = svg.createSVGPoint();
     pt.x = clientX;
     pt.y = clientY;
 
     const ctm = svg.getScreenCTM();
-    if (!ctm) return;
+    if (!ctm) return { x: 0, y: 0 };
 
-    const svgPoint = pt.matrixTransform(ctm.inverse());
-    const px = svgPoint.x;
-    const py = svgPoint.y;
+    return pt.matrixTransform(ctm.inverse());
+  }
 
-    const f = direction === 'in' ? factor : 1 / factor;
+  resetToRealSize() {
+    this.resize();
+  }
 
-    // ograniczenia zoomu (przykład)
-    const MIN_W = this.projWidth / 50; // max ~50x
-    const MAX_W = this.projWidth; // nie dalej niż pełny widok
+  fitToWindow() {
+    const innerWidth = window.innerWidth;
+    const innerHeight = window.innerHeight;
 
-    let newW = vb.w * f;
-    newW = Math.max(MIN_W, Math.min(MAX_W, newW));
-    const aspect = vb.h / vb.w;
-    let newH = newW * aspect;
+    const toolbarH = 0;
+    const maxW = innerWidth;
+    const maxH = Math.max(0, (innerHeight ?? 0) - toolbarH);
 
-    // zachowaj proporcje do projekcji, jeśli wolisz:
-    // const projAspect = this.projHeight / this.projWidth;
-    // newH = newW * projAspect;
+    const s = Math.min(maxW / this.svgData.width, maxH / this.svgData.height);
 
-    // Pozycja kliknięcia jako ułamek w viewBox
-    const rx = (px - vb.x) / vb.w;
-    const ry = (py - vb.y) / vb.h;
+    this.setWidth(`${Math.floor(this.svgData.width * s)}`);
+    this.setHeight(`${Math.floor(this.svgData.height * s)}`);
+  }
 
-    // Nowy viewBox tak, by kliknięty punkt pozostał pod kursorem
-    let newX = px - rx * newW;
-    let newY = py - ry * newH;
+  resize() {
+    this.resizeViewBox(this.svgData);
+    this.resizeWidthHeight(this.svgData);
+  }
 
-    // Clamp do granic mapy
-    if (newW >= this.projWidth) {
-      newW = this.projWidth;
-      newX = 0;
-    } else {
-      newX = Math.max(0, Math.min(this.projWidth - newW, newX));
-    }
+  private resizeWidthHeight({ width: w, height: h }: SvgData) {
+    this.setHeight(`${h}`);
+    this.setWidth(`${w}`);
+  }
 
-    if (newH >= this.projHeight) {
-      newH = this.projHeight;
-      newY = 0;
-    } else {
-      newY = Math.max(0, Math.min(this.projHeight - newH, newY));
-    }
-    // console.log(newW, newH, newX, newY);
-    this.svgData.svgRef.nativeElement.setAttribute('viewBox', `${newX} ${newY} ${newW} ${newH}`);
+  private resizeViewBox({ width: w, height: h }: SvgData) {
+    this.setViewBox(`0 0 ${w} ${h}`);
+    this.viewBox = { x: 0, y: 0, w, h };
+  }
 
-    this.viewBoxSub.next({ x: newX, y: newY, w: newW, h: newH });
+  private setWidth(value: string) {
+    this.setAttributeOnSvg('width', value);
+  }
+
+  private setViewBox(value: string) {
+    this.setAttributeOnSvg('viewBox', value);
+  }
+
+  private setHeight(value: string) {
+    this.setAttributeOnSvg('height', value);
+  }
+
+  private setAttributeOnSvg(attributeName: string, value: string) {
+    if (!this.svgNativeEl) return;
+    this.svgNativeEl.setAttribute(attributeName, value);
   }
 }

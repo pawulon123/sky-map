@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { SkyMapControlsComponent } from '../sky-map-controls/sky-map-controls.component';
 import { SkyMapStateService } from '../domain/services/sky-map-state/sky-map-state.service';
-import { SvgData } from '../../../core/common/svg-data';
+import { SvgData, SvgRef } from '../../../core/common/svg-data';
 import { RootSvgComponent } from '../svg/root-svg/root-svg.component';
 
 @Component({
@@ -34,14 +34,15 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
   isMenuOpen = false;
 
   @Output() dataFromSvg = new EventEmitter<SvgData>();
+  @Output() svgRef = new EventEmitter<SvgRef>();
   @Input() set eventFromCommonMenu(ev: any) {
     this.state.updateRender(ev);
   }
 
   ngAfterViewInit(): void {
+    this.svgRef.emit(this.state.svgRef);
     this.stateProjectionSub = this.projectionSettings$.subscribe(({ width, height }) => {
-      const svgRef = this.state.svgRef;
-      this.dataFromSvg.emit({ width, height, svgRef });
+      this.dataFromSvg.emit({ width, height });
     });
   }
 
