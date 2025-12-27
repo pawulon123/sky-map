@@ -1,6 +1,5 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { EventCommonMenu } from '../core/common/event-common-menu';
-import { SvgDataService } from '../core/services/svg-data-ref.service';
 import { ZoomService } from '../core/services/zoom-service.service';
 import { FitToWindowService } from '../core/services/fit-to-window.service';
 

@@ -2,7 +2,7 @@
   <button (click)="fitToWindow('fit')">Dopasuj do okna</button>
   <button (click)="resetToRealSize('resetToRealSize')">Rzeczywisty rozmiar</button>
 
-  <button (click)="toggleZoom('in')">Zoom +</button>
+  <button (click)="toggleZoom('in')" appActiveMenuButton="toggleZoom" [zoomMode]="'in'">Zoom +</button>
 
-  <button (click)="toggleZoom('out')">Zoom -</button>
+  <button (click)="toggleZoom('out')" appActiveMenuButton="toggleZoom" [zoomMode]="'out'">Zoom -</button>
 </div>

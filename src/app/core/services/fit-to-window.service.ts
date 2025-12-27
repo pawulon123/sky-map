@@ -21,6 +21,7 @@ export class FitToWindowService {
 
     const s = Math.min(maxW / this.svgRefService.svgData.width, maxH / this.svgRefService.svgData.height);
 
+    this.svgRefService.resizeViewBox();
     this.svgRefService.setWidth(`${Math.floor(this.svgRefService.svgData.width * s)}`);
     this.svgRefService.setHeight(`${Math.floor(this.svgRefService.svgData.height * s)}`);
   }

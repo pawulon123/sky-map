@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { SvgData, SvgRef } from '../common/svg-data';
 import { svgDataDefault } from '../default/svg-data';
-import { ZoomMode } from '../common/event-common-menu';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +24,7 @@ export class SvgDataService {
 
   addEventListener(ev: string, method: any) {
     if (!this.svgNativeEl) return;
-    this.svgNativeEl.addEventListener('click', method);
+    this.svgNativeEl.addEventListener(ev, method);
   }
 
   detachClick() {
@@ -38,7 +37,7 @@ export class SvgDataService {
   }
 
   resize() {
-    this.resizeViewBox(this.svgData);
+    this.resizeViewBox();
     this.resizeWidthHeight(this.svgData);
   }
 
@@ -47,7 +46,7 @@ export class SvgDataService {
     this.setWidth(`${w}`);
   }
 
-  private resizeViewBox({ width: w, height: h }: SvgData) {
+  resizeViewBox({ width: w, height: h } = this.svgData) {
     this.setViewBox(`0 0 ${w} ${h}`);
     this.viewBox = { x: 0, y: 0, w, h };
   }
