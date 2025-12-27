@@ -15,6 +15,6 @@ export class ExportComponent {
   svgDataService = inject(SvgDataService);
   @Input() dataFromSvg: SvgData = svgDataDefault;
   exportSvg() {
-    exportSvg(this.dataFromSvg, this.svgDataService.getSvgNativeEl());
+    exportSvg(this.dataFromSvg, this.svgDataService.getSvgNativeEl);
   }
 }

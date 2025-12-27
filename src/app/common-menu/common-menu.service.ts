@@ -1,19 +1,20 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { EventCommonMenu } from '../core/common/event-common-menu';
 import { SvgDataService } from '../core/services/svg-data-ref.service';
+import { ZoomService } from '../core/services/zoom-service.service';
+import { FitToWindowService } from '../core/services/fit-to-window.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CommonMenuService {
-  svgDataService = inject(SvgDataService);
+  zoomService = inject(ZoomService);
+  fitToWindowService = inject(FitToWindowService);
   ev = signal(this.e);
 
   get e(): EventCommonMenu {
     return {
       name: 'fitToWindow',
-      innerWidth: window.innerWidth,
-      innerHeight: window.innerHeight,
     };
   }
   emitEv(partialEv: Partial<EventCommonMenu>) {
@@ -24,17 +25,12 @@ export class CommonMenuService {
   eventFromCommonMenu(ev: EventCommonMenu) {
     switch (ev.name) {
       case 'fitToWindow':
-        this.svgDataService.fitToWindow();
-
-        break;
-
-      case 'resetToRealSize':
-        this.svgDataService.resetToRealSize();
+        this.fitToWindowService.ev(this.ev());
 
         break;
 
       case 'toggleZoom':
-        this.svgDataService.toggleZoom(ev.zoomMode ?? 'none');
+        this.zoomService.ev(this.ev());
 
         break;
     }

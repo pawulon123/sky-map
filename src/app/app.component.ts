@@ -18,8 +18,6 @@ import { renderDefaultSettings } from './core/default/render-default';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  svgNativeEl: SVGSVGElement | undefined;
-
   eventFromCommonMenu = renderDefaultSettings;
 
   svgDataService = inject(SvgDataService);
@@ -30,5 +28,6 @@ export class AppComponent {
   setDataFromSvg(svgData: SvgData) {
     this.svgDataService.setSvgData(svgData);
   }
+
   dataFromSvg: SvgData = svgDataDefault;
 }
