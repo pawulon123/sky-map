@@ -1,4 +1,4 @@
-export type eventsFromCommonMenu = 'fitToWindow' | 'resetToRealSize' | 'toggleZoom';
+export type eventsFromCommonMenu = 'fitToWindow' | 'move' | 'toggleZoom';
 
 export type ZoomMode = 'in' | 'out' | 'none';
 export type FitToWindow = 'fit' | 'resetToRealSize';

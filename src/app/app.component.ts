@@ -9,6 +9,7 @@ import { CommonMenuComponent } from './common-menu/common-menu.component';
 import { EventCommonMenu, ZoomMode } from './core/common/event-common-menu';
 import { SvgDataService } from './core/services/svg-data-ref.service';
 import { renderDefaultSettings } from './core/default/render-default';
+import { PanService } from './core/services/pan.service';
 
 @Component({
   selector: 'app-root',
@@ -19,10 +20,12 @@ import { renderDefaultSettings } from './core/default/render-default';
 })
 export class AppComponent {
   eventFromCommonMenu = renderDefaultSettings;
-
+  panService = inject(PanService);
   svgDataService = inject(SvgDataService);
   setSvgRef(svgRef: SvgRef) {
     this.svgDataService.setSvgRef(svgRef);
+
+    //  this.panService.bind();
   }
 
   setDataFromSvg(svgData: SvgData) {

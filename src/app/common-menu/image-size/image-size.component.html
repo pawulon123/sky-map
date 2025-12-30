@@ -1,8 +1,8 @@
 <div>
   <button (click)="fitToWindow('fit')">Dopasuj do okna</button>
-  <button (click)="resetToRealSize('resetToRealSize')">Rzeczywisty rozmiar</button>
+  <button [ngClass]="{ active: moveActive }" (click)="move('move')">przesuwaj</button>
 
-  <button (click)="toggleZoom('in')" appActiveMenuButton="toggleZoom" [zoomMode]="'in'">Zoom +</button>
+  <button [ngClass]="{ active: zoomMode === 'in' }" (click)="toggleZoom('in')">Zoom +</button>
 
-  <button (click)="toggleZoom('out')" appActiveMenuButton="toggleZoom" [zoomMode]="'out'">Zoom -</button>
+  <button [ngClass]="{ active: zoomMode === 'out' }" (click)="toggleZoom('out')">Zoom -</button>
 </div>

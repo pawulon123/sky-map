@@ -1,9 +1,11 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { SvgData } from '../../core/common/svg-data';
-import { svgDataDefault } from '../../core/default/svg-data';
+import { AfterViewInit, Component, inject, Input, OnInit } from '@angular/core';
+
+import { EventCommonMenu, eventsFromCommonMenu, FitToWindow, ZoomMode } from '../../core/common/event-common-menu';
+
 import { CommonMenuService } from '../common-menu.service';
-import { EventCommonMenu, FitToWindow, ZoomMode } from '../../core/common/event-common-menu';
-import { ActiveMenuButtonDirective } from '../../core/directives/active-button-common-menu.directive';
+import { svgDataDefault } from '../../core/default/svg-data';
+import { SvgData } from '../../core/common/svg-data';
+import { NgClass } from '@angular/common';
 export enum ChengerStateMenuButton {
   zoomIn,
   zoomOut,
@@ -13,18 +15,26 @@ export enum ChengerStateMenuButton {
   templateUrl: './image-size.component.html',
   styleUrl: './image-size.component.css',
   standalone: true,
-  imports: [ActiveMenuButtonDirective],
+  imports: [NgClass],
 })
-export class ImageSizeComponent {
+export class ImageSizeComponent implements AfterViewInit {
   chengerStateMenuButton = ChengerStateMenuButton;
+  moveActive = false;
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.emit({ name: 'fitToWindow', fitToWindow: 'fit' });
+    });
+  }
 
   @Input() dataFromSvg: SvgData = svgDataDefault;
   readonly svc = inject(CommonMenuService);
 
   zoomMode: ZoomMode = 'none';
 
-  resetToRealSize(fitToWindow: FitToWindow): void {
-    this.emit({ name: 'fitToWindow', fitToWindow });
+  move(move: eventsFromCommonMenu): void {
+    this.moveActive = true;
+    this.emit({ name: move });
   }
 
   fitToWindow(fitToWindow: FitToWindow): void {

@@ -11,6 +11,7 @@ export class SvgDataService {
 
   viewBox = { x: 0, y: 0, w: 0, h: 0 };
 
+  didPan = false;
   clickHandler: ((e: MouseEvent) => void) | null = null;
 
   setSvgRef(svgRef: SvgRef) {
@@ -41,6 +42,13 @@ export class SvgDataService {
     this.resizeWidthHeight(this.svgData);
   }
 
+  // resize() {
+  // // NIE resetuj viewBox jeśli już jest ustawiony (w/h > 0)
+  // if (!this.viewBox.w || !this.viewBox.h) {
+  //   this.resizeViewBox();
+  // }
+  // this.resizeWidthHeight(this.svgData);
+  // }
   private resizeWidthHeight({ width: w, height: h }: SvgData) {
     this.setHeight(`${h}`);
     this.setWidth(`${w}`);

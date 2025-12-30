@@ -8,19 +8,16 @@ import { SvgDataService } from './svg-data-ref.service';
 export class FitToWindowService {
   svgRefService = inject(SvgDataService);
   ev({ fitToWindow }: EventCommonMenu) {
-    fitToWindow === 'fit' ? this.fitToWindow() : this.svgRefService.resize();
+    if (fitToWindow === 'fit') this.fitToWindow();
   }
-fitToWindow() {
-  const toolbarH = 0;
-  const maxW = document.documentElement.clientWidth;
-  const maxH = Math.max(0, document.documentElement.clientHeight - toolbarH);
+  fitToWindow() {
+    const toolbarH = 0;
+    const maxW = document.documentElement.clientWidth;
+    const maxH = Math.max(0, document.documentElement.clientHeight - toolbarH);
 
-  
-  this.svgRefService.setWidth(String(maxW));
-  this.svgRefService.setHeight(String(maxH));
+    this.svgRefService.setWidth(String(maxW));
+    this.svgRefService.setHeight(String(maxH));
 
- 
-  this.svgRefService.resizeViewBox();
-}
-
+    this.svgRefService.resizeViewBox();
+  }
 }

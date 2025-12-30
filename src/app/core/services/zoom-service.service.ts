@@ -20,6 +20,11 @@ export class ZoomService {
   }
 
   private onSvgClick(evt: MouseEvent, zoomMode: ZoomMode) {
+    if (this.svgRefService.didPan) {
+      this.svgRefService.didPan = false;
+      return;
+    }
+
     if (zoomMode === 'none') return;
 
     const maxZoomOut = 6;

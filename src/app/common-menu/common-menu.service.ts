@@ -2,6 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { EventCommonMenu } from '../core/common/event-common-menu';
 import { ZoomService } from '../core/services/zoom-service.service';
 import { FitToWindowService } from '../core/services/fit-to-window.service';
+import { PanService } from '../core/services/pan.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ import { FitToWindowService } from '../core/services/fit-to-window.service';
 export class CommonMenuService {
   zoomService = inject(ZoomService);
   fitToWindowService = inject(FitToWindowService);
+  panService = inject(PanService);
   ev = signal(this.e);
 
   get e(): EventCommonMenu {
@@ -30,6 +32,10 @@ export class CommonMenuService {
 
       case 'toggleZoom':
         this.zoomService.ev(this.ev());
+
+        break;
+      case 'move':
+        this.panService.ev(this.ev());
 
         break;
     }
