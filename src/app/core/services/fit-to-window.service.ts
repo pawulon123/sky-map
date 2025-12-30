@@ -10,19 +10,17 @@ export class FitToWindowService {
   ev({ fitToWindow }: EventCommonMenu) {
     fitToWindow === 'fit' ? this.fitToWindow() : this.svgRefService.resize();
   }
+fitToWindow() {
+  const toolbarH = 0;
+  const maxW = document.documentElement.clientWidth;
+  const maxH = Math.max(0, document.documentElement.clientHeight - toolbarH);
 
-  fitToWindow() {
-    const innerWidth = window.innerWidth;
-    const innerHeight = window.innerHeight;
+  
+  this.svgRefService.setWidth(String(maxW));
+  this.svgRefService.setHeight(String(maxH));
 
-    const toolbarH = 0;
-    const maxW = innerWidth;
-    const maxH = Math.max(0, (innerHeight ?? 0) - toolbarH);
+ 
+  this.svgRefService.resizeViewBox();
+}
 
-    const s = Math.min(maxW / this.svgRefService.svgData.width, maxH / this.svgRefService.svgData.height);
-
-    this.svgRefService.resizeViewBox();
-    this.svgRefService.setWidth(`${Math.floor(this.svgRefService.svgData.width * s)}`);
-    this.svgRefService.setHeight(`${Math.floor(this.svgRefService.svgData.height * s)}`);
-  }
 }

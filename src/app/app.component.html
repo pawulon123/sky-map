@@ -1,7 +1,9 @@
-<app-sky-map-page
-  [eventFromCommonMenu]="eventFromCommonMenu"
-  (dataFromSvg)="setDataFromSvg($event)"
-  (svgRef)="setSvgRef($event)"
-></app-sky-map-page>
+
+  <app-sky-map-page
+    [eventFromCommonMenu]="eventFromCommonMenu"
+    (dataFromSvg)="setDataFromSvg($event)"
+    (svgRef)="setSvgRef($event)"
+  ></app-sky-map-page>
+  
 <app-common-menu [dataFromSvg]="dataFromSvg"></app-common-menu>
 <app-svg-tooltip></app-svg-tooltip>
