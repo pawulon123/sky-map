@@ -1,8 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, Signal } from '@angular/core';
-import { ConstellationLinesService } from '../../../domain/services/constellation-lines/constellation-lines.service';
-import { ProjectionService } from '../../../domain/services/projection/projection.service';
-import { ProjectionName } from '../../../domain/models/projection-options.model';
+import { Component, inject} from '@angular/core';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { map } from 'rxjs';
 import { ConstellationLineSettings } from '../../../domain/models/constellation-line.model';
