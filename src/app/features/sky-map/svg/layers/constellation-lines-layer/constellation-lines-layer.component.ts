@@ -4,11 +4,8 @@ import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-m
 import { map } from 'rxjs';
 import { ConstellationLineSettings } from '../../../domain/models/constellation-line.model';
 
-
-
 import { PathComponent } from '../../components/path/path.component';
 import { ConstalationLinesPathsService } from './constalation-lines-paths.service';
-
 
 @Component({
   selector: 'g[app-constellation-lines-layer]',
@@ -17,7 +14,7 @@ import { ConstalationLinesPathsService } from './constalation-lines-paths.servic
   templateUrl: 'constellation-lines-layer.component.html',
 })
 export class ConstellationLinesLayerComponent {
-  private layer = inject(ConstalationLinesPathsService)
+  private layer = inject(ConstalationLinesPathsService);
   private state = inject(SkyMapStateService);
 
   constellationLineSettings$ = this.state.constellationLineSettings$.pipe(map(this.scratchDashed.bind(this)));

@@ -8,7 +8,6 @@ import { ConstellationLineSettings } from '../../../domain/models/constellation-
 import { constellationLineDefaultSettings } from '../../../domain/default/constellation-line';
 import { SelectedIdService } from '../../../domain/services/sky-map-state/allowed-ids-policy.service';
 
-
 type RaDec = [number, number];
 type LonDec = [number, number];
 type XY = [number, number];
@@ -24,7 +23,7 @@ export class ConstalationLinesPathsService {
   constructor() {
     this.svc.loadOnce();
   }
- 
+
   private readonly lineSettings = toSignal(this.state.constellationLineSettings$, {
     initialValue: {
       nodeGap: constellationLineDefaultSettings.nodeGap,

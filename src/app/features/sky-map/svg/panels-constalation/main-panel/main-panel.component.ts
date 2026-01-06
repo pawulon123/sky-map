@@ -2,11 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 
 import { map } from 'rxjs';
-import { ConstellationPanelsLayoutService } from '../constellation-lines-panels-layer.service';
 import { ConstellationLineSettings } from '../../../domain/models/constellation-line.model';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { PathComponent } from '../../components/path/path.component';
-
+import { ConstellationPanelsLayoutService } from '../constellation-panels-layout.service';
 
 @Component({
   selector: 'g[app-constellation-panels-layer]',

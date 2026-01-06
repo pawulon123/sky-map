@@ -12,13 +12,11 @@
 
     <div class="map-scroll-container">
       <ng-container *ngIf="isPanel">
-
         <app-panels-constalation></app-panels-constalation>
-    </ng-container>
+      </ng-container>
       <ng-container *ngIf="!isPanel">
-
         <app-root-svg></app-root-svg>
-    </ng-container>
+      </ng-container>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

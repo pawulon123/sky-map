@@ -1,4 +1,3 @@
-
 <svg:g id="layer-constellation-panels">
   <ng-container *ngIf="constellationLineSettings$ | async as settings">
     <ng-container *ngIf="settings.visible">
@@ -8,56 +7,160 @@
           <!-- <clipPath [attr.id]="p.clipId">
             <rect [attr.x]="p.x" [attr.y]="p.y" [attr.width]="p.w" [attr.height]="p.h"></rect>
           </clipPath> -->
-          
         </ng-container>
       </defs>
 
       <ng-container *ngFor="let p of layout().panels">
         <!-- ramka panelu -->
-<rect
-  [attr.x]="p.x" [attr.y]="p.y"
-  [attr.width]="p.w" [attr.height]="p.h"
-  fill="none"
-  stroke="#000000"
-  stroke-opacity="0.20"
-  stroke-width="1"
-></rect>
-
+        <rect
+          [attr.x]="p.x"
+          [attr.y]="p.y"
+          [attr.width]="p.w"
+          [attr.height]="p.h"
+          fill="none"
+          stroke="#000000"
+          stroke-opacity="0.20"
+          stroke-width="1"
+        ></rect>
 
         <!-- etykieta -->
-<text
-  *ngIf="p.label"
-  [attr.x]="p.label.x"
-  [attr.y]="p.label.y"
-  font-size="12"
-  fill="#000000"
-  opacity="0.6"
->
-  {{ p.label.text }}
-</text>
+        <text *ngIf="p.label" [attr.x]="p.label.x" [attr.y]="p.label.y" font-size="12" fill="#000000" opacity="0.6">
+          {{ p.label.text }}
+        </text>
 
         <!-- konstelacja w panelu -->
         <g [attr.clip-path]="'url(#' + p.clipId + ')'" [attr.transform]="p.transform">
           <ng-container *ngFor="let d of p.paths">
-       <!-- <path
-  [attr.d]="d"
-  fill="none"
-  [attr.stroke]="settings.color"
-  [attr.stroke-width]="settings.lineWidth"
-  vector-effect="non-scaling-stroke"
-  [attr.stroke-opacity]="settings.strokeOpacity"
-  [attr.stroke-dasharray]="settings.dasharray"
-  [attr.stroke-dashoffset]="settings.dashOffset"
-  [attr.stroke-linecap]="settings.strokeLinecap"
-  [attr.stroke-linejoin]="settings.linejoin"
- 
-
-
-></path> -->
-<g app-svg-path [points]="d" [settings]="settings"></g>
-
+            <g app-svg-path [points]="d" [settings]="settings"></g>
           </ng-container>
         </g>
+
+        <ng-container *ngFor="let s of p.stars">
+          <ng-container [ngSwitch]="s.shape">
+            <!-- CIRCLE (domyślny punkt) -->
+            <circle
+              *ngSwitchCase="'circle'"
+              [attr.cx]="s.x"
+              [attr.cy]="s.y"
+              [attr.r]="s.r"
+              [attr.fill]="s.fillColor"
+              [attr.fill-opacity]="s.fillOpacity"
+              [attr.stroke]="s.strokeColor"
+              [attr.stroke-opacity]="s.strokeOpacity"
+              [attr.stroke-width]="s.baseStrokeWidth"
+              [attr.opacity]="s.opacity"
+            ></circle>
+
+            <!-- RING (obręcz) -->
+            <circle
+              *ngSwitchCase="'ring'"
+              [attr.cx]="s.x"
+              [attr.cy]="s.y"
+              [attr.r]="s.r"
+              fill="none"
+              [attr.stroke]="s.strokeColor"
+              [attr.stroke-opacity]="s.strokeOpacity"
+              [attr.stroke-width]="s.ringStrokeWidth"
+              [attr.opacity]="s.opacity"
+            ></circle>
+
+            <!-- CROSS (krzyżyk) -->
+            <g
+              *ngSwitchCase="'cross'"
+              [attr.transform]="'translate(' + s.x + ',' + s.y + ')'"
+              [attr.opacity]="s.opacity"
+            >
+              <line
+                x1="0"
+                [attr.y1]="-s.r"
+                x2="0"
+                [attr.y2]="s.r"
+                [attr.stroke]="s.strokeColor"
+                [attr.stroke-opacity]="s.strokeOpacity"
+                [attr.stroke-width]="s.crossStrokeWidth"
+                stroke-linecap="round"
+              ></line>
+              <line
+                [attr.x1]="-s.r"
+                y1="0"
+                [attr.x2]="s.r"
+                y2="0"
+                [attr.stroke]="s.strokeColor"
+                [attr.stroke-opacity]="s.strokeOpacity"
+                [attr.stroke-width]="s.crossStrokeWidth"
+                stroke-linecap="round"
+              ></line>
+            </g>
+
+            <!-- POLYGONS: star/square/triangle -->
+            <polygon
+              *ngSwitchCase="'star'"
+              [attr.points]="s.polygonPoints"
+              [attr.transform]="'translate(' + s.x + ',' + s.y + ')'"
+              [attr.fill]="s.fillColor"
+              [attr.fill-opacity]="s.fillOpacity"
+              [attr.stroke]="s.strokeColor"
+              [attr.stroke-opacity]="s.strokeOpacity"
+              [attr.stroke-width]="s.baseStrokeWidth"
+              [attr.opacity]="s.opacity"
+            ></polygon>
+
+            <polygon
+              *ngSwitchCase="'square'"
+              [attr.points]="s.polygonPoints"
+              [attr.transform]="'translate(' + s.x + ',' + s.y + ')'"
+              [attr.fill]="s.fillColor"
+              [attr.fill-opacity]="s.fillOpacity"
+              [attr.stroke]="s.strokeColor"
+              [attr.stroke-opacity]="s.strokeOpacity"
+              [attr.stroke-width]="s.baseStrokeWidth"
+              [attr.opacity]="s.opacity"
+            ></polygon>
+
+            <polygon
+              *ngSwitchCase="'triangle'"
+              [attr.points]="s.polygonPoints"
+              [attr.transform]="'translate(' + s.x + ',' + s.y + ')'"
+              [attr.fill]="s.fillColor"
+              [attr.fill-opacity]="s.fillOpacity"
+              [attr.stroke]="s.strokeColor"
+              [attr.stroke-opacity]="s.strokeOpacity"
+              [attr.stroke-width]="s.baseStrokeWidth"
+              [attr.opacity]="s.opacity"
+            ></polygon>
+
+            <!-- CUSTOM: Twoja definicja symbolu w "local space" 0..1 (albo inny) -->
+            <g
+              *ngSwitchCase="'custom'"
+              [attr.transform]="'translate(' + s.x + ',' + s.y + ') ' + s.customTransform"
+              [attr.opacity]="s.opacity"
+            >
+              <!-- PRZYKŁAD: możesz tu wstawić dowolny path -->
+              <path
+                d="M0,0 L1,0 L1,1 L0,1 Z"
+                [attr.fill]="s.fillColor"
+                [attr.fill-opacity]="s.fillOpacity"
+                [attr.stroke]="s.strokeColor"
+                [attr.stroke-opacity]="s.strokeOpacity"
+                [attr.stroke-width]="s.baseStrokeWidth"
+              ></path>
+            </g>
+
+            <!-- FALLBACK -->
+            <circle
+              *ngSwitchDefault
+              [attr.cx]="s.x"
+              [attr.cy]="s.y"
+              [attr.r]="s.r"
+              [attr.fill]="s.fillColor"
+              [attr.fill-opacity]="s.fillOpacity"
+              [attr.stroke]="s.strokeColor"
+              [attr.stroke-opacity]="s.strokeOpacity"
+              [attr.stroke-width]="s.baseStrokeWidth"
+              [attr.opacity]="s.opacity"
+            ></circle>
+          </ng-container>
+        </ng-container>
       </ng-container>
     </ng-container>
   </ng-container>
