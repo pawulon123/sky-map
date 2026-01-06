@@ -1,4 +1,4 @@
-import { computed, inject, Injectable } from '@angular/core';
+import { computed, inject, Injectable, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ProjectionName } from '../../../domain/models/projection-options.model';
 import { ConstellationLinesService } from '../../../domain/services/constellation-lines/constellation-lines.service';
@@ -7,6 +7,7 @@ import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-m
 import { ConstellationLineSettings } from '../../../domain/models/constellation-line.model';
 import { constellationLineDefaultSettings } from '../../../domain/default/constellation-line';
 import { SelectedIdService } from '../../../domain/services/sky-map-state/allowed-ids-policy.service';
+
 
 type RaDec = [number, number];
 type LonDec = [number, number];
@@ -23,14 +24,14 @@ export class ConstalationLinesPathsService {
   constructor() {
     this.svc.loadOnce();
   }
-
+ 
   private readonly lineSettings = toSignal(this.state.constellationLineSettings$, {
     initialValue: {
       nodeGap: constellationLineDefaultSettings.nodeGap,
     } as ConstellationLineSettings,
   });
 
-  readonly paths = computed(() => {
+  readonly data = computed(() => {
     const { projectionName } = this.proj.settings();
     const settings = this.lineSettings();
     const nodeGap = settings.nodeGap ?? 0;

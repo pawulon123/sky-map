@@ -2,17 +2,7 @@
   <ng-container *ngIf="constellationLineSettings$ | async as settings">
     <ng-container *ngIf="settings.visible">
       <ng-container *ngFor="let d of paths()">
-        <path
-          [attr.d]="d"
-          fill="none"
-          [attr.stroke]="settings.color"
-          [attr.stroke-width]="settings.lineWidth"
-          [attr.stroke-opacity]="settings.strokeOpacity"
-          [attr.stroke-dasharray]="settings.dasharray"
-          [attr.stroke-dashoffset]="settings.dashOffset"
-          [attr.stroke-linecap]="settings.strokeLinecap"
-          [attr.stroke-linejoin]="settings.linejoin"
-        ></path>
+        <g app-svg-path [points]="d" [settings]="settings"></g>
       </ng-container>
     </ng-container>
   </ng-container>

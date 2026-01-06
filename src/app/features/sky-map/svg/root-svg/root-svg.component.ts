@@ -12,7 +12,10 @@ import { ConstellationLinesLayerComponent } from '../layers/constellation-lines-
 
 import { LayersSvg } from '../../domain/models/layers-svg';
 
+
+
 @Component({
+
   selector: 'app-root-svg',
   standalone: true,
   imports: [
@@ -24,6 +27,8 @@ import { LayersSvg } from '../../domain/models/layers-svg';
     SvgTooltipRootDirective,
     ReflectOnVerticalAxisDirective,
   ],
+
+  
   templateUrl: './root-svg.component.html',
   styleUrl: './root-svg.component.css',
 })

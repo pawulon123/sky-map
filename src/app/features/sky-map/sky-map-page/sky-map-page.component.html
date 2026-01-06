@@ -11,7 +11,14 @@
     </button>
 
     <div class="map-scroll-container">
-      <app-root-svg></app-root-svg>
+      <ng-container *ngIf="isPanel">
+
+        <app-panels-constalation></app-panels-constalation>
+    </ng-container>
+      <ng-container *ngIf="!isPanel">
+
+        <app-root-svg></app-root-svg>
+    </ng-container>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

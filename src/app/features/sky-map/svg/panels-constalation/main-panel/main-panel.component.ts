@@ -1,28 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
+
 import { map } from 'rxjs';
+import { ConstellationPanelsLayoutService } from '../constellation-lines-panels-layer.service';
 import { ConstellationLineSettings } from '../../../domain/models/constellation-line.model';
-
-
-
+import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { PathComponent } from '../../components/path/path.component';
-import { ConstalationLinesPathsService } from './constalation-lines-paths.service';
 
 
 @Component({
-  selector: 'g[app-constellation-lines-layer]',
+  selector: 'g[app-constellation-panels-layer]',
   standalone: true,
   imports: [CommonModule, PathComponent],
-  templateUrl: 'constellation-lines-layer.component.html',
+  templateUrl: './main-panel.component.html',
 })
-export class ConstellationLinesLayerComponent {
-  private layer = inject(ConstalationLinesPathsService)
+export class ConstellationPanelsLayerComponent {
+  private layoutSvc = inject(ConstellationPanelsLayoutService);
   private state = inject(SkyMapStateService);
 
-  constellationLineSettings$ = this.state.constellationLineSettings$.pipe(map(this.scratchDashed.bind(this)));
+  layout = this.layoutSvc.layout;
 
-  paths = this.layer.data;
+  constellationLineSettings$ = this.state.constellationLineSettings$.pipe(map(this.scratchDashed.bind(this)));
 
   scratchDashed({ style, dashSize, ...settings }: ConstellationLineSettings) {
     const dasharray = style !== 'dashed' ? null : `${dashSize} ${dashSize}`;
