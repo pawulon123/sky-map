@@ -18,5 +18,23 @@ import { Component, Input } from '@angular/core';
   styles: ``,
 })
 export class StarComponent {
-  @Input('star') s: any;
+  s: any;
+  @Input() set star(s: any) {
+    const polygonPoints = this.points(s.r);
+    this.s = { ...s, polygonPoints };
+  }
+
+  private points(r: number): string {
+    const outer = r;
+    const inner = outer * 0.4;
+    const pts: string[] = [];
+    for (let i = 0; i < 10; i++) {
+      const angle = (Math.PI / 5) * i - Math.PI / 2;
+      const rr = i % 2 === 0 ? outer : inner;
+      const x = Math.cos(angle) * rr;
+      const y = Math.sin(angle) * rr;
+      pts.push(`${x},${y}`);
+    }
+    return pts.join(' ');
+  }
 }

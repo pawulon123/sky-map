@@ -1,12 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Input, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Star } from '../../../domain/models/star.model';
-import {
-  RenderStar,
-  StarsLayerSettings,
-  StarsSymbolsSettings,
-  StarSymbolShape,
-} from '../../../domain/models/stars-layer-settings.model';
+import { RenderStar, StarsLayerSettings } from '../../../domain/models/stars-layer-settings.model';
 import { StarsService } from '../../../domain/services/stars/stars.service';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { LabelsLayerComponent } from '../labels-layer/labels-layer.component';

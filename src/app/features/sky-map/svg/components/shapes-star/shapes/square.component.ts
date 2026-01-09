@@ -18,5 +18,12 @@ import { Component, Input } from '@angular/core';
   styles: ``,
 })
 export class SquareComponent {
-  @Input('star') s: any;
+  s: any;
+  @Input() set star(s: any) {
+    const polygonPoints = this.points(s.r);
+    this.s = { ...s, polygonPoints };
+  }
+  private points(r: number): string {
+    return `${-r},${-r} ${-r},${r} ${r},${r} ${r},${-r}`;
+  }
 }
