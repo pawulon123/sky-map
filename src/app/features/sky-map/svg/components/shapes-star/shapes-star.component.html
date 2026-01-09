@@ -1,0 +1,24 @@
+<svg:g>
+  <ng-container [ngSwitch]="s.shape">
+    <g app-circle [star]="s" *ngSwitchCase="'circle'"></g>
+    <g app-ring [star]="s" *ngSwitchCase="'ring'"></g>
+    <g app-cross [star]="s" *ngSwitchCase="'cross'"></g>
+    <g app-star [star]="s" *ngSwitchCase="'star'"></g>
+    <g app-square [star]="s" *ngSwitchCase="'square'"></g>
+    <g app-triangle [star]="s" *ngSwitchCase="'triangle'"></g>
+    <g app-custom [star]="s" *ngSwitchCase="'custom'"></g>
+
+    <circle
+      *ngSwitchDefault
+      [attr.cx]="s.x"
+      [attr.cy]="s.y"
+      [attr.r]="s.r"
+      [attr.fill]="s.fillColor"
+      [attr.fill-opacity]="s.fillOpacity"
+      [attr.stroke]="s.strokeColor"
+      [attr.stroke-opacity]="s.strokeOpacity"
+      [attr.stroke-width]="s.baseStrokeWidth"
+      [attr.opacity]="s.opacity"
+    ></circle>
+  </ng-container>
+</svg:g>

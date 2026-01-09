@@ -37,7 +37,7 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
 
   @Output() dataFromSvg = new EventEmitter<SvgData>();
   @Output() svgRef = new EventEmitter<SvgRef>();
-  isPanel = true;
+  isPanel = false;
   @Input() set eventFromCommonMenu(ev: any) {
     this.state.updateRender(ev);
   }

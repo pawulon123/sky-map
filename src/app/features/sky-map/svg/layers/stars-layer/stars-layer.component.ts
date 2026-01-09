@@ -13,11 +13,12 @@ import { LabelsLayerComponent } from '../labels-layer/labels-layer.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { defaultStarsSettings } from '../../../domain/default/stars';
 import { StarSymbolService } from './star-symbol.service';
+import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.component';
 
 @Component({
   selector: 'g[app-stars-layer]',
   standalone: true,
-  imports: [CommonModule, LabelsLayerComponent],
+  imports: [CommonModule, LabelsLayerComponent, ShapesStarComponent],
   templateUrl: './stars-layer.component.html',
   styleUrl: './stars-layer.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

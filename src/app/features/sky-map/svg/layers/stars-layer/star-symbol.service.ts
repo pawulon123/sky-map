@@ -85,6 +85,7 @@ export class StarSymbolService {
 
   private getPropForShape(shape: string, r: number): { polygonPoints: string; customTransform: string } {
     const propForShape = { polygonPoints: '', customTransform: '' };
+
     switch (shape) {
       case 'star': {
         propForShape.polygonPoints = this.starPoints(r);

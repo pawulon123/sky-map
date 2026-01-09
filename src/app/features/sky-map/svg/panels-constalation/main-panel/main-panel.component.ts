@@ -6,11 +6,12 @@ import { ConstellationLineSettings } from '../../../domain/models/constellation-
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { PathComponent } from '../../components/path/path.component';
 import { ConstellationPanelsLayoutService } from '../constellation-panels-layout.service';
+import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.component';
 
 @Component({
   selector: 'g[app-constellation-panels-layer]',
   standalone: true,
-  imports: [CommonModule, PathComponent],
+  imports: [CommonModule, PathComponent, ShapesStarComponent],
   templateUrl: './main-panel.component.html',
 })
 export class ConstellationPanelsLayerComponent {
