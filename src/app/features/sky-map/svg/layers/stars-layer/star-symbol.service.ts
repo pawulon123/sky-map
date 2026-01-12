@@ -22,37 +22,43 @@ export class StarSymbolService {
     const settings = this.settingsSig();
     const sym = settings.symbols;
 
-    return this.visibleStars().map((star) => {
-      const [cx, cy] = star.__projected ?? [0, 0];
-      const mag = star.mag ?? null;
+         if(!sym.visible){
+      return[]
+     }else{
 
-      const r = createRadius(star, sym);
-      const propsBaseRadis = getPropBaseRadius(r, sym);
-      return {
-        star,
-        cx,
-        cy,
-        mag,
-        shape: sym.shape,
-        r,
-        polygonPoints: '',
-        customTransform: '',
-        ...propsBaseRadis,
-      };
-    });
+       return this.visibleStars().map((star) => {
+         const [cx, cy] = star.__projected ?? [0, 0];
+         const mag = star.mag ?? null;
+   
+         const r = createRadius(star, sym);
+         const propsBaseRadis = getPropBaseRadius(r, sym);
+         return {
+           star,
+           cx,
+           cy,
+           mag,
+           shape: sym.shape,
+           r,
+           polygonPoints: '',
+           customTransform: '',
+           ...propsBaseRadis,
+         };
+       });
+     }
+
   });
 
   private readonly visibleStars = computed<Star[]>(() => {
-    const all = this.svc.data().stars ?? [];
-
     const symbolSettings = this.settingsSig().symbols;
-    let visible = all.filter((s) => Array.isArray(s.__projected));
-    const filteredMag = visible.filter(({ mag }) => symbolSettings.magMax >= mag);
-
-    const selectedConstelation = this.state.getProjectionSettings().selected;
-
-    const finelyStars = filteredMag.filter(({ con }) => selectedConstelation?.includes(con));
-
-    return [...finelyStars].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
+       const all = this.svc.data().stars ?? [];
+       let visible = all.filter((s) => Array.isArray(s.__projected));
+       const filteredMag = visible.filter(({ mag }) => symbolSettings.magMax >= mag);
+   
+       const selectedConstelation = this.state.getProjectionSettings().selected;
+   
+       const finelyStars = filteredMag.filter(({ con }) => selectedConstelation?.includes(con));
+   
+       return [...finelyStars].sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
+     
   });
 }

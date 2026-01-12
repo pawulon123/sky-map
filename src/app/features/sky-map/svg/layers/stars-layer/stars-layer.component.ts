@@ -1,12 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject, Input, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Star } from '../../../domain/models/star.model';
-import { RenderStar, StarsLayerSettings } from '../../../domain/models/stars-layer-settings.model';
-import { StarsService } from '../../../domain/services/stars/stars.service';
+import { RenderStar } from '../../../domain/models/stars-layer-settings.model';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { LabelsLayerComponent } from '../labels-layer/labels-layer.component';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { defaultStarsSettings } from '../../../domain/default/stars';
 import { StarSymbolService } from './star-symbol.service';
 import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.component';
 
@@ -20,21 +16,11 @@ import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.co
 })
 export class StarsLayerComponent {
   private starSynbolService = inject(StarSymbolService);
-  private state = inject(SkyMapStateService);
-
-  maxMag = input<number | null>(null);
+ 
   showLabels = input<boolean>(true);
-  @Input() showStars = true;
-
-  private readonly settingsSig = toSignal(this.state.starsLayerSettings$, {
-    initialValue: defaultStarsSettings,
-  });
 
   readonly starSynbols = this.starSynbolService.starSynbols;
 
-  get starsSettings(): StarsLayerSettings {
-    return this.settingsSig();
-  }
 
   trackByStar(index: number, rs: RenderStar): number {
     return index;

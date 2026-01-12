@@ -43,13 +43,13 @@ export class PanelStarsService {
   }
 
   /** Snapshot gwiazd */
-  getAllStars(): Star[] {
+  private getAllStars(): Star[] {
     return this.starsSvc.data().stars ?? [];
   }
 
   buildPanelStars(args: BuildPanelStarsArgs): RenderPanelStar[] {
     const {
-      stars,
+     
       raCenter,
       bbox,
       scale: s,
@@ -72,8 +72,8 @@ export class PanelStarsService {
     const magLimit = Number.isFinite(sym.magMax as number) ? (sym.magMax as number) : maxMag;
 
     const result: RenderPanelStar[] = [];
-
-    for (const st of stars) {
+   
+    for (const st of this.getAllStars()) {
       const ra = st.ra_deg;
       const dec = st.dec;
       const mag = st.mag ?? null;
@@ -95,7 +95,7 @@ export class PanelStarsService {
 
       // filtr: tylko to, co mieści się w panelu
       if (px < 0 || py < 0 || px > panelW || py > panelH) continue;
-      ///////////
+  
       const r = createRadius(st, sym);
       const propsBaseRadis = getPropBaseRadius(r, sym);
 
@@ -113,7 +113,6 @@ export class PanelStarsService {
       });
     }
 
-    // opcjonalnie: sort jak w mapie (jaśniejsze na wierzchu)
     return result.sort((a, b) => (a.mag ?? 99) - (b.mag ?? 99));
   }
 }
