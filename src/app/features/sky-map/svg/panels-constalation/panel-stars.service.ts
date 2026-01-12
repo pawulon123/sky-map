@@ -49,7 +49,6 @@ export class PanelStarsService {
 
   buildPanelStars(args: BuildPanelStarsArgs): RenderPanelStar[] {
     const {
-     
       raCenter,
       bbox,
       scale: s,
@@ -72,7 +71,7 @@ export class PanelStarsService {
     const magLimit = Number.isFinite(sym.magMax as number) ? (sym.magMax as number) : maxMag;
 
     const result: RenderPanelStar[] = [];
-   
+
     for (const st of this.getAllStars()) {
       const ra = st.ra_deg;
       const dec = st.dec;
@@ -95,7 +94,7 @@ export class PanelStarsService {
 
       // filtr: tylko to, co mieści się w panelu
       if (px < 0 || py < 0 || px > panelW || py > panelH) continue;
-  
+
       const r = createRadius(st, sym);
       const propsBaseRadis = getPropBaseRadius(r, sym);
 

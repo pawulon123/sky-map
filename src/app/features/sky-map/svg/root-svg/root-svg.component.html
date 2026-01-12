@@ -1,4 +1,4 @@
-<svg appSvgTooltipRoot #skySvg preserveAspectRatio="xMidYMid meet" style="display: block">
+<svg:g>
   <g app-stars-layer [showLabels]="showLabels"></g>
 
   <g
@@ -14,4 +14,4 @@
     *ngIf="(asterismSettings$ | async)?.visible"
     [appReflectOnVerticalAxis]="layersSvg.asterisms"
   ></g>
-</svg>
+</svg:g>

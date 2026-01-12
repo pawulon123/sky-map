@@ -1,11 +1,8 @@
 <svg:g id="layer-stars">
-    <ng-container *ngFor="let rs of starSynbols(); trackBy: trackByStar">
-      <g
-        [attr.transform]="'translate(' + rs.cx + ',' + rs.cy + ')'"
-        [attr.data-tooltip]="getTooltip(rs)"
-      >
-        <g app-shapes-star [star]="rs"></g>
-      </g>  
-    </ng-container>
+  <ng-container *ngFor="let rs of starSynbols(); trackBy: trackByStar">
+    <g [attr.transform]="'translate(' + rs.cx + ',' + rs.cy + ')'" [attr.data-tooltip]="getTooltip(rs)">
+      <g app-shapes-star [star]="rs"></g>
+    </g>
+  </ng-container>
   <g app-labels-layer *ngIf="showLabels()"></g>
 </svg:g>

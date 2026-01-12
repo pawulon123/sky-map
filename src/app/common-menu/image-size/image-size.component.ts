@@ -17,15 +17,15 @@ export enum ChengerStateMenuButton {
   standalone: true,
   imports: [NgClass],
 })
-export class ImageSizeComponent implements AfterViewInit {
+export class ImageSizeComponent {
   chengerStateMenuButton = ChengerStateMenuButton;
   moveActive = false;
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.emit({ name: 'fitToWindow', fitToWindow: 'fit' });
-    });
-  }
+  // ngAfterViewInit(): void {
+  //   setTimeout(() => {
+  //     // this.emit({ name: 'fitToWindow', fitToWindow: 'fit' });
+  //   });
+  // }
 
   @Input() dataFromSvg: SvgData = svgDataDefault;
   readonly svc = inject(CommonMenuService);

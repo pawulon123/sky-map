@@ -2,7 +2,7 @@ import { PositionConfig, StarsLayerSettings } from '../models/stars-layer-settin
 
 export const defaultStarsSettings: StarsLayerSettings = {
   symbols: {
-    visible: true,
+    visible: false,
     ring: 0,
     magMax: 7,
     shape: 'ring',

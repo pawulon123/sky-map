@@ -1,4 +1,14 @@
-import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 
@@ -10,6 +20,9 @@ import { SkyMapStateService } from '../domain/services/sky-map-state/sky-map-sta
 import { SvgData, SvgRef } from '../../../core/common/svg-data';
 import { RootSvgComponent } from '../svg/root-svg/root-svg.component';
 import { PanelsConstellationComponent } from '../svg/panels-constalation/panels-constalation.component';
+import { ModeProjection } from '../domain/models/projection-options.model';
+import { defaultProjectionSettings } from '../domain/default/projection';
+import { SvgTooltipRootDirective } from '../../../core/tooltip/tooltip.directive';
 
 @Component({
   selector: 'app-sky-map-page',
@@ -23,6 +36,7 @@ import { PanelsConstellationComponent } from '../svg/panels-constalation/panels-
     MatIconModule,
     RootSvgComponent,
     PanelsConstellationComponent,
+    SvgTooltipRootDirective,
   ],
   templateUrl: './sky-map-page.component.html',
   styleUrl: './sky-map-page.component.css',
@@ -34,18 +48,21 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
   readonly projectionSettings$ = this.state.projectionSettings$;
 
   isMenuOpen = false;
-
+  @ViewChild('svg', { static: false }) svg!: ElementRef<SVGSVGElement>;
   @Output() dataFromSvg = new EventEmitter<SvgData>();
   @Output() svgRef = new EventEmitter<SvgRef>();
-  isPanel = true;
+  mode: ModeProjection = defaultProjectionSettings.mode;
   @Input() set eventFromCommonMenu(ev: any) {
     this.state.updateRender(ev);
   }
 
   ngAfterViewInit(): void {
+    this.state.setRefSvg(this.svg);
     this.svgRef.emit(this.state.svgRef);
-    this.stateProjectionSub = this.projectionSettings$.subscribe(({ width, height }) => {
+    this.stateProjectionSub = this.projectionSettings$.subscribe(({ width, height, mode }) => {
+      console.log(width, height);
       this.dataFromSvg.emit({ width, height });
+      this.mode = mode;
     });
   }
 

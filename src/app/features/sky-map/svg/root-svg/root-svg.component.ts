@@ -13,7 +13,7 @@ import { ConstellationLinesLayerComponent } from '../layers/constellation-lines-
 import { LayersSvg } from '../../domain/models/layers-svg';
 
 @Component({
-  selector: 'app-root-svg',
+  selector: 'g[app-root-svg]',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,14 +21,13 @@ import { LayersSvg } from '../../domain/models/layers-svg';
     AsterismsLayerComponent,
     BoundariesLayerComponent,
     ConstellationLinesLayerComponent,
-    SvgTooltipRootDirective,
     ReflectOnVerticalAxisDirective,
   ],
 
   templateUrl: './root-svg.component.html',
   styleUrl: './root-svg.component.css',
 })
-export class RootSvgComponent implements AfterViewInit {
+export class RootSvgComponent {
   readonly state = inject(SkyMapStateService);
   readonly projectionSettings$ = this.state.projectionSettings$;
   readonly asterismSettings$ = this.state.asterismLayerSettings$;
@@ -39,11 +38,5 @@ export class RootSvgComponent implements AfterViewInit {
   @Input() showLabels = true;
   @Input() maxIntensity: number | null = null;
 
-  @ViewChild('skySvg', { static: false }) svgRef!: ElementRef<SVGSVGElement>;
-
   layersSvg = LayersSvg;
-
-  ngAfterViewInit(): void {
-    this.state.setRefSvg(this.svgRef);
-  }
 }

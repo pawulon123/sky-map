@@ -11,12 +11,10 @@
     </button>
 
     <div class="map-scroll-container">
-      <ng-container *ngIf="isPanel">
-        <app-panels-constalation></app-panels-constalation>
-      </ng-container>
-      <ng-container *ngIf="!isPanel">
-        <app-root-svg></app-root-svg>
-      </ng-container>
+      <svg appSvgTooltipRoot #svg preserveAspectRatio="xMidYMid meet" style="display: block">
+        <g app-root-svg *ngIf="mode == 'map'"></g>
+        <g app-panels-constalation *ngIf="mode == 'panels'"></g>
+      </svg>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

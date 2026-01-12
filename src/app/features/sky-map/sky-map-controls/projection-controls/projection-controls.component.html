@@ -1,54 +1,23 @@
 <div style="padding: 15px 5px 0px 5px">
-  <div class="center-in">
-    <mat-form-field appearance="outline" class="projection-select-field">
-      <mat-label>Typ projekcji</mat-label>
-      <mat-select [value]="projectionSv.settings().projectionName" (selectionChange)="setProjection($event.value)">
-        <mat-option *ngFor="let p of projections" [value]="p.value">
-          {{ p.label }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div class="center-in">
-    <mat-form-field appearance="outline" class="projection-size-field">
-      <mat-label>Szerokość</mat-label>
-      <input
-        matInput
-        type="number"
-        [value]="width()"
-        (input)="setSize($any($event.target).valueAsNumber || 1200, height())"
-      />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="projection-size-field">
-      <mat-label>Wysokość</mat-label>
-      <input
-        matInput
-        type="number"
-        [value]="height()"
-        (input)="setSize(width(), $any($event.target).valueAsNumber || 1200)"
-      />
-    </mat-form-field>
-  </div>
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>Konstelacje</mat-label>
-
-    <mat-select [formControl]="constellationsCtrl" multiple>
-      <mat-option *ngFor="let c of CONSTELLATION_PL" [value]="c.value">
-        {{ c.label }}
+  <mat-form-field appearance="fill">
+    <mat-label>Tryb</mat-label>
+    <mat-select [formControl]="modeCtrl">
+      <mat-option *ngFor="let m of mode" [value]="m.value">
+        {{ m.label }}
       </mat-option>
     </mat-select>
-  </mat-form-field> -->
+  </mat-form-field>
+
+  <app-map-projection-controls *ngIf="modeCtrl.value == 'map'"></app-map-projection-controls>
+  <app-panels-projection-controls *ngIf="modeCtrl.value == 'panels'"></app-panels-projection-controls>
+
   <div class="constellations-toolbar">
     <button mat-stroked-button type="button" (click)="selectAllConstellations()">Zaznacz wszystkie</button>
-
     <button mat-stroked-button type="button" (click)="clearAllConstellations()">Odznacz wszystkie</button>
   </div>
 
   <mat-form-field appearance="fill">
     <mat-label>Konstelacje</mat-label>
-
     <mat-select [formControl]="constellationsCtrl" multiple>
       <mat-option *ngFor="let c of CONSTELLATION_PL" [value]="c.value">
         {{ c.label }}

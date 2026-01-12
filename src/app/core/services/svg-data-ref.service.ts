@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SvgData, SvgRef } from '../common/svg-data';
 import { svgDataDefault } from '../default/svg-data';
+import { EventCommonMenu } from '../common/event-common-menu';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,8 @@ export class SvgDataService {
 
   setSvgData(svgData: SvgData) {
     this.svgData = svgData;
-    this.resize();
+    this.fitToWindow();
+    // this.resize();
   }
 
   addEventListener(ev: string, method: any) {
@@ -37,22 +39,15 @@ export class SvgDataService {
     return this.svgNativeEl;
   }
 
-  resize() {
-    this.resizeViewBox();
-    this.resizeWidthHeight(this.svgData);
-  }
-
   // resize() {
-  // // NIE resetuj viewBox jeśli już jest ustawiony (w/h > 0)
-  // if (!this.viewBox.w || !this.viewBox.h) {
   //   this.resizeViewBox();
+  //   this.resizeWidthHeight(this.svgData);
   // }
-  // this.resizeWidthHeight(this.svgData);
+
+  // private resizeWidthHeight({ width: w, height: h }: SvgData) {
+  //   this.setHeight(`${h}`);
+  //   this.setWidth(`${w}`);
   // }
-  private resizeWidthHeight({ width: w, height: h }: SvgData) {
-    this.setHeight(`${h}`);
-    this.setWidth(`${w}`);
-  }
 
   resizeViewBox({ width: w, height: h } = this.svgData) {
     this.setViewBox(`0 0 ${w} ${h}`);
@@ -74,5 +69,18 @@ export class SvgDataService {
   private setAttributeOnSvg(attributeName: string, value: string) {
     if (!this.svgNativeEl) return;
     this.svgNativeEl.setAttribute(attributeName, value);
+  }
+  ev(ev: EventCommonMenu) {
+    this.fitToWindow();
+  }
+
+  fitToWindow() {
+    const toolbarH = 0;
+    const maxW = document.documentElement.clientWidth;
+    const maxH = Math.max(0, document.documentElement.clientHeight - toolbarH);
+
+    this.setWidth(String(maxW));
+    this.setHeight(String(maxH));
+    this.resizeViewBox();
   }
 }

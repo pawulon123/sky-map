@@ -1,16 +1,18 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ProjectionService } from '../../domain/services/projection/projection.service';
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
-import { ProjectionName } from '../../domain/models/projection-options.model';
+import { ModeProjection, ProjectionName } from '../../domain/models/projection-options.model';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { defaultProjectionSettings, projections } from '../../domain/default/projection';
+import { defaultProjectionSettings, modes, projections } from '../../domain/default/projection';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatOption, MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CONSTELLATION_PL } from '../../domain/default/constalation-select';
 import { Subscriber, Subscription } from 'rxjs';
+import { MapProjectionControlsComponent } from '../map-projection-controls/map-projection-controls.component';
+import { PanelsProjectionControlsComponent } from '../panels-projection-controls/panels-projection-controls.component';
 
 @Component({
   selector: 'app-projection-controls',
@@ -21,10 +23,12 @@ import { Subscriber, Subscription } from 'rxjs';
     MatLabel,
     MatSelect,
     MatOption,
-    MatInputModule,
+    // MatInputModule,
     MatCheckboxModule,
-    MatSelectModule,
+    // MatSelectModule,
     ReactiveFormsModule,
+    MapProjectionControlsComponent,
+    PanelsProjectionControlsComponent,
   ],
   templateUrl: './projection-controls.component.html',
   styleUrl: './projection-controls.component.css',
@@ -32,16 +36,18 @@ import { Subscriber, Subscription } from 'rxjs';
 })
 export class ProjectionControlsComponent implements OnInit, OnDestroy {
   protected projectionSv = inject(ProjectionService);
-  private state = inject(SkyMapStateService);
 
   constalationSelectSub?: Subscription;
-  starsSettings$ = this.state.starsLayerSettings$;
-  projections = projections;
   constellationsCtrl = new FormControl<string[]>([], { nonNullable: true });
   CONSTELLATION_PL = CONSTELLATION_PL;
 
+  modeCtrl = new FormControl<ModeProjection>(defaultProjectionSettings.mode, { nonNullable: true });
+  mode = modes;
+  modeSelectSub?: Subscription;
+
   ngOnInit() {
     this.constalationSelectSub = this.constalationSelectEv();
+    this.modeSelectSub = this.modeSelectEv();
   }
 
   private constalationSelectEv() {
@@ -50,20 +56,11 @@ export class ProjectionControlsComponent implements OnInit, OnDestroy {
       this.projectionSv.setSettings({ selected });
     });
   }
-
-  setProjection(projectionName: ProjectionName) {
-    this.projectionSv.setSettings({ projectionName });
-  }
-
-  setSize(width: number, height: number) {
-    this.projectionSv.setSettings({ width, height });
-  }
-
-  width() {
-    return this.projectionSv.settings().width;
-  }
-  height() {
-    return this.projectionSv.settings().height;
+  private modeSelectEv() {
+    this.modeCtrl.setValue(defaultProjectionSettings.mode);
+    return this.modeCtrl.valueChanges.subscribe((mode) => {
+      this.projectionSv.setSettings({ mode });
+    });
   }
 
   toggleMirrorX(mirrorX: boolean) {
@@ -72,8 +69,6 @@ export class ProjectionControlsComponent implements OnInit, OnDestroy {
 
   selectAllConstellations(): void {
     const all = this.CONSTELLATION_PL.map((c) => c.value);
-
-    // bez emitEvent:false — chcemy, żeby valueChanges odpaliło i zaktualizowało ProjectionService
     this.constellationsCtrl.setValue(all);
   }
 
@@ -83,5 +78,6 @@ export class ProjectionControlsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.constalationSelectSub) this.constalationSelectSub.unsubscribe();
+    if (this.modeSelectSub) this.modeSelectSub.unsubscribe();
   }
 }

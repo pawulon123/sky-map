@@ -24,11 +24,12 @@ export class AppComponent {
   svgDataService = inject(SvgDataService);
   setSvgRef(svgRef: SvgRef) {
     this.svgDataService.setSvgRef(svgRef);
-
-    //  this.panService.bind();
+    // console.log(svgRef);
   }
 
   setDataFromSvg(svgData: SvgData) {
+    //console.log(svgData);
+
     this.svgDataService.setSvgData(svgData);
   }
 

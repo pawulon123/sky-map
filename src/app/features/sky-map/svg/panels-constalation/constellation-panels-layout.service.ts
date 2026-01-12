@@ -7,6 +7,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { defaultStarsSettings } from '../../domain/default/stars';
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
 import { SelectedIdService } from '../../domain/services/sky-map-state/allowed-ids-policy.service';
+import { defaultProjectionSettings } from '../../domain/default/projection';
 
 @Injectable({ providedIn: 'root' })
 export class ConstellationPanelsLayoutService {
@@ -15,59 +16,44 @@ export class ConstellationPanelsLayoutService {
   private state = inject(SkyMapStateService);
 
   private selectedId = inject(SelectedIdService);
-  /** Wymiary panelu w jednostkach SVG */
-  private readonly panelSize = signal({ w: 400, h: 300 });
 
-  /** Odstęp między panelami */
-  private readonly GAP = 10;
-
-  /** Padding wewnętrzny w panelu */
-  private readonly PAD = 40;
-
-  /** Liczba paneli w wierszu */
-  private readonly COLS = 8;
-
-  /** Limit jasności */
   private readonly MAX_MAG = 6.5;
-
-  // opcjonalnie public setter
 
   private readonly starSettingsSig = toSignal(this.state.starsLayerSettings$, {
     initialValue: defaultStarsSettings,
   });
-
-  setPanelSize(w: number, h: number) {
-    this.panelSize.set({ w, h });
-  }
+  private readonly projectionSettingsSig = toSignal(this.state.projectionSettings$, {
+    initialValue: defaultProjectionSettings,
+  });
 
   readonly layout = computed<ConstellationPanelsLayoutVM>(() => {
     const loaded = this.geom.loaded();
     const items = this.geom.sortedConstellations();
     const filtretItems = this.selectedId.filter(items);
 
-    // const sym = settings.symbols;
-    const { w: PANEL_W, h: PANEL_H } = this.panelSize();
+    const { gap, panelSize, columns } = this.projectionSettingsSig();
 
     if (!loaded || filtretItems.length === 0) {
-      return { totalW: PANEL_W, totalH: PANEL_H, panels: [] };
+      return { totalW: panelSize.w, totalH: panelSize.h, panels: [] };
     }
 
-    const rows = Math.ceil(filtretItems.length / this.COLS);
+    const rows = Math.ceil(filtretItems.length / columns);
 
-    const totalW = this.COLS * PANEL_W + (this.COLS - 1) * this.GAP;
-    const totalH = rows * PANEL_H + (rows - 1) * this.GAP;
+    const totalW = columns * panelSize.w + (columns - 1) * gap;
+    const totalH = rows * panelSize.h + (rows - 1) * gap;
 
-    const panels = filtretItems.map((c, i) => this.buildPanel(c, i, PANEL_W, PANEL_H));
+    const panels = filtretItems.map((c, i) => this.buildPanel(c, i, panelSize.w, panelSize.h));
 
     return { totalW, totalH, panels };
   });
 
   private buildPanel(c: ConstellationLine, i: number, PANEL_W: number, PANEL_H: number): ConstellationPanelVM {
-    const col = i % this.COLS;
-    const row = Math.floor(i / this.COLS);
+    const { padding, gap, columns } = this.projectionSettingsSig();
+    const col = i % columns;
+    const row = Math.floor(i / columns);
 
-    const x0 = col * (PANEL_W + this.GAP);
-    const y0 = row * (PANEL_H + this.GAP);
+    const x0 = col * (PANEL_W + gap);
+    const y0 = row * (PANEL_H + gap);
 
     const id = `panel-${c.constelationId}`;
     const clipId = `clip-${id}`;
@@ -92,8 +78,8 @@ export class ConstellationPanelsLayoutService {
       };
     }
 
-    const innerW = PANEL_W - 2 * this.PAD;
-    const innerH = PANEL_H - 2 * this.PAD;
+    const innerW = PANEL_W - 2 * padding;
+    const innerH = PANEL_H - 2 * padding;
 
     const w0 = g.bbox.maxX - g.bbox.minX;
     const h0 = g.bbox.maxY - g.bbox.minY;
@@ -111,19 +97,17 @@ export class ConstellationPanelsLayoutService {
     const dy = (innerH - scaledH) / 2;
 
     const transform = [
-      `translate(${x0 + this.PAD + dx},${y0 + this.PAD + dy})`,
+      `translate(${x0 + padding + dx},${y0 + padding + dy})`,
       `scale(${s})`,
       `translate(${-g.bbox.minX},${-g.bbox.minY})`,
     ].join(' ');
 
     // gwiazdy
 
-    
     const { symbols: settings } = this.starSettingsSig();
-    let stars: RenderPanelStar[] = []
-    if(settings.visible){
-
-       stars = this.panelStars.buildPanelStars({
+    let stars: RenderPanelStar[] = [];
+    if (settings.visible) {
+      stars = this.panelStars.buildPanelStars({
         stars: [],
         raCenter: g.raCenter,
         bbox: g.bbox,
@@ -132,7 +116,7 @@ export class ConstellationPanelsLayoutService {
         panelY0: y0,
         panelW: PANEL_W,
         panelH: PANEL_H,
-        pad: this.PAD,
+        pad: padding,
         dxCenter: dx,
         dyCenter: dy,
         maxMag: this.MAX_MAG,

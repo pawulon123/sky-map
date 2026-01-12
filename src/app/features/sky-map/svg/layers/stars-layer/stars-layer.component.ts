@@ -16,11 +16,10 @@ import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.co
 })
 export class StarsLayerComponent {
   private starSynbolService = inject(StarSymbolService);
- 
+
   showLabels = input<boolean>(true);
 
   readonly starSynbols = this.starSynbolService.starSynbols;
-
 
   trackByStar(index: number, rs: RenderStar): number {
     return index;
