@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { map, Subscription, tap } from 'rxjs';
+import { distinctUntilChanged, map, Subscription, tap } from 'rxjs';
 
 import { MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -61,16 +61,26 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
     this.sendSvg();
     this.sendProjectionProps();
   }
-  sendProjectionProps() {
-    this.stateProjectionSub = this.projectionSettings$
-      .pipe(
-        tap(({ mode }) => (this.mode = mode)),
-        map(coputedWidthHeight)
-      )
-      .subscribe(({ width, height }) => {
-        this.dataFromSvg.emit({ width, height });
-      });
-  }
+
+
+sendProjectionProps() {
+  this.stateProjectionSub = this.projectionSettings$.pipe(
+    map(s => {
+      const { width, height } = coputedWidthHeight(s);
+      return { mode: s.mode, width, height };
+    }),
+    distinctUntilChanged((a, b) =>
+      a.mode === b.mode &&
+      a.width === b.width &&
+      a.height === b.height
+    )
+  )
+  .subscribe(({ mode, width, height }) => {
+    this.mode = mode; // aktualizuj tylko gdy faktycznie się zmieniło
+    this.dataFromSvg.emit({ width, height });
+  });
+}
+
   sendSvg() {
     this.state.setRefSvg(this.svg);
     this.svgRef.emit(this.state.svgRef);
