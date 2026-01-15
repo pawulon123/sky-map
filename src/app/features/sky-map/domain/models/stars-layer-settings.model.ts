@@ -91,4 +91,3 @@ export interface RenderStar {
   hasFill: boolean;
 }
 export type LabelPlacementWithLines = LabelPlacement & { lines: string[] };
-

@@ -15,7 +15,6 @@
         [attr.paint-order]="'stroke'"
       >
         <ng-container *ngFor="let line of label.lines; let i = index">
-
           <svg:tspan [attr.x]="label.x" [attr.dy]="i === 0 ? 0 : settings.labels.fontSize * 1.1">
             {{ line }}
           </svg:tspan>

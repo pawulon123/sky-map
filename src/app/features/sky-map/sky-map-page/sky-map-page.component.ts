@@ -62,24 +62,20 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
     this.sendProjectionProps();
   }
 
-
-sendProjectionProps() {
-  this.stateProjectionSub = this.projectionSettings$.pipe(
-    map(s => {
-      const { width, height } = coputedWidthHeight(s);
-      return { mode: s.mode, width, height };
-    }),
-    distinctUntilChanged((a, b) =>
-      a.mode === b.mode &&
-      a.width === b.width &&
-      a.height === b.height
-    )
-  )
-  .subscribe(({ mode, width, height }) => {
-    this.mode = mode; 
-    this.dataFromSvg.emit({ width, height });
-  });
-}
+  sendProjectionProps() {
+    this.stateProjectionSub = this.projectionSettings$
+      .pipe(
+        map((s) => {
+          const { width, height } = coputedWidthHeight(s);
+          return { mode: s.mode, width, height };
+        }),
+        distinctUntilChanged((a, b) => a.mode === b.mode && a.width === b.width && a.height === b.height)
+      )
+      .subscribe(({ mode, width, height }) => {
+        this.mode = mode;
+        this.dataFromSvg.emit({ width, height });
+      });
+  }
 
   sendSvg() {
     this.state.setRefSvg(this.svg);

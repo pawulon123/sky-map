@@ -8,6 +8,9 @@ import { defaultStarsSettings } from '../../domain/default/stars';
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
 import { SelectedIdService } from '../../domain/services/sky-map-state/allowed-ids-policy.service';
 import { defaultProjectionSettings } from '../../domain/default/projection';
+import { constellationLineDefaultSettings } from '../../domain/default/constellation-line';
+import { ConstellationLineSettings } from '../../domain/models/constellation-line.model';
+import { makeShortenedSegmentPathsXY } from './sky-panel-projection.util';
 
 @Injectable({ providedIn: 'root' })
 export class ConstellationPanelsLayoutService {
@@ -24,6 +27,11 @@ export class ConstellationPanelsLayoutService {
   });
   private readonly projectionSettingsSig = toSignal(this.state.projectionSettings$, {
     initialValue: defaultProjectionSettings,
+  });
+  private readonly lineSettingsSig = toSignal(this.state.constellationLineSettings$, {
+    initialValue: {
+      nodeGap: constellationLineDefaultSettings.nodeGap,
+    } as ConstellationLineSettings,
   });
 
   readonly layout = computed<ConstellationPanelsLayoutVM>(() => {
@@ -49,6 +57,10 @@ export class ConstellationPanelsLayoutService {
 
   private buildPanel(c: ConstellationLine, i: number, PANEL_W: number, PANEL_H: number): ConstellationPanelVM {
     const { padding, gap, columns } = this.projectionSettingsSig();
+
+    const nodeGap = this.lineSettingsSig().nodeGap ?? 0;
+    const nGap = Math.max(0, nodeGap);
+
     const col = i % columns;
     const row = Math.floor(i / columns);
 
@@ -96,6 +108,9 @@ export class ConstellationPanelsLayoutService {
     const dx = (innerW - scaledW) / 2;
     const dy = (innerH - scaledH) / 2;
 
+    const gapModel = s > 0 ? nGap / s : 0;
+    const paths = makeShortenedSegmentPathsXY(g.segsXY, gapModel);
+
     const transform = [
       `translate(${x0 + padding + dx},${y0 + padding + dy})`,
       `scale(${s})`,
@@ -136,7 +151,7 @@ export class ConstellationPanelsLayoutService {
       h: PANEL_H,
       clipId,
       transform,
-      paths: g.paths,
+      paths,
       label,
       stars,
     };

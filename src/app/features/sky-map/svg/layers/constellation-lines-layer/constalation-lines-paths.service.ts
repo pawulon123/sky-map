@@ -7,6 +7,7 @@ import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-m
 import { ConstellationLineSettings } from '../../../domain/models/constellation-line.model';
 import { constellationLineDefaultSettings } from '../../../domain/default/constellation-line';
 import { SelectedIdService } from '../../../domain/services/sky-map-state/allowed-ids-policy.service';
+import { shortenedSegmentPaths } from '../../../common/path.helper';
 
 type RaDec = [number, number];
 type LonDec = [number, number];
@@ -51,34 +52,7 @@ export class ConstalationLinesPathsService {
 
     const xy: XY[] = pts.map(([lon, dec]) => this.proj.getProjectionByLonLat(lon, dec) as XY);
 
-    const result: string[] = [];
-
-    for (let i = 0; i < xy.length - 1; i++) {
-      const [x1, y1] = xy[i];
-      const [x2, y2] = xy[i + 1];
-
-      const dx = x2 - x1;
-      const dy = y2 - y1;
-      const len = Math.hypot(dx, dy);
-
-      if (len === 0) continue;
-
-      const shrink = Math.min(gap, len / 2);
-
-      if (len <= 2 * shrink) continue;
-
-      const ux = dx / len;
-      const uy = dy / len;
-
-      const sx1 = x1 + ux * shrink;
-      const sy1 = y1 + uy * shrink;
-      const sx2 = x2 - ux * shrink;
-      const sy2 = y2 - uy * shrink;
-
-      result.push(`M${sx1},${sy1} L${sx2},${sy2}`);
-    }
-
-    return result;
+    return shortenedSegmentPaths(xy, gap);
   }
 
   private splitByDateline(n: ProjectionName, seg: RaDec[]): LonDec[][] {
