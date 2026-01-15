@@ -4,6 +4,7 @@ import { ProjectionService } from '../../domain/services/projection/projection.s
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { PX_TO_MM } from '../../../../core/default/px-mm.convert';
 
 @Component({
   selector: 'app-panels-projection-controls',
@@ -14,10 +15,10 @@ import { MatInputModule } from '@angular/material/input';
 export class PanelsProjectionControlsComponent {
   private projectionSv = inject(ProjectionService);
   settings = this.projectionSv.settings();
+  // pxToMm = PX_TO_MM
 
   updatePanelSize(key: string, value: number) {
     const size = this.projectionSv.settings().panelSize;
-
     this.projectionSv.setSettings({ panelSize: { ...size, [key]: value } });
   }
   update(key: string, value: number) {

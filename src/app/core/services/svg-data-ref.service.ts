@@ -39,16 +39,6 @@ export class SvgDataService {
     return this.svgNativeEl;
   }
 
-  // resize() {
-  //   this.resizeViewBox();
-  //   this.resizeWidthHeight(this.svgData);
-  // }
-
-  // private resizeWidthHeight({ width: w, height: h }: SvgData) {
-  //   this.setHeight(`${h}`);
-  //   this.setWidth(`${w}`);
-  // }
-
   resizeViewBox({ width: w, height: h } = this.svgData) {
     this.setViewBox(`0 0 ${w} ${h}`);
     this.viewBox = { x: 0, y: 0, w, h };

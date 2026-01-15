@@ -2,10 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { StarsService } from '../../domain/services/stars/stars.service';
 import { Star } from '../../domain/models/star.model';
 import { BBox, PanelStarShape, PanelStarSymbolSettings, RenderPanelStar } from '../../domain/models/panels.model';
-
 import { raAlign, wrapDeltaRa } from './sky-panel-projection.util';
-import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
-import { StarsSymbolsSettings } from '../../domain/models/stars-layer-settings.model';
 import { defaultStarsSettings } from '../../domain/default/stars';
 import { createRadius, getPropBaseRadius } from '../../common/star-symbol-helper';
 

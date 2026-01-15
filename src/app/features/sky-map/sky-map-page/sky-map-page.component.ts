@@ -10,7 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { map, Subscription, tap } from 'rxjs';
 
 import { MatSidenavContainer, MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,6 +23,8 @@ import { PanelsConstellationComponent } from '../svg/panels-constalation/panels-
 import { ModeProjection } from '../domain/models/projection-options.model';
 import { defaultProjectionSettings } from '../domain/default/projection';
 import { SvgTooltipRootDirective } from '../../../core/tooltip/tooltip.directive';
+import { ConstellationPanelsLayoutService } from '../svg/panels-constalation/constellation-panels-layout.service';
+import { coputedWidthHeight } from './coputed-width-height';
 
 @Component({
   selector: 'app-sky-map-page',
@@ -46,7 +48,6 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
 
   readonly state = inject(SkyMapStateService);
   readonly projectionSettings$ = this.state.projectionSettings$;
-
   isMenuOpen = false;
   @ViewChild('svg', { static: false }) svg!: ElementRef<SVGSVGElement>;
   @Output() dataFromSvg = new EventEmitter<SvgData>();
@@ -57,13 +58,22 @@ export class SkyMapPageComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.sendSvg();
+    this.sendProjectionProps();
+  }
+  sendProjectionProps() {
+    this.stateProjectionSub = this.projectionSettings$
+      .pipe(
+        tap(({ mode }) => (this.mode = mode)),
+        map(coputedWidthHeight)
+      )
+      .subscribe(({ width, height }) => {
+        this.dataFromSvg.emit({ width, height });
+      });
+  }
+  sendSvg() {
     this.state.setRefSvg(this.svg);
     this.svgRef.emit(this.state.svgRef);
-    this.stateProjectionSub = this.projectionSettings$.subscribe(({ width, height, mode }) => {
-      console.log(width, height);
-      this.dataFromSvg.emit({ width, height });
-      this.mode = mode;
-    });
   }
 
   openMenu() {

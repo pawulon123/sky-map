@@ -1,9 +1,9 @@
+import { PX_TO_MM } from '../../../../../core/default/px-mm.convert';
 import { boundaryDefaultSettings } from '../../../domain/default/boundary';
 import { Boundary, BoundaryLanguage } from '../../../domain/models/boundary.model';
 import { createBoundaryName } from './create-boundary-name';
 
 export const getComputedBoundary = (boundary: Boundary, pathD: string, language: BoundaryLanguage) => {
-  const PX_TO_MM = 0.2645833;
   const bbox = computePathBoundingBox(pathD);
 
   const widthMm = bbox.width * PX_TO_MM;
