@@ -76,7 +76,7 @@ sendProjectionProps() {
     )
   )
   .subscribe(({ mode, width, height }) => {
-    this.mode = mode; // aktualizuj tylko gdy faktycznie się zmieniło
+    this.mode = mode; 
     this.dataFromSvg.emit({ width, height });
   });
 }
