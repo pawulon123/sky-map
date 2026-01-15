@@ -90,5 +90,5 @@ export interface RenderStar {
   strokeOpacity: number;
   hasFill: boolean;
 }
-export type LabelVM = LabelPlacement & { lines: string[] };
-export type Vm = { settings: StarsLayerSettings; labels: LabelVM[] };
+export type LabelPlacementWithLines = LabelPlacement & { lines: string[] };
+

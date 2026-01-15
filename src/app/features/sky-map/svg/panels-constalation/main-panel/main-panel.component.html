@@ -2,13 +2,13 @@
   <ng-container *ngIf="constellationLineSettings$ | async as settings">
     <ng-container *ngIf="settings.visible">
       <!-- defs raz -->
-      <defs>
+      <!-- <defs>
         <ng-container *ngFor="let p of layout().panels">
-          <!-- <clipPath [attr.id]="p.clipId">
+          <clipPath [attr.id]="p.clipId">
             <rect [attr.x]="p.x" [attr.y]="p.y" [attr.width]="p.w" [attr.height]="p.h"></rect>
-          </clipPath> -->
+          </clipPath>
         </ng-container>
-      </defs>
+      </defs> -->
 
       <ng-container *ngFor="let p of layout().panels">
         <!-- ramka panelu -->
@@ -37,6 +37,11 @@
 
         <ng-container *ngFor="let s of p.stars">
           <g app-shapes-star [star]="s"></g>
+
+          
+
+
+
         </ng-container>
       </ng-container>
     </ng-container>

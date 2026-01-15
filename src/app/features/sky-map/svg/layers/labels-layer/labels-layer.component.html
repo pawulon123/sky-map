@@ -1,21 +1,22 @@
-<ng-container *ngIf="vm$ | async as vm">
-  <ng-container *ngIf="vm.settings.labels.visible">
-    <ng-container *ngFor="let label of vm.labels; trackBy: trackByLabel">
+<ng-container *ngIf="starsSettings$ | async as settings">
+  <ng-container *ngIf="settings.labels.visible">
+    <ng-container *ngFor="let label of computeLabelLayout()">
       <svg:text
         class="star-label"
         [attr.x]="label.x"
         [attr.y]="label.y"
-        [style.fontSize.px]="vm.settings.labels.fontSize"
-        [style.font-weight]="vm.settings.labels.fontWeight"
-        [style.font-family]="vm.settings.labels.fontFamily"
-        [attr.stroke]="vm.settings.labels.stroke"
-        [attr.stroke-width]="vm.settings.labels.strokeWidth"
-        [attr.stroke-opacity]="vm.settings.labels.strokeOpacity"
-        [style.letter-spacing.px]="vm.settings.labels.letterSpacing"
+        [style.fontSize.px]="settings.labels.fontSize"
+        [style.font-weight]="settings.labels.fontWeight"
+        [style.font-family]="settings.labels.fontFamily"
+        [attr.stroke]="settings.labels.stroke"
+        [attr.stroke-width]="settings.labels.strokeWidth"
+        [attr.stroke-opacity]="settings.labels.strokeOpacity"
+        [style.letter-spacing.px]="settings.labels.letterSpacing"
         [attr.paint-order]="'stroke'"
       >
         <ng-container *ngFor="let line of label.lines; let i = index">
-          <svg:tspan [attr.x]="label.x" [attr.dy]="i === 0 ? 0 : vm.settings.labels.fontSize * 1.1">
+
+          <svg:tspan [attr.x]="label.x" [attr.dy]="i === 0 ? 0 : settings.labels.fontSize * 1.1">
             {{ line }}
           </svg:tspan>
         </ng-container>
