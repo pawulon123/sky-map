@@ -1,18 +1,25 @@
 <svg:g id="layer-constellation-panels">
   <ng-container *ngIf="constellationLineSettings$ | async as settings">
     <ng-container *ngIf="settings.visible">
-      <!-- defs raz -->
-      <!-- <defs>
+
+      <!-- defs raz (SVG namespace) -->
+      <svg:defs>
         <ng-container *ngFor="let p of layout().panels">
-          <clipPath [attr.id]="p.clipId">
-            <rect [attr.x]="p.x" [attr.y]="p.y" [attr.width]="p.w" [attr.height]="p.h"></rect>
-          </clipPath>
+          <svg:clipPath [attr.id]="p.clipId" clipPathUnits="userSpaceOnUse">
+            <svg:rect
+              [attr.x]="p.x"
+              [attr.y]="p.y"
+              [attr.width]="p.w"
+              [attr.height]="p.h"
+            ></svg:rect>
+          </svg:clipPath>
         </ng-container>
-      </defs> -->
+      </svg:defs>
 
       <ng-container *ngFor="let p of layout().panels">
+
         <!-- ramka panelu -->
-        <rect
+        <svg:rect
           [attr.x]="p.x"
           [attr.y]="p.y"
           [attr.width]="p.w"
@@ -21,24 +28,42 @@
           stroke="#000000"
           stroke-opacity="0.20"
           stroke-width="1"
-        ></rect>
+        ></svg:rect>
 
-        <!-- etykieta -->
-        <text *ngIf="p.label" [attr.x]="p.label.x" [attr.y]="p.label.y" font-size="12" fill="#000000" opacity="0.6">
+        <!-- etykieta panelu -->
+        <svg:text
+          *ngIf="p.label"
+          [attr.x]="p.label.x"
+          [attr.y]="p.label.y"
+          font-size="12"
+          fill="#000000"
+          opacity="0.6"
+        >
           {{ p.label.text }}
-        </text>
+        </svg:text>
 
-        <!-- konstelacja w panelu -->
-        <g [attr.clip-path]="'url(#' + p.clipId + ')'" [attr.transform]="p.transform">
-          <ng-container *ngFor="let d of p.paths">
-            <g app-svg-path [points]="d" [settings]="settings"></g>
+        <!-- CLIP NA ZEWNĘTRZNYM G (bez transform) -->
+        <svg:g [attr.clip-path]="'url(#' + p.clipId + ')'">
+
+          <!-- konstelacja: transform tylko tutaj -->
+          <svg:g [attr.transform]="p.transform">
+            <ng-container *ngFor="let d of p.paths">
+              <svg:g app-svg-path [points]="d" [settings]="settings"></svg:g>
+            </ng-container>
+          </svg:g>
+
+          <!-- gwiazdy: jeśli p.stars są w globalnych x/y, to rysuj bez transform -->
+          <ng-container *ngFor="let s of p.stars">
+            <svg:g app-shapes-star [star]="s"></svg:g>
           </ng-container>
-        </g>
 
-        <ng-container *ngFor="let s of p.stars">
-          <g app-shapes-star [star]="s"></g>
-        </ng-container>
+          <!-- etykiety gwiazd: też globalnie, ale clipowane -->
+          <!-- (jeśli masz warstwę etykiet) -->
+          <!-- <svg:g app-constellation-panels-labels-layer [panel]="p"></svg:g> -->
+
+        </svg:g>
       </ng-container>
+
     </ng-container>
   </ng-container>
 </svg:g>
