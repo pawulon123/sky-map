@@ -27,8 +27,6 @@ export class ConstellationGeometryService {
     const segsXY: XY[][] = (c.segments ?? [])
       .map((seg) =>
         seg.map(([ra, dec]) => {
-          // uwaga: w liniach nie było raAlign w Twoim kodzie – zachowuję Twoją logikę:
-          // dx = wrapDeltaRa(ra, center), dy = -dec
           const dx = wrapDeltaRa(ra, raCenter);
           const dy = -dec;
           return [dx, dy] as XY;
@@ -40,6 +38,11 @@ export class ConstellationGeometryService {
     const paths = segsXY.map(segmentToPath);
 
     return { raCenter, segsXY, bbox, paths };
+  }
+
+  isCallMakeSens() {
+    const items = this.sortedConstellations();
+    return this.loaded() || items.length ? items : [];
   }
 
   /** Export helper dla gwiazd (żeby były spójne z lonToRa) */

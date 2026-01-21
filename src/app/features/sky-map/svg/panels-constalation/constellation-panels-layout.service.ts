@@ -3,13 +3,8 @@ import { ConstellationLine } from '../../domain/services/constellation-lines/con
 import { ConstellationGeometryService } from './constellation-geometry.service';
 import { PanelStarsService } from './panel-stars.service';
 import { ConstellationPanelsLayoutVM, ConstellationPanelVM, RenderPanelStar } from '../../domain/models/panels.model';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { defaultStarsSettings } from '../../domain/default/stars';
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
 import { SelectedIdService } from '../../domain/services/sky-map-state/allowed-ids-policy.service';
-import { defaultProjectionSettings } from '../../domain/default/projection';
-import { constellationLineDefaultSettings } from '../../domain/default/constellation-line';
-import { ConstellationLineSettings } from '../../domain/models/constellation-line.model';
 import { makeShortenedSegmentPathsXY } from './sky-panel-projection.util';
 
 @Injectable({ providedIn: 'root' })
@@ -22,31 +17,19 @@ export class ConstellationPanelsLayoutService {
 
   private readonly MAX_MAG = 6.5;
 
-  private readonly starSettingsSig = toSignal(this.state.starsLayerSettings$, {
-    initialValue: defaultStarsSettings,
-  });
-  private readonly projectionSettingsSig = toSignal(this.state.projectionSettings$, {
-    initialValue: defaultProjectionSettings,
-  });
-  private readonly lineSettingsSig = toSignal(this.state.constellationLineSettings$, {
-    initialValue: {
-      nodeGap: constellationLineDefaultSettings.nodeGap,
-    } as ConstellationLineSettings,
-  });
+  starSettongsSig = this.state.starSettingsSig();
+  projectionSettongsSig = this.state.projectionSettingsSig();
+  constalationLinesSettongsSig = this.state.constalationLinesSettingsSig();
 
   readonly layout = computed<ConstellationPanelsLayoutVM>(() => {
-    const loaded = this.geom.loaded();
-    const items = this.geom.sortedConstellations();
+    const items = this.geom.isCallMakeSens();
     const filtretItems = this.selectedId.filter(items);
+    const { gap, panelSize, columns } = this.projectionSettongsSig();
 
-    const { gap, panelSize, columns } = this.projectionSettingsSig();
-
-    if (!loaded || filtretItems.length === 0) {
+    if (items.length === 0 || filtretItems.length === 0) {
       return { totalW: panelSize.w, totalH: panelSize.h, panels: [] };
     }
-
     const rows = Math.ceil(filtretItems.length / columns);
-
     const totalW = columns * panelSize.w + (columns - 1) * gap;
     const totalH = rows * panelSize.h + (rows - 1) * gap;
 
@@ -56,9 +39,9 @@ export class ConstellationPanelsLayoutService {
   });
 
   private buildPanel(c: ConstellationLine, i: number, PANEL_W: number, PANEL_H: number): ConstellationPanelVM {
-    const { padding, gap, columns } = this.projectionSettingsSig();
+    const { padding, gap, columns } = this.projectionSettongsSig();
 
-    const nodeGap = this.lineSettingsSig().nodeGap ?? 0;
+    const nodeGap = this.constalationLinesSettongsSig().nodeGap ?? 0;
     const nGap = Math.max(0, nodeGap);
 
     const col = i % columns;
@@ -119,7 +102,7 @@ export class ConstellationPanelsLayoutService {
 
     // gwiazdy
 
-    const { symbols: settings } = this.starSettingsSig();
+    const { symbols: settings } = this.starSettongsSig();
     let stars: RenderPanelStar[] = [];
     if (settings.visible) {
       stars = this.panelStars.buildPanelStars({

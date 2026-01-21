@@ -16,6 +16,7 @@ import { updateEndNext } from '../../../../../core/utils/update-end-next';
 import { BoundaryLayerSettings } from '../../models/boundary.model';
 import { RenderSettings } from '../../models/render.model';
 import { renderDefaultSettings } from '../../default/render-default';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -102,5 +103,16 @@ export class SkyMapStateService {
   }
   getConstalationLinesSettings(): ConstellationLineSettings {
     return this.constellationLineSettingsSubject.getValue();
+  }
+
+  starSettingsSig() {
+    return toSignal(this.starsLayerSettings$, { initialValue: defaultStarsSettings });
+  }
+
+  projectionSettingsSig() {
+    return toSignal(this.projectionSettings$, { initialValue: defaultProjectionSettings });
+  }
+  constalationLinesSettingsSig() {
+    return toSignal(this.constellationLineSettings$, { initialValue: constellationLineDefaultSettings });
   }
 }
