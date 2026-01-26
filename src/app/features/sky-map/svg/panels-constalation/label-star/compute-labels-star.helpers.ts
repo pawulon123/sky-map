@@ -1,6 +1,5 @@
-import { Star } from "../../../domain/models/star.model";
-import { PanelLabelPlacement, PanelLabelBox, PanelLeaderLine } from "./label-star.model";
-
+import { Star } from '../../../domain/models/star.model';
+import { PanelLabelPlacement, PanelLabelBox, PanelLeaderLine } from './label-star.model';
 
 export interface PanelLabelSettings {
   visible: boolean;
@@ -133,7 +132,7 @@ function tryPlaceLabelForPoint(args: {
     }
 
     const leader = args.leaderLines ? buildLeaderLine(p.x, p.y, box) : undefined;
-    const leaderPointsAttr = leader ? leader.points.map(([x,y]) => `${x},${y}`).join(' ') : undefined;
+    const leaderPointsAttr = leader ? leader.points.map(([x, y]) => `${x},${y}`).join(' ') : undefined;
     return {
       panelId: p.panelId,
       star: p.star,
@@ -152,14 +151,14 @@ function tryPlaceLabelForPoint(args: {
 function buildCandidatePositions(x: number, y: number, d: number, w: number, h: number) {
   // preferencje: NE, NW, SE, SW + warianty „bliżej osi”
   return [
-    { x: x + d, y: y - h / 2 },         // E
-    { x: x - d - w, y: y - h / 2 },     // W
-    { x: x - w / 2, y: y - d - h },     // N
-    { x: x - w / 2, y: y + d },         // S
-    { x: x + d, y: y - d - h },         // NE
-    { x: x - d - w, y: y - d - h },     // NW
-    { x: x + d, y: y + d },             // SE
-    { x: x - d - w, y: y + d },         // SW
+    { x: x + d, y: y - h / 2 }, // E
+    { x: x - d - w, y: y - h / 2 }, // W
+    { x: x - w / 2, y: y - d - h }, // N
+    { x: x - w / 2, y: y + d }, // S
+    { x: x + d, y: y - d - h }, // NE
+    { x: x - d - w, y: y - d - h }, // NW
+    { x: x + d, y: y + d }, // SE
+    { x: x - d - w, y: y + d }, // SW
   ];
 }
 
@@ -174,7 +173,12 @@ function buildLeaderLine(starX: number, starY: number, box: PanelLabelBox): Pane
   // najbliższy punkt ramki do gwiazdy -> prosta łamana 2 pkt
   const cx = clamp(starX, box.x, box.x + box.w);
   const cy = clamp(starY, box.y, box.y + box.h);
-  return { points: [[starX, starY], [cx, cy]] };
+  return {
+    points: [
+      [starX, starY],
+      [cx, cy],
+    ],
+  };
 }
 
 function clamp(v: number, a: number, b: number) {
@@ -257,9 +261,9 @@ export function invertPanelTransform(transform: string): { apply: (x: number, y:
  * Parsuje string w formie:
  * "translate(a,b) scale(s) translate(c,d)"
  */
-function parsePanelTransform(transform: string):
-  | { t1x: number; t1y: number; s: number; t2x: number; t2y: number }
-  | null {
+function parsePanelTransform(
+  transform: string
+): { t1x: number; t1y: number; s: number; t2x: number; t2y: number } | null {
   // bardzo “celowany” regex pod Twój format
   const re =
     /translate\(\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\)\s*scale\(\s*([-\d.]+)\s*\)\s*translate\(\s*([-\d.]+)\s*,\s*([-\d.]+)\s*\)/;

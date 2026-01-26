@@ -1,12 +1,11 @@
-import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, inject } from "@angular/core";
-import { Star } from "../../../domain/models/star.model";
-import { SkyMapStateService } from "../../../domain/services/sky-map-state/sky-map-state.service";
-import { buildLabelLines, firstLine } from "../../layers/labels-layer/name-or-bayer";
-import { ConstellationPanelLabelsService } from "./constellation-panel-labels.service";
-import { PanelLabelPlacement } from "./label-star.model";
-import { ConstellationPanelVM } from "../../../domain/models/panels.model";
-
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, inject } from '@angular/core';
+import { Star } from '../../../domain/models/star.model';
+import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
+import { buildLabelLines, firstLine } from '../../layers/labels-layer/name-or-bayer';
+import { ConstellationPanelLabelsService } from './constellation-panel-labels.service';
+import { PanelLabelPlacement } from './label-star.model';
+import { ConstellationPanelVM } from '../../../domain/models/panels.model';
 
 @Component({
   selector: 'g[app-constellation-panels-labels-layer]',
@@ -19,7 +18,7 @@ export class ConstellationPanelsLabelsLayerComponent implements OnInit {
   private state = inject(SkyMapStateService);
 
   private labelLinesFn!: (star: Star) => string[];
-@Input({ required: true }) panel!: ConstellationPanelVM;
+  @Input({ required: true }) panel!: ConstellationPanelVM;
   ngOnInit(): void {
     const getLabelsSetting = () => this.state.getStarSettings().labels;
     this.labelLinesFn = buildLabelLines(firstLine)(getLabelsSetting);
@@ -40,6 +39,6 @@ export class ConstellationPanelsLabelsLayerComponent implements OnInit {
     // const cached = this.getCache();
     // return this.svc.computePanelLabels(cached);
     const cached = this.getCache();
-    return this.svc.computePanelLabelsForPanel(this.panel, cached,'panel');
+    return this.svc.computePanelLabelsForPanel(this.panel, cached, 'panel');
   }
 }

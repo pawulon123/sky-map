@@ -1,12 +1,16 @@
-import { Injectable, inject } from "@angular/core";
-import { Star } from "../../../domain/models/star.model";
-import { SelectedIdService } from "../../../domain/services/sky-map-state/allowed-ids-policy.service";
-import { SkyMapStateService } from "../../../domain/services/sky-map-state/sky-map-state.service";
-import { ConstellationPanelsLayoutService } from "../constellation-panels-layout.service";
-import { PanelStarPoint, computePanelLabelLayoutEngine, PanelLabelSettings, invertPanelTransform } from "./compute-labels-star.helpers";
-import { PanelLabelPlacement } from "./label-star.model";
-import { ConstellationPanelVM } from "../../../domain/models/panels.model";
-
+import { Injectable, inject } from '@angular/core';
+import { Star } from '../../../domain/models/star.model';
+import { SelectedIdService } from '../../../domain/services/sky-map-state/allowed-ids-policy.service';
+import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
+import { ConstellationPanelsLayoutService } from '../constellation-panels-layout.service';
+import {
+  PanelStarPoint,
+  computePanelLabelLayoutEngine,
+  PanelLabelSettings,
+  invertPanelTransform,
+} from './compute-labels-star.helpers';
+import { PanelLabelPlacement } from './label-star.model';
+import { ConstellationPanelVM } from '../../../domain/models/panels.model';
 
 @Injectable({ providedIn: 'root' })
 export class ConstellationPanelLabelsService {
@@ -54,8 +58,7 @@ export class ConstellationPanelLabelsService {
     });
   }
 
-  
- computePanelLabelsForPanel(
+  computePanelLabelsForPanel(
     panel: ConstellationPanelVM,
     getLabelLines: (s: Star) => string[],
     coordinateSpace: 'global' | 'panel' = 'global'
@@ -106,10 +109,10 @@ export class ConstellationPanelLabelsService {
       magnitudeRange: s.magnitudeRange,
       fontSize: s.fontSize ?? 10,
       letterSpacing: s.letterSpacing ?? 0,
-      lineHeight: s.lineHeight,      // jeśli masz
+      lineHeight: s.lineHeight, // jeśli masz
       offsetPx: s.offsetPx ?? 4,
       paddingPx: 2,
-      leaderLines: !!s.leaderLines,  // jeśli dodasz do stanu
+      leaderLines: !!s.leaderLines, // jeśli dodasz do stanu
     };
   }
 }

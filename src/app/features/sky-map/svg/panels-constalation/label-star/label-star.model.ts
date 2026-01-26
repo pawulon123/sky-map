@@ -1,5 +1,4 @@
-import { Star } from "../../../domain/models/star.model";
-
+import { Star } from '../../../domain/models/star.model';
 
 export interface PanelLabelBox {
   x: number;

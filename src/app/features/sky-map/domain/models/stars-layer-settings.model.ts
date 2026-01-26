@@ -33,9 +33,9 @@ export interface StarsLabelsSettings {
   strokeOpacity: number;
   fontFamily: string;
   letterSpacing: number;
-  colision: string[] | null;
+  colision: ColisinLabelStar[] | null;
 }
-
+export type ColisinLabelStar = 'boundaries' | 'star-symbol';
 export interface StarsLayerSettings {
   symbols: StarsSymbolsSettings;
   labels: StarsLabelsSettings;

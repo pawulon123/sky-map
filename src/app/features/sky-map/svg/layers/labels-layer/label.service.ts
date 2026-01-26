@@ -11,7 +11,7 @@ import { LabelsLayoutStrategy } from '../../panels-constalation/label-star/label
 @Injectable({
   providedIn: 'root',
 })
-export class LabelStarMapService implements LabelsLayoutStrategy{
+export class LabelStarMapService implements LabelsLayoutStrategy {
   private state = inject(SkyMapStateService);
   private starService = inject(StarsService);
   private selectedId = inject(SelectedIdService);
@@ -22,7 +22,6 @@ export class LabelStarMapService implements LabelsLayoutStrategy{
 
     const filteredStars: Star[] = this.selectedId.filter(stars);
     const collisionsEnabled = this.getDataForColision();
-
 
     return computeLabelLayoutEngine({
       settings,
@@ -36,9 +35,6 @@ export class LabelStarMapService implements LabelsLayoutStrategy{
   }
 
   private getStarsForLabels(): Star[] {
-    return this.starService
-      .data()
-      .stars.filter((s) => hasNameOrBayer(s))
-      // .filter((s) => projected(this.starService.projectedMap().get(Number(s.id))));
+    return this.starService.data().stars.filter((s) => hasNameOrBayer(s));
   }
 }

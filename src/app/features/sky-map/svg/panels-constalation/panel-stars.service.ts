@@ -7,7 +7,7 @@ import { defaultStarsSettings } from '../../domain/default/stars';
 import { createRadius, getPropBaseRadius } from '../../common/star-symbol-helper';
 
 export interface BuildPanelStarsArgs {
-  stars: Star[]; 
+  stars: Star[];
   raCenter: number;
   bbox: BBox;
   scale: number;
@@ -30,7 +30,7 @@ export class PanelStarsService {
   private rawStarsSig = signal<Star[]>([]);
 
   constructor() {
-         this.starsSvc.loadOnce(() => {}).catch((err) =>  console.error('Stars loadOnce failed', err) );
+    this.starsSvc.loadOnce(() => {}).catch((err) => console.error('Stars loadOnce failed', err));
 
     // Złap snapshot tylko raz, gdy dane będą gotowe
     effect(() => {

@@ -8,7 +8,6 @@ import { LabelPlacement } from '../../../domain/models/stars-layer-settings.mode
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { defaultProjectionSettings } from '../../../domain/default/projection';
 
-
 import { PanelsLabelsLayoutService } from './panels-labels-layout.service';
 import { LabelStarMapService } from '../../layers/labels-layer/label.service';
 
@@ -17,12 +16,11 @@ export class AdaptiveLabelsLayoutService {
   private state = inject(SkyMapStateService);
   private map = inject(LabelStarMapService);
   private panels = inject(PanelsLabelsLayoutService);
-//   private panels = inject(LabelStarMapService);
+  //   private panels = inject(LabelStarMapService);
 
-  private modeSig = toSignal(
-    this.state.projectionSettings$.pipe(map((s) => s.mode)),
-    { initialValue: defaultProjectionSettings.mode }
-  );
+  private modeSig = toSignal(this.state.projectionSettings$.pipe(map((s) => s.mode)), {
+    initialValue: defaultProjectionSettings.mode,
+  });
 
   computeLabelLayout(getLines: (star: Star) => string[]): LabelPlacement[] {
     const mode = this.modeSig();
