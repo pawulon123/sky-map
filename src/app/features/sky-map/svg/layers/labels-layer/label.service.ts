@@ -6,11 +6,12 @@ import { LabelPlacement } from '../../../domain/models/stars-layer-settings.mode
 import { hasNameOrBayer, projected } from './helpers';
 import { computeLabelLayoutEngine } from './compute-label-layou';
 import { SelectedIdService } from '../../../domain/services/sky-map-state/allowed-ids-policy.service';
+import { LabelsLayoutStrategy } from '../../panels-constalation/label-star/labels-layout-strategy';
 
 @Injectable({
   providedIn: 'root',
 })
-export class LabelService {
+export class LabelStarMapService implements LabelsLayoutStrategy{
   private state = inject(SkyMapStateService);
   private starService = inject(StarsService);
   private selectedId = inject(SelectedIdService);
@@ -21,6 +22,7 @@ export class LabelService {
 
     const filteredStars: Star[] = this.selectedId.filter(stars);
     const collisionsEnabled = this.getDataForColision();
+
 
     return computeLabelLayoutEngine({
       settings,
@@ -37,6 +39,6 @@ export class LabelService {
     return this.starService
       .data()
       .stars.filter((s) => hasNameOrBayer(s))
-      .filter((s) => projected(s));
+      // .filter((s) => projected(this.starService.projectedMap().get(Number(s.id))));
   }
 }

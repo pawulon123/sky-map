@@ -1,25 +1,21 @@
+
+
 <svg:g id="layer-constellation-panels">
   <ng-container *ngIf="constellationLineSettings$ | async as settings">
     <ng-container *ngIf="settings.visible">
+      <ng-container *ngIf="layout() as vm">
 
-      <!-- defs raz (SVG namespace) -->
-      <svg:defs>
-        <ng-container *ngFor="let p of layout().panels">
-          <svg:clipPath [attr.id]="p.clipId" clipPathUnits="userSpaceOnUse">
-            <svg:rect
-              [attr.x]="p.x"
-              [attr.y]="p.y"
-              [attr.width]="p.w"
-              [attr.height]="p.h"
-            ></svg:rect>
-          </svg:clipPath>
-        </ng-container>
-      </svg:defs>
+        <svg:defs>
+          <ng-container *ngFor="let p of vm.panels">
+            <svg:clipPath [attr.id]="p.clipId" clipPathUnits="userSpaceOnUse">
+              <svg:rect [attr.x]="p.x" [attr.y]="p.y" [attr.width]="p.w" [attr.height]="p.h"></svg:rect>
+            </svg:clipPath>
+          </ng-container>
+        </svg:defs>
 
-      <ng-container *ngFor="let p of layout().panels">
-
-        <!-- ramka panelu -->
-        <svg:rect
+        <ng-container *ngFor="let p of vm.panels">
+       
+  <svg:rect
           [attr.x]="p.x"
           [attr.y]="p.y"
           [attr.width]="p.w"
@@ -45,25 +41,26 @@
         <!-- CLIP NA ZEWNĘTRZNYM G (bez transform) -->
         <svg:g [attr.clip-path]="'url(#' + p.clipId + ')'">
 
-          <!-- konstelacja: transform tylko tutaj -->
           <svg:g [attr.transform]="p.transform">
             <ng-container *ngFor="let d of p.paths">
               <svg:g app-svg-path [points]="d" [settings]="settings"></svg:g>
             </ng-container>
           </svg:g>
 
-          <!-- gwiazdy: jeśli p.stars są w globalnych x/y, to rysuj bez transform -->
+        
           <ng-container *ngFor="let s of p.stars">
             <svg:g app-shapes-star [star]="s"></svg:g>
           </ng-container>
-
-          <!-- etykiety gwiazd: też globalnie, ale clipowane -->
-          <!-- (jeśli masz warstwę etykiet) -->
-          <!-- <svg:g app-constellation-panels-labels-layer [panel]="p"></svg:g> -->
-
+  
         </svg:g>
-      </ng-container>
+        <g app-labels-layer ></g>
 
+
+
+
+        </ng-container>
+
+      </ng-container>
     </ng-container>
   </ng-container>
 </svg:g>

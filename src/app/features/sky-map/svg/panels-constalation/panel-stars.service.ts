@@ -1,33 +1,24 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, effect, inject, signal } from '@angular/core';
 import { StarsService } from '../../domain/services/stars/stars.service';
 import { Star } from '../../domain/models/star.model';
-import { BBox, PanelStarShape, PanelStarSymbolSettings, RenderPanelStar } from '../../domain/models/panels.model';
+import { BBox, PanelStarSymbolSettings, RenderPanelStar } from '../../domain/models/panels.model';
 import { raAlign, wrapDeltaRa } from './sky-panel-projection.util';
 import { defaultStarsSettings } from '../../domain/default/stars';
 import { createRadius, getPropBaseRadius } from '../../common/star-symbol-helper';
 
 export interface BuildPanelStarsArgs {
-  stars: Star[];
+  stars: Star[]; 
   raCenter: number;
   bbox: BBox;
   scale: number;
-
-  // pozycja panelu w globalnym SVG
   panelX0: number;
   panelY0: number;
-
   panelW: number;
   panelH: number;
-
-  // offset dopasowania (tak jak w Twoim kodzie)
   pad: number;
   dxCenter: number;
   dyCenter: number;
-
-  // fallback jeśli settings.magMax nie podasz
   maxMag: number;
-
-  // NOWE: ustawienia symboli dla paneli (jak na mapie)
   settings?: PanelStarSymbolSettings;
 }
 
@@ -35,13 +26,27 @@ export interface BuildPanelStarsArgs {
 export class PanelStarsService {
   private starsSvc = inject(StarsService);
 
+  // SNAPSHOT gwiazd jako SIGNAL (żeby zależności w computed zadziałały)
+  private rawStarsSig = signal<Star[]>([]);
+
   constructor() {
-    void this.starsSvc.loadOnce(() => {}).catch((err) => console.error('Stars loadOnce failed', err));
+         this.starsSvc.loadOnce(() => {}).catch((err) =>  console.error('Stars loadOnce failed', err) );
+
+    // Złap snapshot tylko raz, gdy dane będą gotowe
+    effect(() => {
+      const loaded = this.starsSvc.loaded();
+      if (!loaded) return;
+
+      // jeśli już mamy snapshot, nie nadpisuj (ignoruj np. updateProjection)
+      if (this.rawStarsSig().length > 0) return;
+
+      const stars = this.starsSvc.data().stars ?? [];
+      this.rawStarsSig.set(stars);
+    });
   }
 
-  /** Snapshot gwiazd */
-  private getAllStars(): Star[] {
-    return this.starsSvc.data().stars ?? [];
+  getAllStars(): Star[] {
+    return this.rawStarsSig();
   }
 
   buildPanelStars(args: BuildPanelStarsArgs): RenderPanelStar[] {
@@ -59,8 +64,7 @@ export class PanelStarsService {
       maxMag,
     } = args;
 
-    const settings = { ...defaultStarsSettings.symbols, ...(args.settings ?? {}) };
-    const sym = settings;
+    const sym = { ...defaultStarsSettings.symbols, ...(args.settings ?? {}) };
 
     const offX = pad + dxCenter;
     const offY = pad + dyCenter;
@@ -69,6 +73,8 @@ export class PanelStarsService {
 
     const result: RenderPanelStar[] = [];
 
+    // UWAGA: teraz to jest sygnał -> jeśli było [] na starcie,
+    // layout przeliczy się ponownie po rawStarsSig.set(...)
     for (const st of this.getAllStars()) {
       const ra = st.ra_deg;
       const dec = st.dec;
@@ -78,18 +84,13 @@ export class PanelStarsService {
       if (!Number.isFinite(ra) || !Number.isFinite(dec)) continue;
       if (mag != null && Number.isFinite(mag) && mag > magLimit) continue;
 
-      // spójne z lonToRa
       const raFixed = raAlign(ra);
-
-      // lokalny układ jak dla linii: x=ΔRA, y=-Dec
       const lx = wrapDeltaRa(raFixed, raCenter);
       const ly = -dec;
 
-      // mapowanie do panelu
       const px = (lx - bbox.minX) * s + offX;
       const py = (ly - bbox.minY) * s + offY;
 
-      // filtr: tylko to, co mieści się w panelu
       if (px < 0 || py < 0 || px > panelW || py > panelH) continue;
 
       const r = createRadius(st, sym);
@@ -104,7 +105,6 @@ export class PanelStarsService {
         r,
         polygonPoints: '',
         customTransform: '',
-
         ...propsBaseRadis,
       });
     }

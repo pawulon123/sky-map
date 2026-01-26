@@ -21,7 +21,8 @@ export class ConstellationPanelsLayoutService {
   projectionSettongsSig = this.state.projectionSettingsSig();
   constalationLinesSettongsSig = this.state.constalationLinesSettingsSig();
 
-  readonly layout = computed<ConstellationPanelsLayoutVM>(() => {
+  readonly layout = computed<ConstellationPanelsLayoutVM>(() => {console.log('ddcws');
+  
     const items = this.geom.isCallMakeSens();
     const filtretItems = this.selectedId.filter(items);
     const { gap, panelSize, columns } = this.projectionSettongsSig();
