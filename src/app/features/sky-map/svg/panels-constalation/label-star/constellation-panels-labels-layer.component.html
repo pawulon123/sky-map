@@ -1,0 +1,24 @@
+<ng-container *ngFor="let p of compute()">
+  <svg:polyline
+    *ngIf="p.leader"
+    [attr.points]="p.leaderPointsAttr"
+    fill="none"
+    stroke="#000"
+    stroke-opacity="0.25"
+    stroke-width="1"
+    style="pointer-events:none"
+  ></polyline>
+
+  <svg:g [attr.transform]="'translate(' + p.x + ',' + p.y + ')'">
+    <text
+      *ngFor="let line of p.lines; let i = index"
+      [attr.y]="(i + 1) * 11"
+      font-size="10"
+      fill="#000"
+      opacity="0.65"
+      style="pointer-events:none"
+    >
+      {{ line }}
+    </text>
+  </g>
+</ng-container>
