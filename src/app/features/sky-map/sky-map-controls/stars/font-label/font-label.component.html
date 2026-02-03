@@ -3,7 +3,7 @@
     <span>Rozmiar czcionki</span>
     <span>{{ settingsLabels.fontSize }} px</span>
   </div>
-  <mat-slider [min]="6" [max]="50" [step]="1">
+  <mat-slider [min]="1" [max]="50" [step]="1">
     <input
       matSliderThumb
       type="range"
@@ -14,15 +14,29 @@
 </div>
 <div>
   <div class="">
-    <span>Odległość od gwiazdy</span>
-    <span>{{ settingsLabels.offsetPx }} px</span>
+    <span>Odległość od gwiazdy pozioma</span>
+    <span>{{ settingsLabels.offsetXPx }} px</span>
   </div>
-  <mat-slider [min]="0" [max]="500" [step]="1">
+  <mat-slider [min]="-200" [max]="200" [step]="1">
     <input
       matSliderThumb
       type="range"
-      [ngModel]="settingsLabels.offsetPx"
-      (ngModelChange)="update('offsetPx', $event)"
+      [ngModel]="settingsLabels.offsetXPx"
+      (ngModelChange)="update('offsetXPx', $event)"
+    />
+  </mat-slider>
+</div>
+<div>
+  <div class="">
+    <span>Odległość od gwiazdy pionowa</span>
+    <span>{{ settingsLabels.offsetYPx }} px</span>
+  </div>
+  <mat-slider [min]="-200" [max]="200" [step]="1">
+    <input
+      matSliderThumb
+      type="range"
+      [ngModel]="settingsLabels.offsetYPx"
+      (ngModelChange)="update('offsetYPx', $event)"
     />
   </mat-slider>
 </div>

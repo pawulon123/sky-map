@@ -21,7 +21,8 @@ export interface StarsSymbolsSettings {
 }
 
 export interface StarsLabelsSettings {
-  offsetPx: number;
+  offsetXPx: number; // poziom (left/right)
+  offsetYPx: number;
   visible: boolean;
   magnitudeRange: [number, number];
   position: StarLabelPosition;

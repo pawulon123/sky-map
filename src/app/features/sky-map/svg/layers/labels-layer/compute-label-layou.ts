@@ -19,8 +19,22 @@ export function computeLabelLayoutEngine(params: LabelLayoutEngineParams): Label
   const fontSize = settings.fontSize ?? defaultStarsSettings.labels.fontSize;
   const letterSpacing = settings.letterSpacing ?? 0;
 
+  // legacy fallback
+  const offsetPxRaw = (settings as any).offsetPx;
+  const legacyOffset = Number.isFinite(offsetPxRaw)
+    ? Number(offsetPxRaw)
+    : ((defaultStarsSettings.labels as any).offsetPx ?? 4);
+
+  // NEW: osobne osie
+  const offsetXPxRaw = (settings as any).offsetXPx;
+  const offsetYPxRaw = (settings as any).offsetYPx;
+
+  const offsetXPx = Number.isFinite(offsetXPxRaw) ? Number(offsetXPxRaw) : legacyOffset;
+
+  const offsetYPx = Number.isFinite(offsetYPxRaw) ? Number(offsetYPxRaw) : legacyOffset;
+
   // NOWE: zawsze licz liczbę, nigdy undefined
-  const offsetPxRaw = (settings as any).offsetPx; // jeśli typ jeszcze nie ma pola
+
   const offsetPx = Number.isFinite(offsetPxRaw)
     ? Number(offsetPxRaw)
     : ((defaultStarsSettings.labels as any).offsetPx ?? 4);
@@ -38,7 +52,8 @@ export function computeLabelLayoutEngine(params: LabelLayoutEngineParams): Label
       fontSize,
       letterSpacing,
       cellSize,
-      offsetPx,
+      offsetXPx,
+      offsetYPx,
       grid,
       getLabelLines,
       collisionsEnabled,

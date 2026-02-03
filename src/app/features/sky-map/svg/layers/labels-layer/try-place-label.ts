@@ -17,11 +17,13 @@ interface TryPlaceLabelForStarParams {
   grid: Map<string, LabelBox[]> | null;
   getLabelLines: (star: Star) => string[];
   collisionsEnabled: boolean;
-  offsetPx: number;
+  offsetXPx: number;
+  offsetYPx: number;
 }
 
 export function tryPlaceLabelForStar(params: TryPlaceLabelForStarParams): LabelPlacement | null {
-  const { star, fontSize, letterSpacing, cellSize, grid, getLabelLines, collisionsEnabled, offsetPx } = params;
+  const { star, fontSize, letterSpacing, cellSize, grid, getLabelLines, collisionsEnabled, offsetXPx, offsetYPx } =
+    params;
 
   const lines = getLabelLines(star);
   if (lines.length === 0) return null;
@@ -31,10 +33,12 @@ export function tryPlaceLabelForStar(params: TryPlaceLabelForStarParams): LabelP
   const { textWidth, textHeight } = computeLabelDimensions(lines, fontSize, letterSpacing);
 
   // NOWE: labelOffset = promień gwiazdy + odstęp użytkownika
-  const labelOffset = computeLabelOffset(star, offsetPx);
+
+  const labelOffsetX = computeLabelOffsetX(star, offsetXPx);
+  const labelOffsetY = computeLabelOffsetY(star, offsetYPx);
 
   for (const position of POSITION_CONFIGS) {
-    const { anchorX, anchorY } = computeAnchorPoint(sx, sy, labelOffset, position);
+    const { anchorX, anchorY } = computeAnchorPointXY(sx, sy, labelOffsetX, labelOffsetY, position);
 
     // NOWE: przekaż offsetPx dalej, żeby prawa/lewa strona też używała odstępu
     const { x, y } = computeLabelPositionForConfig(
@@ -46,7 +50,8 @@ export function tryPlaceLabelForStar(params: TryPlaceLabelForStarParams): LabelP
       textWidth,
       textHeight,
       star,
-      offsetPx
+      offsetXPx,
+      offsetYPx
     );
 
     const box = createLabelBox(x, y, textWidth, textHeight);
@@ -144,9 +149,10 @@ const computeLabelPositionForConfig = (
   textWidth: number,
   textHeight: number,
   star: Star,
-  offsetPx: number
+  offsetXPx: number,
+  offsetYPx: number
 ): { x: number; y: number } => {
-  const dy = radiusFn(star) + offsetPx;
+  const dy = computeLabelOffsetY(star, offsetYPx);
 
   if (key === 'right') {
     return { x: anchorX, y: sy - dy };
@@ -165,14 +171,24 @@ const computeLabelPositionForConfig = (
 };
 
 const radiusFn: (s: Star) => number = () => 2;
-const computeLabelOffset = (star: Star, offsetPx: number): number => radiusFn(star) + 2;
-const computeAnchorPoint = (
+const BASE_GAP_PX = 2;
+
+const computeLabelOffsetX = (star: Star, offsetXPx: number): number => {
+  return radiusFn(star) + BASE_GAP_PX + offsetXPx;
+};
+
+const computeLabelOffsetY = (star: Star, offsetYPx: number): number => {
+  return radiusFn(star) + BASE_GAP_PX + offsetYPx;
+};
+
+const computeAnchorPointXY = (
   sx: number,
   sy: number,
-  labelOffset: number,
+  labelOffsetX: number,
+  labelOffsetY: number,
   position: PositionConfig
 ): { anchorX: number; anchorY: number } => {
-  const anchorX = sx + position.dx * labelOffset;
-  const anchorY = sy + position.dy * labelOffset;
+  const anchorX = sx + position.dx * labelOffsetX;
+  const anchorY = sy + position.dy * labelOffsetY;
   return { anchorX, anchorY };
 };

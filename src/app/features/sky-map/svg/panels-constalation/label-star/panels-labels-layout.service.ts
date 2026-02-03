@@ -12,6 +12,9 @@ export class PanelsLabelsLayoutService implements LabelsLayoutStrategy {
   private panelsLayout = inject(ConstellationPanelsLayoutService);
   private state = inject(SkyMapStateService);
 
+  // minimalny “fabryczny” odstęp od promienia gwiazdy (tak jak wcześniej było ~2px)
+  private readonly BASE_GAP_PX = 2;
+
   computeLabelLayout(getLines: (star: Star) => string[]): LabelPlacement[] {
     const settings: StarsLabelsSettings = this.state.getStarSettings().labels;
     if (!settings.visible) return [];
@@ -21,7 +24,14 @@ export class PanelsLabelsLayoutService implements LabelsLayoutStrategy {
 
     const fontSize = Number(settings.fontSize ?? 10);
     const letterSpacing = Number(settings.letterSpacing ?? 0);
-    const offsetPx = Number(settings.offsetPx ?? 3);
+
+    // --- offsets (backward compatible) ---
+    // legacy offset: stary suwak
+    const legacyOffset = this.toFiniteNumber((settings as any).offsetPx, 3);
+
+    // nowe suwaki: X i Y (osobno)
+    const offsetXPx = this.toFiniteNumber((settings as any).offsetXPx, legacyOffset);
+    const offsetYPx = this.toFiniteNumber((settings as any).offsetYPx, legacyOffset);
 
     const [magMin, magMax] = settings.magnitudeRange ?? [-99, 99];
 
@@ -34,11 +44,9 @@ export class PanelsLabelsLayoutService implements LabelsLayoutStrategy {
     // === KOLIZJE wg Twoich zasad ===
     // null => brak kolizji w ogóle
     const collisionsEnabled = settings.colision !== null;
-    // jeśli kolizje włączone (czyli tablica nie-null), to domyślnie: ramka+etykiety
     const checkPanelEdge = collisionsEnabled;
     const checkLabels = collisionsEnabled;
 
-    // bufory (na start 0; możesz podstroić)
     const panelPad = 0;
     const labelPad = 0;
 
@@ -70,9 +78,10 @@ export class PanelsLabelsLayoutService implements LabelsLayoutStrategy {
 
         const box = this.measureLabel(lines, fontSize, charW);
 
-        const candidates = this.buildCandidates(rs.x, rs.y, rStar, box, fontSize, offsetPx, order);
+        // UWAGA: kandydaci liczeni ZAWSZE tak samo – niezależnie od kolizji.
+        const candidates = this.buildCandidates(rs.x, rs.y, rStar, box, fontSize, offsetXPx, offsetYPx, order);
 
-        // A) brak kolizji: bierz pierwszy kandydat i nie sprawdzaj nic
+        // A) brak kolizji: bierz pierwszy kandydat
         if (!collisionsEnabled) {
           const c = candidates[0];
           placements.push({ star, x: c.x, y: c.y, positionKey: c.key });
@@ -101,6 +110,11 @@ export class PanelsLabelsLayoutService implements LabelsLayoutStrategy {
   }
 
   // -------- helpers --------
+
+  private toFiniteNumber(v: any, fallback: number): number {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : fallback;
+  }
 
   private magOf(rs: any, star?: Star): number | null {
     const m = rs?.mag ?? star?.mag ?? null;
@@ -131,31 +145,47 @@ export class PanelsLabelsLayoutService implements LabelsLayoutStrategy {
     return { l: x, t, r: x + w, b: t + h };
   }
 
+  /**
+   * offsetXPx / offsetYPx:
+   * - right/left: offsetXPx reguluje dystans w poziomie od gwiazdy
+   * - top/bottom: offsetXPx działa jako shift w poziomie (żeby suwak X ruszał też te etykiety)
+   * - top/bottom: offsetYPx reguluje dystans w pionie od gwiazdy
+   * - right/left: offsetYPx reguluje pionowe "podniesienie" baseline
+   */
   private buildCandidates(
     starX: number,
     starY: number,
     rStar: number,
     box: { w: number; h: number },
     fontSize: number,
-    offsetPx: number,
+    offsetXPx: number,
+    offsetYPx: number,
     order: PositionKey[]
   ) {
-    const gap = Math.max(0, offsetPx);
+    // dystanse od gwiazdy (pozwalamy na ujemne offsety, ale dystans nie może spaść < 0)
+    const distX = Math.max(0, rStar + this.BASE_GAP_PX + offsetXPx);
+    const distY = Math.max(0, rStar + this.BASE_GAP_PX + offsetYPx);
 
-    const rightX = starX + rStar + gap;
-    const rightY = starY - rStar - gap;
+    // shiftX: sprawia, że offsetXPx wpływa również na top/bottom (w poziomie)
+    // (gdybyś chciał, żeby top/bottom NIE reagowały na offsetXPx, ustaw shiftX = 0)
+    const shiftX = offsetXPx;
+
+    // RIGHT / LEFT
+    const rightX = starX + distX;
+    const rightY = starY - distY;
     const rightRect = this.rectFromTextAnchor(rightX, rightY, box.w, box.h, fontSize);
 
-    const leftX = starX - rStar - gap - box.w;
+    const leftX = starX - distX - box.w;
     const leftY = rightY;
     const leftRect = this.rectFromTextAnchor(leftX, leftY, box.w, box.h, fontSize);
 
-    const topX = starX - box.w / 2;
-    const topY = starY - rStar - gap;
+    // TOP / BOTTOM
+    const topX = starX + shiftX - box.w / 2;
+    const topY = starY - distY;
     const topRect = this.rectFromTextAnchor(topX, topY, box.w, box.h, fontSize);
 
-    const bottomX = starX - box.w / 2;
-    const bottomY = starY + rStar + gap + fontSize;
+    const bottomX = starX + shiftX - box.w / 2;
+    const bottomY = starY + distY + fontSize; // baseline poniżej
     const bottomRect = this.rectFromTextAnchor(bottomX, bottomY, box.w, box.h, fontSize);
 
     const dict: Record<PositionKey, { key: PositionKey; x: number; y: number; rect: Rect }> = {
