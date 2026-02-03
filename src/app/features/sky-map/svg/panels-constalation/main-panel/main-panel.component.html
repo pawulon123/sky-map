@@ -23,16 +23,17 @@
           ></svg:rect>
 
           <!-- etykieta panelu -->
-          <svg:text
+
+          <!-- <svg:text
             *ngIf="p.label"
             [attr.x]="p.label.x"
             [attr.y]="p.label.y"
             font-size="12"
             fill="#000000"
             opacity="0.6"
-          >
+            >
             {{ p.label.text }}
-          </svg:text>
+          </svg:text> -->
 
           <!-- CLIP NA ZEWNĘTRZNYM G (bez transform) -->
           <svg:g [attr.clip-path]="'url(#' + p.clipId + ')'">
@@ -45,6 +46,7 @@
             <ng-container *ngFor="let s of p.stars">
               <svg:g app-shapes-star [star]="s"></svg:g>
             </ng-container>
+            <g app-label-panels [panel]="vm.panels"></g>
           </svg:g>
           <g app-labels-layer [stars]="p.stars"></g>
         </ng-container>

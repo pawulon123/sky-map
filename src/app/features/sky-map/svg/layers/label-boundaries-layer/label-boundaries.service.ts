@@ -10,7 +10,7 @@ import { BoundariesService } from '../../../domain/services/boundaries/boundarie
 import { ProjectionService } from '../../../domain/services/projection/projection.service';
 import { SelectedIdService } from '../../../domain/services/sky-map-state/allowed-ids-policy.service';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
-import { createBoundaryName } from '../boundaries-layer/create-boundary-name';
+import { getFullNameConstelation } from '../../../common/get-full-name-constelation';
 
 @Injectable({ providedIn: 'root' })
 export class LabelBoundariesService {
@@ -56,7 +56,7 @@ export class LabelBoundariesService {
       x,
       y,
       abbrev: boundary.abbrev,
-      name: createBoundaryName(boundary.abbrev)[language],
+      name: getFullNameConstelation(boundary.abbrev)[language],
     };
   }
 

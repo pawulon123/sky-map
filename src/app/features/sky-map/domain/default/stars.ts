@@ -23,6 +23,7 @@ export const defaultStarsSettings: StarsLayerSettings = {
     fontSize: 5,
     showBayer: false,
     fontWeight: 'normal',
+
     stroke: '#000000',
     strokeWidth: 0,
     strokeOpacity: 1,

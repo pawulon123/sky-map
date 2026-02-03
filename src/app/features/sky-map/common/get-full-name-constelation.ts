@@ -1,4 +1,4 @@
-export const createBoundaryName = (abbrev: string) => {
+export const getFullNameConstelation = (abbrev: string) => {
   return (
     CONSTELLATION_NAMES[abbrev] ?? {
       latin: 'Nieznane',

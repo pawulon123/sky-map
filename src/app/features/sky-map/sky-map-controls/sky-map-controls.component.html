@@ -23,15 +23,35 @@
     </mat-expansion-panel>
 
     <!-- GRANICE GWIAZDOZBIORÓW -->
-    <mat-expansion-panel [expanded]="activePanel === 'boundaries'" (opened)="setActivePanel('boundaries')">
-      <mat-expansion-panel-header>
-        <mat-panel-title> Granice gwiazdozbiorów </mat-panel-title>
-      </mat-expansion-panel-header>
 
-      <div class="panel-body-scroll">
-        <app-boundaries-controls></app-boundaries-controls>
-      </div>
-    </mat-expansion-panel>
+    <ng-container *ngIf="projectionSettings | async as settings">
+      <mat-expansion-panel
+        *ngIf="settings.mode == 'map'"
+        [expanded]="activePanel === 'boundaries'"
+        (opened)="setActivePanel('boundaries')"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> Granice gwiazdozbiorów </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="panel-body-scroll">
+          <app-boundaries-controls></app-boundaries-controls>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel
+        *ngIf="settings.mode == 'panels'"
+        [expanded]="activePanel === 'boundaries'"
+        (opened)="setActivePanel('boundaries')"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title> Etykieta Panelu </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="panel-body-scroll">
+          <app-panels-label></app-panels-label>
+        </div>
+      </mat-expansion-panel>
+    </ng-container>
 
     <!-- LINIE KONSTELACJI -->
     <mat-expansion-panel

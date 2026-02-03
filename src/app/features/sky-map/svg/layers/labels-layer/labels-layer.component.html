@@ -1,25 +1,5 @@
 <ng-container *ngIf="starsSettings$ | async as settings">
   <ng-container *ngIf="settings.labels.visible">
-    <ng-container *ngFor="let label of computeLabelLayout()">
-      <svg:text
-        class="star-label"
-        [attr.x]="label.x"
-        [attr.y]="label.y"
-        [style.fontSize.px]="settings.labels.fontSize"
-        [style.font-weight]="settings.labels.fontWeight"
-        [style.font-family]="settings.labels.fontFamily"
-        [attr.stroke]="settings.labels.stroke"
-        [attr.stroke-width]="settings.labels.strokeWidth"
-        [attr.stroke-opacity]="settings.labels.strokeOpacity"
-        [style.letter-spacing.px]="settings.labels.letterSpacing"
-        [attr.paint-order]="'stroke'"
-      >
-        <ng-container *ngFor="let line of label.lines; let i = index">
-          <svg:tspan [attr.x]="label.x" [attr.dy]="i === 0 ? 0 : settings.labels.fontSize * 1.1">
-            {{ line }}
-          </svg:tspan>
-        </ng-container>
-      </svg:text>
-    </ng-container>
+    <svg:g app-taxt-polines [lines]="computeLabelLayout()" [settings]="settings.labels"></svg:g>
   </ng-container>
 </ng-container>

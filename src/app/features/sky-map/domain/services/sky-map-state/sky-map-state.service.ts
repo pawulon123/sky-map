@@ -17,6 +17,8 @@ import { BoundaryLayerSettings } from '../../models/boundary.model';
 import { RenderSettings } from '../../models/render.model';
 import { renderDefaultSettings } from '../../default/render-default';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { PanelLabel } from '../../models/panels.model';
+import { panelLabelDefault } from '../../default/label-panels';
 
 @Injectable({
   providedIn: 'root',
@@ -33,6 +35,7 @@ export class SkyMapStateService {
     constellationLineDefaultSettings
   );
   private readonly renderSettingsSubject = new BehaviorSubject<RenderSettings>(renderDefaultSettings);
+  private readonly labelPanelSettingsSubject = new BehaviorSubject<PanelLabel>(panelLabelDefault);
 
   readonly starsLayerSettings$: Observable<StarsLayerSettings> = this.starsLayerSettingsSubject.asObservable();
   readonly projectionSettings$: Observable<ProjectionSettings> = this.projectionSettingsSubject.asObservable();
@@ -41,9 +44,10 @@ export class SkyMapStateService {
   readonly asterismLayerSettings$: Observable<AsterismSettings> = this.asterismLayerSettingsSubject.asObservable();
   readonly constellationLineSettings$: Observable<ConstellationLineSettings> =
     this.constellationLineSettingsSubject.asObservable();
+  readonly renderSettings$: Observable<RenderSettings> = this.renderSettingsSubject.asObservable();
+  readonly labelPanelsSettings$: Observable<PanelLabel> = this.labelPanelSettingsSubject.asObservable();
 
   svgRef: ElementRef<SVGSVGElement> | null = null;
-  readonly renderSettings$: Observable<RenderSettings> = this.renderSettingsSubject.asObservable();
 
   constructor() {
     this.updateProjection();
@@ -86,6 +90,9 @@ export class SkyMapStateService {
   updateRender(partial: Partial<RenderSettings>): void {
     updateEndNext(partial, this.renderSettingsSubject);
   }
+  updateLabelPanels(partial: Partial<PanelLabel>): void {
+    updateEndNext(partial, this.labelPanelSettingsSubject);
+  }
 
   setRefSvg(svgRef: ElementRef<SVGSVGElement>): void {
     this.svgRef = svgRef;
@@ -112,6 +119,7 @@ export class SkyMapStateService {
   projectionSettingsSig() {
     return toSignal(this.projectionSettings$, { initialValue: defaultProjectionSettings });
   }
+
   constalationLinesSettingsSig() {
     return toSignal(this.constellationLineSettings$, { initialValue: constellationLineDefaultSettings });
   }

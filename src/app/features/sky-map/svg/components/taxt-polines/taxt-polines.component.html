@@ -1,0 +1,21 @@
+<ng-container *ngFor="let label of lines">
+  <svg:text
+    class="star-label"
+    [attr.x]="label.x"
+    [attr.y]="label.y"
+    [style.fontSize.px]="settings.fontSize"
+    [style.font-weight]="settings.fontWeight"
+    [style.font-family]="settings.fontFamily"
+    [attr.stroke]="settings.stroke"
+    [attr.stroke-width]="settings.strokeWidth"
+    [attr.stroke-opacity]="settings.strokeOpacity"
+    [style.letter-spacing.px]="settings.letterSpacing"
+    [attr.paint-order]="'stroke'"
+  >
+    <ng-container *ngFor="let line of label.lines; let i = index">
+      <svg:tspan [attr.x]="label.x" [attr.dy]="i === 0 ? 0 : settings.fontSize * 1.1">
+        {{ line }}
+      </svg:tspan>
+    </ng-container>
+  </svg:text>
+</ng-container>

@@ -1,4 +1,16 @@
-// constellation-panels.vm.ts
+export interface PanelLabel {
+  visible: boolean;
+  position: LabelPanelPosition;
+  fontSize: number;
+  fontWeight: string;
+  stroke: string;
+  strokeWidth: number;
+  strokeOpacity: number;
+  fontFamily: string;
+  letterSpacing: number;
+}
+export type LabelPanelPosition = 'rightTop' | 'leftTop' | 'rightBottom' | 'leftBottom' | 'centerTop' | 'centerBottom';
+
 export type RaDec = [number, number];
 export type XY = [number, number];
 

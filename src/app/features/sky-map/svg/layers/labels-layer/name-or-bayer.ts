@@ -1,6 +1,74 @@
 import { Star } from '../../../domain/models/star.model';
 import { StarsLabelsSettings } from '../../../domain/models/stars-layer-settings.model';
 
+export type LabelLineFn = (star: Star, settings: StarsLabelsSettings) => string | null | undefined;
+type GetSettingsFn = () => StarsLabelsSettings;
+
+type LabelLinesBuilder = {
+  (fn: LabelLineFn): LabelLinesBuilder;
+  (getSettings: GetSettingsFn): (star: Star) => string[];
+};
+
+export function buildLabelLines(...initial: LabelLineFn[]): LabelLinesBuilder {
+  const fns: LabelLineFn[] = [...initial];
+
+  function chain(fn: LabelLineFn): LabelLinesBuilder;
+  function chain(getSettings: GetSettingsFn): (star: Star) => string[];
+  function chain(next: LabelLineFn | GetSettingsFn) {
+    // LabelLineFn ma zwykle 2 argumenty (star, settings)
+    if (next.length >= 2) {
+      fns.push(next as LabelLineFn);
+      return chain;
+    }
+
+    const getSettings = next as GetSettingsFn;
+
+    return (star: Star): string[] => {
+      const settings = getSettings(); // pobierz raz na star
+      const lines: string[] = [];
+
+      for (const fn of fns) {
+        const line = fn(star, settings);
+        if (line && line.trim().length > 0) lines.push(line);
+      }
+
+      return lines;
+    };
+  }
+
+  return chain;
+}
+export const firstLine = (star: Star, settings: StarsLabelsSettings): string | null | undefined => {
+  const rawName = (star as any).name;
+  const rawBayer = (star as any).bayer;
+
+  const name = rawName != null ? String(rawName).trim() : '';
+  const bayerLatin = rawBayer != null ? String(rawBayer).trim() : '';
+
+  const hasName = name.length > 0;
+  const hasBayer = bayerLatin.length > 0;
+  const showBayer = settings.showBayer;
+
+  if (!hasName && (!showBayer || !hasBayer)) {
+    return null;
+  }
+
+  const bayerGreek = hasBayer ? toGreekBayer(bayerLatin) : '';
+
+  if (hasName) {
+    if (showBayer && hasBayer) {
+      return `${name} (${bayerGreek})`;
+    }
+    return name;
+  }
+
+  if (showBayer && hasBayer) {
+    return bayerGreek;
+  }
+
+  return null;
+};
+
 const GREEK: Record<string, string> = {
   alpha: 'α',
   alp: 'α',
@@ -110,51 +178,3 @@ export function toGreekBayer(bayer: string): string {
 
   return rest.length > 0 ? `${greekWithIndex} ${rest.join(' ')}` : greekWithIndex;
 }
-
-// export type LabelLineFn = (star: Star, settings: StarsLabelsSettings) => string | null | undefined;
-export type LabelLineFn = (star: Star, settings: StarsLabelsSettings) => string | null | undefined;
-
-export const buildLabelLines =
-  (...fns: LabelLineFn[]) =>
-  (getSettings: Function) =>
-  (star: Star): string[] =>
-    fns.reduce<string[]>((acc, fn) => {
-      const setingsLabel = getSettings();
-      const line = fn(star, setingsLabel);
-      if (line && line.trim().length > 0) {
-        acc.push(line);
-      }
-      return acc;
-    }, []);
-
-// 1. Pierwsza linia: nazwa + ewentualnie Bayer w nawiasie
-export const firstLine: LabelLineFn = (star, settings) => {
-  const rawName = (star as any).name;
-  const rawBayer = (star as any).bayer;
-
-  const name = rawName != null ? String(rawName).trim() : '';
-  const bayerLatin = rawBayer != null ? String(rawBayer).trim() : '';
-
-  const hasName = name.length > 0;
-  const hasBayer = bayerLatin.length > 0;
-  const showBayer = settings.showBayer;
-
-  if (!hasName && (!showBayer || !hasBayer)) {
-    return null;
-  }
-
-  const bayerGreek = hasBayer ? toGreekBayer(bayerLatin) : '';
-
-  if (hasName) {
-    if (showBayer && hasBayer) {
-      return `${name} (${bayerGreek})`;
-    }
-    return name;
-  }
-
-  if (showBayer && hasBayer) {
-    return bayerGreek;
-  }
-
-  return null;
-};

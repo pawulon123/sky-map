@@ -1,7 +1,7 @@
 import { PX_TO_MM } from '../../../../../core/default/px-mm.convert';
+import { getFullNameConstelation } from '../../../common/get-full-name-constelation';
 import { boundaryDefaultSettings } from '../../../domain/default/boundary';
 import { Boundary, BoundaryLanguage } from '../../../domain/models/boundary.model';
-import { createBoundaryName } from './create-boundary-name';
 
 export const getComputedBoundary = (boundary: Boundary, pathD: string, language: BoundaryLanguage) => {
   const bbox = computePathBoundingBox(pathD);
@@ -9,7 +9,7 @@ export const getComputedBoundary = (boundary: Boundary, pathD: string, language:
   const widthMm = bbox.width * PX_TO_MM;
   const heightMm = bbox.height * PX_TO_MM;
 
-  const name = createBoundaryName(boundary.abbrev)[language] ?? boundaryDefaultSettings.labels.language;
+  const name = getFullNameConstelation(boundary.abbrev)[language] ?? boundaryDefaultSettings.labels.language;
 
   return `${name}
 szerokość = ${widthMm.toFixed(1)} mm

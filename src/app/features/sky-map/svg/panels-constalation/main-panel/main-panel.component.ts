@@ -8,11 +8,12 @@ import { PathComponent } from '../../components/path/path.component';
 import { ConstellationPanelsLayoutService } from '../constellation-panels-layout.service';
 import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.component';
 import { LabelsLayerComponent } from '../../layers/labels-layer/labels-layer.component';
+import { LabelPanelsComponent } from '../label-panels/label-panels.component';
 
 @Component({
   selector: 'g[app-constellation-panels-layer]',
   standalone: true,
-  imports: [CommonModule, PathComponent, ShapesStarComponent, LabelsLayerComponent],
+  imports: [CommonModule, PathComponent, ShapesStarComponent, LabelsLayerComponent, LabelPanelsComponent],
   templateUrl: './main-panel.component.html',
 })
 export class ConstellationPanelsLayerComponent {

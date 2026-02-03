@@ -6,23 +6,29 @@ import { AsterismControlsComponent } from './asterism-controls/asterism-controls
 import { ConstellationLineControlsComponent } from './constellation-line-controls/constellation-line-controls.component';
 import { BoundariesControllsComponent } from './boundaries-controls/boundaries-controlls/boundaries-controlls.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { SkyMapStateService } from '../domain/services/sky-map-state/sky-map-state.service';
+import { CommonModule } from '@angular/common';
+import { PanelsLabelComponent } from './panels-label/panels-label.component';
 
 @Component({
   selector: 'app-sky-map-controls',
   imports: [
+    CommonModule,
     MatExpansionModule,
     SkyMapLayerStarsControlsComponent,
     ProjectionControlsComponent,
     AsterismControlsComponent,
     ConstellationLineControlsComponent,
     BoundariesControllsComponent,
+    PanelsLabelComponent,
   ],
   templateUrl: './sky-map-controls.component.html',
   styleUrl: './sky-map-controls.component.css',
 })
 export class SkyMapControlsComponent implements OnInit {
   activePanel: 'projection' | 'stars' | 'boundaries' | 'constellationLines' | 'asterisms' = 'projection';
-
+  private state = inject(SkyMapStateService);
+  projectionSettings = this.state.projectionSettings$;
   ngOnInit(): void {
     this.refreshProjectionSv.loadOnceEndRefresh();
   }
