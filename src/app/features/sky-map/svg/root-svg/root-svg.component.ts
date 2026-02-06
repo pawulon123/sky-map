@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
-import { SvgTooltipRootDirective } from '../../../../core/tooltip/tooltip.directive';
 import { ReflectOnVerticalAxisDirective } from '../../common/reflect-on-vertical-axis.directive';
 
 import { StarsLayerComponent } from '../layers/stars-layer/stars-layer.component';

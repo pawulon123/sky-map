@@ -1,3 +1,3 @@
 <ng-container *ngIf="panelLabelSettings$ | async as settings">
-  <svg:g app-taxt-polines *ngIf="settings.visible" [lines]="labels$ | async" [settings]="settings"></svg:g>
+  <svg:g app-taxt-polines *ngIf="settings.visible" [lines]="(labels$ | async) ?? []" [settings]="settings"></svg:g>
 </ng-container>

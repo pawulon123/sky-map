@@ -28,7 +28,7 @@ export class LabelBoundariesService {
     const filtered = this.filterBoundaries(boundaries);
     const ctx = this.getLabelContext();
 
-    return filtered.map((b) => this.boundaryToLabel(b, ctx)).filter(this.isLabelBoundary);
+    return filtered.map((b) => this.boundaryToLabelMirrored(b, ctx)).filter(this.isLabelBoundary);
   }
 
   private getBoundaries(): Boundary[] {
@@ -44,19 +44,24 @@ export class LabelBoundariesService {
     return this.state.getBoundariesSettings().labels.language;
   }
 
-  private boundaryToLabel(boundary: Boundary, language: BoundaryLanguage): LabelBoundary | null {
+  private boundaryToLabelMirrored(boundary: Boundary, language: BoundaryLanguage): LabelBoundary | null {
     const segs = boundary.segments ?? [];
     if (!segs.length) return null;
 
     const centroid = this.computeCentroidOnScreen(segs);
     if (!centroid) return null;
 
+    const W = this.proj.settings().width;
     const [x, y] = centroid;
+
+    const mx = W - x;
+
     return {
-      x,
+      x: mx,
       y,
       abbrev: boundary.abbrev,
-      name: getFullNameConstelation(boundary.abbrev)[language],
+      name: '',
+      lines: [getFullNameConstelation(boundary.abbrev)[language]],
     };
   }
 

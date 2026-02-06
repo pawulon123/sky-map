@@ -16,7 +16,6 @@ export class AdaptiveLabelsLayoutService {
   private state = inject(SkyMapStateService);
   private map = inject(LabelStarMapService);
   private panels = inject(PanelsLabelsLayoutService);
-  //   private panels = inject(LabelStarMapService);
 
   private modeSig = toSignal(this.state.projectionSettings$.pipe(map((s) => s.mode)), {
     initialValue: defaultProjectionSettings.mode,

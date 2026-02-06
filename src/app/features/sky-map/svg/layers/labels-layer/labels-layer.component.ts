@@ -2,16 +2,13 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Star } from '../../../domain/models/star.model';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
-import {
-  StarsLayerSettings,
-  LabelPlacementWithLines,
-  StarsLabelsSettings,
-} from '../../../domain/models/stars-layer-settings.model';
+import { StarsLayerSettings } from '../../../domain/models/stars-layer-settings.model';
 import { defaultStarsSettings } from '../../../domain/default/stars';
 import { buildLabelLines, firstLine } from './name-or-bayer';
 import { AdaptiveLabelsLayoutService } from '../../panels-constalation/label-star/adaptive-labels-layout.service';
 import { RenderPanelStar } from '../../../domain/models/panels.model';
-import { TaxtPolinesComponent } from '../../components/taxt-polines/taxt-polines.component';
+import { TaxtPolinesComponent } from '../../components/text-polines/text-polines.component';
+import { PolilineText } from '../../../domain/models/svg-general';
 
 @Component({
   selector: 'g[app-labels-layer]',
@@ -43,7 +40,7 @@ export class LabelsLayerComponent implements OnInit {
     return this.labelLinesFn(star);
   }
 
-  computeLabelLayout(): LabelPlacementWithLines[] {
+  computeLabelLayout(): PolilineText[] {
     const getLinesCached = this.getCache();
     const placements = this.labelsLayout.computeLabelLayout(getLinesCached);
 

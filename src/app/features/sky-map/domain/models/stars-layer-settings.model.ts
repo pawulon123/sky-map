@@ -66,7 +66,7 @@ export interface PositionConfig {
   dy: number;
   align: 'left' | 'center';
 }
-// np. domain/models/sky-map-settings.model.ts
+
 export type StarSymbolShape = 'circle' | 'ring' | 'star' | 'cross' | 'square' | 'triangle' | 'custom';
 export interface RenderStar {
   star: Star;
@@ -91,4 +91,3 @@ export interface RenderStar {
   strokeOpacity: number;
   hasFill: boolean;
 }
-export type LabelPlacementWithLines = LabelPlacement & { lines: string[] };

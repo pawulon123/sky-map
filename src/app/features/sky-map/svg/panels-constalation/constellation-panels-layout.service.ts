@@ -68,7 +68,6 @@ export class ConstellationPanelsLayoutService {
         clipId,
         transform: `translate(${x0},${y0})`,
         paths: [],
-        label: { x: x0 + 8, y: y0 + 18, text: c.abbrev ?? c.constelationId },
         stars: [],
       };
     }
@@ -135,7 +134,6 @@ export class ConstellationPanelsLayoutService {
       clipId,
       transform,
       paths,
-      label,
       stars,
     };
   }

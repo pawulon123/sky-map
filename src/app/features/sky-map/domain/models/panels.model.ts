@@ -1,14 +1,11 @@
-export interface PanelLabel {
+import { Star } from '../models/star.model';
+import { SettingsPolilineText } from './svg-general';
+
+export interface PanelLabel extends SettingsPolilineText {
   visible: boolean;
   position: LabelPanelPosition;
-  fontSize: number;
-  fontWeight: string;
-  stroke: string;
-  strokeWidth: number;
-  strokeOpacity: number;
-  fontFamily: string;
-  letterSpacing: number;
 }
+
 export type LabelPanelPosition = 'rightTop' | 'leftTop' | 'rightBottom' | 'leftBottom' | 'centerTop' | 'centerBottom';
 
 export type RaDec = [number, number];
@@ -36,8 +33,6 @@ export interface ConstellationPanelVM {
   transform: string;
   paths: string[];
 
-  label?: { x: number; y: number; text: string };
-
   stars: RenderPanelStar[];
 }
 
@@ -62,7 +57,6 @@ export interface ConstellationGeometryVM {
   paths: string[];
 }
 // panels.model.ts (albo nowy plik)
-import { Star } from '../models/star.model';
 
 export type PanelStarShape = 'circle' | 'ring' | 'star' | 'square' | 'triangle' | 'cross' | 'custom';
 

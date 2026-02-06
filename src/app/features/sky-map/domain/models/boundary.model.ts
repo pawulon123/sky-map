@@ -1,4 +1,5 @@
 import { RaDec } from './constellation-line.model';
+import { PolilineText } from './svg-general';
 
 export type Lines = {
   visible: boolean;
@@ -53,12 +54,10 @@ export type ChunkWithBoundary = {
   chunk: ScreenChunk;
   boundary: Boundary;
 };
-export type LabelBoundary = {
-  x: number;
-  y: number;
+export interface LabelBoundary extends PolilineText {
   abbrev: string;
   name: string;
-};
+}
 export type PieceState = {
   pieces: RaDec[][];
   current: RaDec[];

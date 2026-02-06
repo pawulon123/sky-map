@@ -6,6 +6,7 @@ import { segmentToScreenChunks } from './segment-to-screen-chunks';
 import { SelectedIdService } from '../../../domain/services/sky-map-state/allowed-ids-policy.service';
 
 type RaDec = [number, number];
+type XY = [number, number];
 
 @Injectable({ providedIn: 'root' })
 export class BoundaryPathService {
@@ -64,7 +65,7 @@ export class BoundaryPathService {
 
     return pieces
       .flatMap((piece) => this.projectPieceToChunks(piece))
-      .map((chunk) => this.chunkToD(chunk))
+      .map((chunk) => this.chunkToD_Mirrored(chunk))
       .filter(this.isNonEmptyString)
       .map((d) => ({ d, boundary }));
   }
@@ -85,10 +86,7 @@ export class BoundaryPathService {
   }
 
   private initPieceState(first: RaDec): PieceState {
-    return {
-      pieces: [],
-      current: [first],
-    };
+    return { pieces: [], current: [first] };
   }
 
   private stepPieceState(st: PieceState, p1: RaDec, p2: RaDec, drawnEdges: Set<string>): PieceState {
@@ -149,18 +147,24 @@ export class BoundaryPathService {
     return segmentToScreenChunks(piece, this.proj.settings, this.proj.getProjectionByLonLat.bind(this.proj));
   }
 
-  private chunkToD(chunkXY: ScreenChunk): string {
+  private chunkToD_Mirrored(chunkXY: ScreenChunk): string {
     if (!chunkXY || chunkXY.length < 2) return '';
 
-    const head = this.moveTo(chunkXY[0]);
-    const tail = chunkXY.slice(1).map(this.lineTo).join('');
+    const W = this.proj.settings().width;
+    const mirrored = chunkXY.map(([x, y]) => this.mirrorXY([x, y], W));
+
+    const head = this.moveTo(mirrored[0]);
+    const tail = mirrored.slice(1).map(this.lineTo).join('');
 
     return head + tail;
   }
 
-  private moveTo = ([x, y]: [number, number]): string => `M${x},${y}`;
+  private mirrorXY([x, y]: XY, width: number): XY {
+    return [width - x, y];
+  }
 
-  private lineTo = ([x, y]: [number, number]): string => `L${x},${y}`;
+  private moveTo = ([x, y]: XY): string => `M${x},${y}`;
+  private lineTo = ([x, y]: XY): string => `L${x},${y}`;
 
   private isNonEmptyString(v: string): v is string {
     return typeof v === 'string' && v.length > 0;

@@ -2,7 +2,7 @@ import { EventCommonMenu } from '../common/event-common-menu';
 
 export const renderDefaultSettings: EventCommonMenu = {
   name: 'move',
-  innerWidth: 0,
-  innerHeight: 0,
+  innerWidth: 8000,
+  innerHeight: 8000,
   zoomMode: 'none',
 };

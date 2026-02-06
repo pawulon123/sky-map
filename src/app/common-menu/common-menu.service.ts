@@ -3,6 +3,7 @@ import { EventCommonMenu } from '../core/common/event-common-menu';
 import { ZoomService } from '../core/services/zoom-service.service';
 import { PanService } from '../core/services/pan.service';
 import { SvgDataService } from '../core/services/svg-data-ref.service';
+import { renderDefaultSettings } from '../core/default/render-default';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class CommonMenuService {
   ev = signal(this.e);
 
   get e(): EventCommonMenu {
-    return {};
+    return renderDefaultSettings;
   }
   emitEv(partialEv: Partial<EventCommonMenu>) {
     this.ev.update((ev) => Object.assign({}, this.e, partialEv));

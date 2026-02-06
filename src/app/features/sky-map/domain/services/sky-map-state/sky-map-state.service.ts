@@ -14,11 +14,11 @@ import { ConstellationLineSettings } from '../../models/constellation-line.model
 import { constellationLineDefaultSettings } from '../../default/constellation-line';
 import { updateEndNext } from '../../../../../core/utils/update-end-next';
 import { BoundaryLayerSettings } from '../../models/boundary.model';
-import { RenderSettings } from '../../models/render.model';
-import { renderDefaultSettings } from '../../default/render-default';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PanelLabel } from '../../models/panels.model';
 import { panelLabelDefault } from '../../default/label-panels';
+import { renderDefaultSettings } from '../../../../../core/default/render-default';
+import { RenderSettings } from '../../../../../core/common/event-common-menu';
 
 @Injectable({
   providedIn: 'root',
