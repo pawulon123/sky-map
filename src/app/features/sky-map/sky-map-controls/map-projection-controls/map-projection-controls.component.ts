@@ -39,4 +39,8 @@ export class MapProjectionControlsComponent {
   setProjection(projectionName: ProjectionName) {
     this.projectionSv.setSettings({ projectionName });
   }
+
+  toggleMirrorX(mirrorX: boolean) {
+    this.projectionSv.setSettings({ mirrorX });
+  }
 }

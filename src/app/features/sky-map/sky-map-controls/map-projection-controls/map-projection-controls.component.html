@@ -29,4 +29,8 @@
       (input)="setSize(width(), $any($event.target).valueAsNumber || 1200)"
     />
   </mat-form-field>
+
+  <mat-checkbox [checked]="projectionSv.settings().mirrorX" (change)="toggleMirrorX($event.checked)">
+    Odbicie w osi pionowej
+  </mat-checkbox>
 </div>

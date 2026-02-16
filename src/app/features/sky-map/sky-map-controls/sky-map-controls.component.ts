@@ -17,7 +17,7 @@ import { PanelsLabelComponent } from './panels-label/panels-label.component';
     MatExpansionModule,
     SkyMapLayerStarsControlsComponent,
     ProjectionControlsComponent,
-    AsterismControlsComponent,
+    // AsterismControlsComponent,
     ConstellationLineControlsComponent,
     BoundariesControllsComponent,
     PanelsLabelComponent,

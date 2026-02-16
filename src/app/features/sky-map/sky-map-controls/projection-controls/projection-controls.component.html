@@ -1,8 +1,8 @@
 <div style="padding: 15px 5px 0px 5px">
-  <mat-form-field appearance="fill">
-    <mat-label>Tryb</mat-label>
+  <mat-form-field appearance="outline">
+    <mat-label>Wizualizacja</mat-label>
     <mat-select [formControl]="modeCtrl">
-      <mat-option *ngFor="let m of mode" [value]="m.value">
+      <mat-option *ngFor="let m of modes" [value]="m.value">
         {{ m.label }}
       </mat-option>
     </mat-select>
@@ -11,21 +11,23 @@
   <app-map-projection-controls *ngIf="modeCtrl.value == 'map'"></app-map-projection-controls>
   <app-panels-projection-controls *ngIf="modeCtrl.value == 'panels'"></app-panels-projection-controls>
 
-  <div class="constellations-toolbar">
-    <button mat-stroked-button type="button" (click)="selectAllConstellations()">Zaznacz wszystkie</button>
-    <button mat-stroked-button type="button" (click)="clearAllConstellations()">Odznacz wszystkie</button>
+  <div>
+    Konstelacje
+
+    <div class="panel-size-row">
+      <button mat-stroked-button type="button" (click)="selectAllConstellations()">Zaznacz wszystkie</button>
+      <button mat-stroked-button type="button" (click)="clearAllConstellations()">Odznacz wszystkie</button>
+    </div>
+
+    <div class="panel-size-row">
+      <mat-form-field appearance="outline" style="width: 300px">
+        <mat-label>Konstelacje</mat-label>
+        <mat-select [formControl]="constellationsCtrl" multiple>
+          <mat-option *ngFor="let c of CONSTELLATION_PL" [value]="c.value">
+            {{ c.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Konstelacje</mat-label>
-    <mat-select [formControl]="constellationsCtrl" multiple>
-      <mat-option *ngFor="let c of CONSTELLATION_PL" [value]="c.value">
-        {{ c.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-checkbox [checked]="projectionSv.settings().mirrorX" (change)="toggleMirrorX($event.checked)">
-    Odbicie w osi pionowej
-  </mat-checkbox>
 </div>

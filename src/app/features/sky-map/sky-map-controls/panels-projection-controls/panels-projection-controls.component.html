@@ -1,48 +1,66 @@
-<mat-form-field appearance="outline">
-  <mat-label>Szeokość panelu</mat-label>
-  <input
-    matInput
-    type="number"
-    min="0"
-    step="1"
-    [ngModel]="settings.panelSize.w"
-    (ngModelChange)="updatePanelSize('w', +$event)"
-  />
-</mat-form-field>
-<mat-form-field appearance="outline">
-  <mat-label>Wysokość panelu</mat-label>
-  <input
-    matInput
-    type="number"
-    min="0"
-    step="1"
-    [ngModel]="settings.panelSize.h"
-    (ngModelChange)="updatePanelSize('h', +$event)"
-  />
-</mat-form-field>
-<mat-form-field appearance="outline">
-  <mat-label>Odstęp </mat-label>
-  <input matInput type="number" min="0" step="1" [ngModel]="settings.gap" (ngModelChange)="update('gap', +$event)" />
-</mat-form-field>
-<mat-form-field appearance="outline">
-  <mat-label>Liczba Kolumn </mat-label>
-  <input
-    matInput
-    type="number"
-    min="0"
-    step="1"
-    [ngModel]="settings.columns"
-    (ngModelChange)="update('columns', +$event)"
-  />
-</mat-form-field>
-<mat-form-field appearance="outline">
-  <mat-label>Padding </mat-label>
-  <input
-    matInput
-    type="number"
-    min="0"
-    step="1"
-    [ngModel]="settings.padding"
-    (ngModelChange)="update('padding', +$event)"
-  />
-</mat-form-field>
+<div>
+  Rozmiar jednego panelu
+  <div class="panel-size-row">
+    <mat-form-field appearance="outline" class="">
+      <mat-label>Szeokość</mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        step="1"
+        [ngModel]="settings.panelSize.w"
+        (ngModelChange)="updatePanelSize('w', +$event)"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Wysokość</mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        step="1"
+        [ngModel]="settings.panelSize.h"
+        (ngModelChange)="updatePanelSize('h', +$event)"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Skala </mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        step="1"
+        [ngModel]="settings.padding"
+        (ngModelChange)="update('padding', +$event)"
+      />
+    </mat-form-field>
+  </div>
+</div>
+
+<div>
+  Właściwości paneli
+  <div class="panel-size-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Odstęp </mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        step="1"
+        [ngModel]="settings.gap"
+        (ngModelChange)="update('gap', +$event)"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Liczba Kolumn </mat-label>
+      <input
+        matInput
+        type="number"
+        min="0"
+        step="1"
+        [ngModel]="settings.columns"
+        (ngModelChange)="update('columns', +$event)"
+      />
+    </mat-form-field>
+  </div>
+</div>

@@ -22,9 +22,9 @@ app-root {
   height: 100%;
 }
 
-mat-sidenav-container {
+/* mat-sidenav-container {
   height: 100vh;
-}
+} */
 
 mat-sidenav-content {
   height: 100%;
@@ -53,9 +53,9 @@ mat-sidenav {
 mat-sidenav-container {
   height: 100%;
 }
-app-sky-map-controls {
+/* app-sky-map-controls {
   background-color: burlywood;
-}
+} */
 /* === GLOBALNE USTAWIENIA COMPACT DLA WSZYSTKICH mat-form-field === */
 
 /* Domyślne wartości – cały app jest „compact” */
@@ -133,3 +133,16 @@ app-sky-map-controls {
 }
 
 /* //////////////////// */
+.panel-size-row {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center; /* wyrównanie w pionie */
+  justify-content: space-around;
+}
+
+.panel-size-row mat-form-field {
+  width: 80px;
+  /* flex: 1 1 0;         /* równe szerokości */
+  /* min-width: 40;    żeby nie robiły się mikroskopijne */
+}

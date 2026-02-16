@@ -37,13 +37,13 @@ import { PanelsProjectionControlsComponent } from '../panels-projection-controls
 export class ProjectionControlsComponent implements OnInit, OnDestroy {
   protected projectionSv = inject(ProjectionService);
 
-  constalationSelectSub?: Subscription;
+  constalationSelectSub = new Subscription();
   constellationsCtrl = new FormControl<string[]>([], { nonNullable: true });
   CONSTELLATION_PL = CONSTELLATION_PL;
 
   modeCtrl = new FormControl<ModeProjection>(defaultProjectionSettings.mode, { nonNullable: true });
-  mode = modes;
-  modeSelectSub?: Subscription;
+  modes = modes;
+  modeSelectSub = new Subscription();
 
   ngOnInit() {
     this.constalationSelectSub = this.constalationSelectEv();
@@ -63,10 +63,6 @@ export class ProjectionControlsComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleMirrorX(mirrorX: boolean) {
-    this.projectionSv.setSettings({ mirrorX });
-  }
-
   selectAllConstellations(): void {
     const all = this.CONSTELLATION_PL.map((c) => c.value);
     this.constellationsCtrl.setValue(all);
@@ -77,7 +73,7 @@ export class ProjectionControlsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.constalationSelectSub) this.constalationSelectSub.unsubscribe();
-    if (this.modeSelectSub) this.modeSelectSub.unsubscribe();
+    this.constalationSelectSub.unsubscribe();
+    this.modeSelectSub.unsubscribe();
   }
 }
