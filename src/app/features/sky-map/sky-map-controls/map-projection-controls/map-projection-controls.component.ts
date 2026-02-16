@@ -7,6 +7,7 @@ import { ProjectionService } from '../../domain/services/projection/projection.s
 import { ProjectionName } from '../../domain/models/projection-options.model';
 import { projections } from '../../domain/default/projection';
 import { CommonModule } from '@angular/common';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-map-projection-controls',
@@ -19,6 +20,7 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatCheckboxModule,
     MatSelectModule,
+    MatDividerModule,
   ],
   templateUrl: './map-projection-controls.component.html',
   styleUrl: './map-projection-controls.component.css',

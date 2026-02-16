@@ -1,35 +1,48 @@
-<div class="center-in">
-  <mat-form-field appearance="outline" class="projection-select-field">
-    <mat-label>Typ projekcji mapy</mat-label>
-    <mat-select [value]="projectionSv.settings().projectionName" (selectionChange)="setProjection($event.value)">
-      <mat-option *ngFor="let p of projections" [value]="p.value">
-        {{ p.label }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<div class="head-in-menu">
+  Typ
+
+  <div class="panel-size-row">
+    <mat-form-field appearance="outline" style="width: 200px">
+      <mat-label>Typ projekcji mapy</mat-label>
+      <mat-select [value]="projectionSv.settings().projectionName" (selectionChange)="setProjection($event.value)">
+        <mat-option *ngFor="let p of projections" [value]="p.value">
+          {{ p.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </div>
 
-<div class="center-in">
-  <mat-form-field appearance="outline" class="projection-size-field">
-    <mat-label>Szerokość</mat-label>
-    <input
-      matInput
-      type="number"
-      [value]="width()"
-      (input)="setSize($any($event.target).valueAsNumber || 1200, height())"
-    />
-  </mat-form-field>
+<mat-divider style="margin: 10px"></mat-divider>
 
-  <mat-form-field appearance="outline" class="projection-size-field">
-    <mat-label>Wysokość</mat-label>
-    <input
-      matInput
-      type="number"
-      [value]="height()"
-      (input)="setSize(width(), $any($event.target).valueAsNumber || 1200)"
-    />
-  </mat-form-field>
+<div class="head-in-menu">
+  Rozmiar
 
+  <div class="panel-size-row">
+    <mat-form-field appearance="outline" class="projection-size-field">
+      <mat-label>Szerokość</mat-label>
+      <input
+        matInput
+        type="number"
+        [value]="width()"
+        (input)="setSize($any($event.target).valueAsNumber || 1200, height())"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="projection-size-field">
+      <mat-label>Wysokość</mat-label>
+      <input
+        matInput
+        type="number"
+        [value]="height()"
+        (input)="setSize(width(), $any($event.target).valueAsNumber || 1200)"
+      />
+    </mat-form-field>
+  </div>
+</div>
+
+<mat-divider style="margin: 10px"></mat-divider>
+<div class="panel-size-row">
   <mat-checkbox [checked]="projectionSv.settings().mirrorX" (change)="toggleMirrorX($event.checked)">
     Odbicie w osi pionowej
   </mat-checkbox>

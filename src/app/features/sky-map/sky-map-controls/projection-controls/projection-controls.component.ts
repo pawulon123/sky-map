@@ -13,6 +13,7 @@ import { CONSTELLATION_PL } from '../../domain/default/constalation-select';
 import { Subscriber, Subscription } from 'rxjs';
 import { MapProjectionControlsComponent } from '../map-projection-controls/map-projection-controls.component';
 import { PanelsProjectionControlsComponent } from '../panels-projection-controls/panels-projection-controls.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-projection-controls',
@@ -29,6 +30,7 @@ import { PanelsProjectionControlsComponent } from '../panels-projection-controls
     ReactiveFormsModule,
     MapProjectionControlsComponent,
     PanelsProjectionControlsComponent,
+    MatDividerModule,
   ],
   templateUrl: './projection-controls.component.html',
   styleUrl: './projection-controls.component.css',

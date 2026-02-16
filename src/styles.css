@@ -142,7 +142,8 @@ mat-sidenav-container {
 }
 
 .panel-size-row mat-form-field {
-  width: 80px;
-  /* flex: 1 1 0;         /* równe szerokości */
-  /* min-width: 40;    żeby nie robiły się mikroskopijne */
+  width: 100px;
+}
+.head-in-menu {
+  text-align: center;
 }

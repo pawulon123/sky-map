@@ -4,7 +4,6 @@ import { ProjectionService } from '../../domain/services/projection/projection.s
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { PX_TO_MM } from '../../../../core/default/px-mm.convert';
 
 @Component({
   selector: 'app-panels-projection-controls',
