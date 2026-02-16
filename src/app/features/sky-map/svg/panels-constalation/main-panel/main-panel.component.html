@@ -1,6 +1,6 @@
 <svg:g id="layer-constellation-panels">
   <ng-container *ngIf="constellationLineSettings$ | async as settings">
-    <ng-container *ngIf="settings.visible">
+    <ng-container>
       <ng-container *ngIf="layout() as vm">
         <svg:defs>
           <ng-container *ngFor="let p of vm.panels">
@@ -37,7 +37,7 @@
 
           <!-- CLIP NA ZEWNĘTRZNYM G (bez transform) -->
           <svg:g [attr.clip-path]="'url(#' + p.clipId + ')'">
-            <svg:g [attr.transform]="p.transform">
+            <svg:g  *ngIf="settings.visible" [attr.transform]="p.transform">
               <ng-container *ngFor="let d of p.paths">
                 <svg:g app-svg-path [points]="d" [settings]="settings"></svg:g>
               </ng-container>
