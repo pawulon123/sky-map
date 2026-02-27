@@ -8,12 +8,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
-import {
-  StarsLayerSettings,
-  StarsSymbolsSettings,
-  StarSymbolShape,
-} from '../../../domain/models/stars-layer-settings.model';
-
+import { StarsSymbolsSettings } from '../../../domain/models/stars-layer-settings.model';
+import { HeaderPortalComponent } from '../../header-portal.component';
 @Component({
   selector: 'app-stars-symbol-controls',
   standalone: true,
@@ -26,13 +22,13 @@ import {
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
+    HeaderPortalComponent,
   ],
   templateUrl: './stars-symbol-controls.component.html',
   styleUrls: ['./stars-symbol-controls.component.css'],
 })
 export class StarsSymbolControlsComponent {
   private state = inject(SkyMapStateService);
-
   starsSettings$ = this.state.starsLayerSettings$;
 
   update<K extends keyof StarsSymbolsSettings>(key: K, value: StarsSymbolsSettings[K]): void {

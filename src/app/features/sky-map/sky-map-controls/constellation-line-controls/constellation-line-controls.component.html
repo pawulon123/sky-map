@@ -1,8 +1,9 @@
 <div class="constellation-line-controls" *ngIf="constellationLineSettings$ | async as settings">
   <!-- Widoczność -->
-  <mat-checkbox color="primary" [checked]="settings.visible" (change)="update('visible', $event.checked)">
-    Linie konstelacji widoczne
-  </mat-checkbox>
+  <app-header-portal key="constellationLines">
+    <mat-checkbox color="primary" [checked]="settings.visible" (change)="update('visible', $event.checked)">
+    </mat-checkbox>
+  </app-header-portal>
 
   <!-- Styl linii -->
   <div class="mt-3">

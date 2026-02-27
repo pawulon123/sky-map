@@ -1,8 +1,18 @@
 <div class="boundary-line-controls" *ngIf="boundaryLinesSettings$ | async as settings">
   <!-- Widoczność -->
-  <mat-slide-toggle color="primary" [checked]="settings.visible" (change)="update('visible', $event.checked)">
-    Pokaż granice
-  </mat-slide-toggle>
+  <app-header-portal key="boundariesLine">
+    <div class="cb-vertical">
+      <label class="cb-label" for="boundariesLine">Linie</label>
+
+      <mat-checkbox
+        id="boundariesLine"
+        [checked]="settings.visible"
+        (change)="update('visible', $event.checked)"
+        color="primary"
+      >
+      </mat-checkbox>
+    </div>
+  </app-header-portal>
 
   <div class="mt-3">
     <div class="mb-1 font-semibold">Styl linii granic</div>

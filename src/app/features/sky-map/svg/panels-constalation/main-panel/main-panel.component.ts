@@ -23,6 +23,8 @@ export class ConstellationPanelsLayerComponent {
   layout = this.layoutSvc.layout;
 
   constellationLineSettings$ = this.state.constellationLineSettings$.pipe(map(this.scratchDashed.bind(this)));
+  starSettings$ = this.state.starsLayerSettings$;
+  labelPanelSettings$ = this.state.labelPanelsSettings$;
 
   scratchDashed({ style, dashSize, ...settings }: ConstellationLineSettings) {
     const dasharray = style !== 'dashed' ? null : `${dashSize} ${dashSize}`;

@@ -9,9 +9,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatCheckbox } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
 import { FontLabelComponent } from '../font-label/font-label.component';
 import { ColisionLabelComponent } from '../colision-label/colision-label.component';
+import { HeaderPortalComponent } from '../../header-portal.component';
 
 @Component({
   selector: 'app-stars-label-controls',
@@ -27,6 +28,8 @@ import { ColisionLabelComponent } from '../colision-label/colision-label.compone
     MatSliderModule,
     FontLabelComponent,
     ColisionLabelComponent,
+    HeaderPortalComponent,
+    MatCheckboxModule,
   ],
   templateUrl: './stars-label-controls.component.html',
   styleUrls: ['./stars-label-controls.component.css'],

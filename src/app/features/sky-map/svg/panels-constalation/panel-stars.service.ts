@@ -5,6 +5,7 @@ import { BBox, PanelStarSymbolSettings, RenderPanelStar } from '../../domain/mod
 import { raAlign, wrapDeltaRa } from './sky-panel-projection.util';
 import { defaultStarsSettings } from '../../domain/default/stars';
 import { createRadius, getPropBaseRadius } from '../../common/star-symbol-helper';
+import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
 
 export interface BuildPanelStarsArgs {
   stars: Star[];
@@ -19,16 +20,16 @@ export interface BuildPanelStarsArgs {
   dxCenter: number;
   dyCenter: number;
   maxMag: number;
-  settings?: PanelStarSymbolSettings;
+  // settings?: PanelStarSymbolSettings;
 }
 
 @Injectable({ providedIn: 'root' })
 export class PanelStarsService {
   private starsSvc = inject(StarsService);
-
+  private state = inject(SkyMapStateService);
   // SNAPSHOT gwiazd jako SIGNAL (żeby zależności w computed zadziałały)
   private rawStarsSig = signal<Star[]>([]);
-
+  starSettongsSig = this.state.starSettingsSig();
   constructor() {
     this.starsSvc.loadOnce(() => {}).catch((err) => console.error('Stars loadOnce failed', err));
 
@@ -64,12 +65,12 @@ export class PanelStarsService {
       maxMag,
     } = args;
 
-    const sym = { ...defaultStarsSettings.symbols, ...(args.settings ?? {}) };
-
+    // const sym = { ...defaultStarsSettings.symbols, ...(settings ?? {}) };
+    const { symbols: settings } = this.starSettongsSig();
     const offX = pad + dxCenter;
     const offY = pad + dyCenter;
 
-    const magLimit = Number.isFinite(sym.magMax as number) ? (sym.magMax as number) : maxMag;
+    const magLimit = Number.isFinite(settings.magMax as number) ? (settings.magMax as number) : maxMag;
 
     const result: RenderPanelStar[] = [];
 
@@ -93,15 +94,15 @@ export class PanelStarsService {
 
       if (px < 0 || py < 0 || px > panelW || py > panelH) continue;
 
-      const r = createRadius(st, sym);
-      const propsBaseRadis = getPropBaseRadius(r, sym);
+      const r = createRadius(st, settings);
+      const propsBaseRadis = getPropBaseRadius(r, settings);
 
       result.push({
         star: st,
         x: x0 + px,
         y: y0 + py,
         mag,
-        shape: sym.shape,
+        shape: settings.shape,
         r,
         polygonPoints: '',
         customTransform: '',

@@ -1,6 +1,6 @@
-<div style="padding-top: 15px">
-  <div class="panel-size-row">
-    <mat-form-field appearance="outline" style="width: 200px">
+<div style="">
+  <app-header-portal key="projection">
+    <mat-form-field appearance="outline" style="width: 130px; padding-right: 10px">
       <mat-label>Wizualizacja</mat-label>
       <mat-select [formControl]="modeCtrl">
         <mat-option *ngFor="let m of modes" [value]="m.value">
@@ -8,7 +8,8 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-  </div>
+  </app-header-portal>
+
   <mat-divider style="margin: 10px"></mat-divider>
 
   <app-map-projection-controls *ngIf="modeCtrl.value == 'map'"></app-map-projection-controls>

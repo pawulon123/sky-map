@@ -11,13 +11,24 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BoundaryLayerSettings } from '../../../domain/models/boundary.model';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
+import { HeaderPortalComponent } from '../../header-portal.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 type BoundaryLinesSettings = BoundaryLayerSettings['lines'];
 
 @Component({
   selector: 'app-boundary-lines-controls',
   standalone: true,
-  imports: [CommonModule, MatSlideToggleModule, MatRadioModule, MatSliderModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    MatSlideToggleModule,
+    MatRadioModule,
+    MatSliderModule,
+    MatFormFieldModule,
+    MatInputModule,
+    HeaderPortalComponent,
+    MatCheckboxModule,
+  ],
   templateUrl: './lines-boundaries-controlls.component.html',
   styleUrl: './lines-boundaries-controlls.component.css',
 })

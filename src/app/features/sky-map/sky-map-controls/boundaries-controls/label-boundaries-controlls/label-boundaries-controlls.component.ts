@@ -7,10 +7,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HeaderPortalComponent } from '../../header-portal.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-label-boundaries-controlls',
-  imports: [CommonModule, FormsModule, MatSlideToggleModule, MatFormFieldModule, MatSelectModule, MatSliderModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatSlideToggleModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatSliderModule,
+    HeaderPortalComponent,
+    MatCheckboxModule,
+  ],
   templateUrl: './label-boundaries-controlls.component.html',
   styleUrl: './label-boundaries-controlls.component.css',
 })

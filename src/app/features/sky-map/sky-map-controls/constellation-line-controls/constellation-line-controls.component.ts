@@ -9,11 +9,20 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { HeaderPortalComponent } from '../header-portal.component';
 
 @Component({
   selector: 'app-constellation-line-controls',
   standalone: true,
-  imports: [CommonModule, MatCheckboxModule, MatRadioModule, MatSliderModule, MatFormFieldModule, MatInputModule],
+  imports: [
+    CommonModule,
+    MatCheckboxModule,
+    MatRadioModule,
+    MatSliderModule,
+    MatFormFieldModule,
+    MatInputModule,
+    HeaderPortalComponent,
+  ],
   templateUrl: './constellation-line-controls.component.html',
   styleUrl: './constellation-line-controls.component.css',
 })

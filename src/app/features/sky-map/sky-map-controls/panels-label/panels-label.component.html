@@ -1,7 +1,8 @@
 <ng-container *ngIf="settingsLabels | async as settings">
-  <mat-slide-toggle color="primary" [checked]="settings.visible" (change)="update('visible', $event.checked)">
-    Pokaż etykiety
-  </mat-slide-toggle>
+  <app-header-portal key="panelLabel">
+    <mat-checkbox color="primary" [checked]="settings.visible" (change)="update('visible', $event.checked)">
+    </mat-checkbox>
+  </app-header-portal>
 
   <div>
     <div class="">

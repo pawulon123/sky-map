@@ -1,11 +1,18 @@
 <div class="stars-symbol-controls space-y-4">
   <div class=" ">
-    <mat-slide-toggle
-      [checked]="(boundariesSettings$ | async)?.labels?.visible"
-      (change)="update('visible', $event.checked)"
-    >
-      Pokaż etykiety
-    </mat-slide-toggle>
+    <app-header-portal key="boundariesLabel">
+      <div class="cb-vertical">
+        <label class="cb-label" for="boundariesLabel">Etykiety</label>
+
+        <mat-checkbox
+          id="boundariesLabel"
+          [checked]="(boundariesSettings$ | async)?.labels?.visible"
+          (change)="update('visible', $event.checked)"
+          color="primary"
+        >
+        </mat-checkbox>
+      </div>
+    </app-header-portal>
   </div>
 
   <!-- ROZMIAR CZCIONKI -->

@@ -3,7 +3,12 @@
     <!-- PROJEKCJA -->
     <mat-expansion-panel [expanded]="activePanel === 'projection'" (opened)="setActivePanel('projection')">
       <mat-expansion-panel-header>
-        <mat-panel-title> Projekcja </mat-panel-title>
+        <div style="padding-top: 20px; width: 100%; display: flex; justify-content: space-between">
+          <div style="padding-top: 5px">Projekcja</div>
+          <ng-container *ngIf="projectionHeaderPortal$ | async as p">
+            <ng-template [cdkPortalOutlet]="p"></ng-template>
+          </ng-container>
+        </div>
       </mat-expansion-panel-header>
 
       <div class="panel-body-scroll">
@@ -14,7 +19,18 @@
     <!-- GWIAZDY -->
     <mat-expansion-panel [expanded]="activePanel === 'stars'" (opened)="setActivePanel('stars')">
       <mat-expansion-panel-header>
-        <mat-panel-title> Gwiazdy </mat-panel-title>
+        <mat-panel-title>
+          <div style="padding-top: 20px; width: 100%; display: flex; justify-content: space-between">
+            <div style="padding-top: 5px">Gwiazdy</div>
+
+            <ng-container *ngIf="starsHeaderPortal$ | async as p">
+              <ng-template [cdkPortalOutlet]="p"></ng-template>
+            </ng-container>
+            <ng-container *ngIf="starsLabelHeaderPortal$ | async as l">
+              <ng-template [cdkPortalOutlet]="l"></ng-template>
+            </ng-container>
+          </div>
+        </mat-panel-title>
       </mat-expansion-panel-header>
 
       <div class="panel-body-scroll">
@@ -31,7 +47,17 @@
         (opened)="setActivePanel('boundaries')"
       >
         <mat-expansion-panel-header>
-          <mat-panel-title> Granice gwiazdozbiorów </mat-panel-title>
+          <mat-panel-title>
+            <div style="padding-top: 20px; width: 100%; display: flex; justify-content: space-between">
+              <div>Granice gwiazdozbiorów</div>
+              <ng-container *ngIf="boundariesLineHeaderPortal$ | async as p">
+                <ng-template [cdkPortalOutlet]="p"></ng-template>
+              </ng-container>
+              <ng-container *ngIf="boundariesLabelHeaderPortal$ | async as l">
+                <ng-template [cdkPortalOutlet]="l"></ng-template>
+              </ng-container>
+            </div>
+          </mat-panel-title>
         </mat-expansion-panel-header>
 
         <div class="panel-body-scroll">
@@ -46,6 +72,10 @@
       >
         <mat-expansion-panel-header>
           <mat-panel-title> Etykieta Panelu </mat-panel-title>
+
+          <ng-container *ngIf="panelLabelHeaderPortal$ | async as l">
+            <ng-template [cdkPortalOutlet]="l"></ng-template>
+          </ng-container>
         </mat-expansion-panel-header>
         <div class="panel-body-scroll">
           <app-panels-label></app-panels-label>
@@ -60,6 +90,9 @@
     >
       <mat-expansion-panel-header>
         <mat-panel-title> Linie konstelacji </mat-panel-title>
+        <ng-container *ngIf="constellationLinesHeaderPortal$ | async as l">
+          <ng-template [cdkPortalOutlet]="l"></ng-template>
+        </ng-container>
       </mat-expansion-panel-header>
 
       <div class="panel-body-scroll">
@@ -79,3 +112,4 @@
     </mat-expansion-panel> -->
   </mat-accordion>
 </div>
+<router-outlet></router-outlet>

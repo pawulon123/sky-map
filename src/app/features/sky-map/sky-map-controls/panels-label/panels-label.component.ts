@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { panelLabelDefault } from '../../domain/default/label-panels';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { HeaderPortalComponent } from '../header-portal.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-panels-label',
@@ -21,6 +23,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatFormFieldModule,
     MatSelectModule,
     MatSlideToggleModule,
+    HeaderPortalComponent,
+    MatCheckboxModule,
   ],
   templateUrl: './panels-label.component.html',
   styleUrl: './panels-label.component.css',

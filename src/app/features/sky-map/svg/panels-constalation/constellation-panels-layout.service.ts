@@ -17,7 +17,6 @@ export class ConstellationPanelsLayoutService {
 
   private readonly MAX_MAG = 6.5;
 
-  starSettongsSig = this.state.starSettingsSig();
   projectionSettongsSig = this.state.projectionSettingsSig();
   constalationLinesSettongsSig = this.state.constalationLinesSettingsSig();
 
@@ -101,25 +100,22 @@ export class ConstellationPanelsLayoutService {
 
     // gwiazdy
 
-    const { symbols: settings } = this.starSettongsSig();
     let stars: RenderPanelStar[] = [];
-    if (settings.visible) {
-      stars = this.panelStars.buildPanelStars({
-        stars: [],
-        raCenter: g.raCenter,
-        bbox: g.bbox,
-        scale: s,
-        panelX0: x0,
-        panelY0: y0,
-        panelW: PANEL_W,
-        panelH: PANEL_H,
-        pad: padding,
-        dxCenter: dx,
-        dyCenter: dy,
-        maxMag: this.MAX_MAG,
-        settings,
-      });
-    }
+    stars = this.panelStars.buildPanelStars({
+      stars: [],
+      raCenter: g.raCenter,
+      bbox: g.bbox,
+      scale: s,
+      panelX0: x0,
+      panelY0: y0,
+      panelW: PANEL_W,
+      panelH: PANEL_H,
+      pad: padding,
+      dxCenter: dx,
+      dyCenter: dy,
+      maxMag: this.MAX_MAG,
+    });
+
     const label = { x: x0 + 8, y: y0 + 18, text: c.abbrev ?? c.constelationId };
 
     return {

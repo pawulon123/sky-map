@@ -1,9 +1,19 @@
 <ng-container *ngIf="starsSettings$ | async as settings">
   <!-- Nagłówek + widoczność -->
   <div>
-    <mat-slide-toggle [checked]="settings.symbols.visible" (change)="update('visible', $event.checked)" color="primary">
-      Widoczne
-    </mat-slide-toggle>
+    <app-header-portal key="stars">
+      <div class="cb-vertical">
+        <label class="cb-label" for="symbolsVisible">Symbole</label>
+
+        <mat-checkbox
+          id="symbolsVisible"
+          [checked]="settings.symbols.visible"
+          (change)="update('visible', $event.checked)"
+          color="primary"
+        >
+        </mat-checkbox>
+      </div>
+    </app-header-portal>
   </div>
 
   <!-- SUWAK MAGNITUDO MAX -->

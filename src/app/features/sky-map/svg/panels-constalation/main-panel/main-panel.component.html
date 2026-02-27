@@ -1,5 +1,5 @@
 <svg:g id="layer-constellation-panels">
-  <ng-container *ngIf="constellationLineSettings$ | async as settings">
+  <ng-container *ngIf="constellationLineSettings$ | async as settingsComstelation">
     <ng-container>
       <ng-container *ngIf="layout() as vm">
         <svg:defs>
@@ -22,33 +22,23 @@
             stroke-width="1"
           ></svg:rect>
 
-          <!-- etykieta panelu -->
-
-          <!-- <svg:text
-            *ngIf="p.label"
-            [attr.x]="p.label.x"
-            [attr.y]="p.label.y"
-            font-size="12"
-            fill="#000000"
-            opacity="0.6"
-            >
-            {{ p.label.text }}
-          </svg:text> -->
-
           <!-- CLIP NA ZEWNĘTRZNYM G (bez transform) -->
           <svg:g [attr.clip-path]="'url(#' + p.clipId + ')'">
-            <svg:g  *ngIf="settings.visible" [attr.transform]="p.transform">
+            <svg:g *ngIf="settingsComstelation.visible" [attr.transform]="p.transform">
               <ng-container *ngFor="let d of p.paths">
-                <svg:g app-svg-path [points]="d" [settings]="settings"></svg:g>
+                <svg:g app-svg-path [points]="d" [settings]="settingsComstelation"></svg:g>
               </ng-container>
             </svg:g>
 
-            <ng-container *ngFor="let s of p.stars">
-              <svg:g app-shapes-star [star]="s"></svg:g>
+            <ng-container *ngIf="(starSettings$ | async)?.symbols?.visible">
+              <ng-container *ngFor="let s of p.stars">
+                <svg:g app-shapes-star [star]="s"></svg:g>
+              </ng-container>
             </ng-container>
-            <g app-label-panels [panel]="vm.panels"></g>
+
+            <g app-label-panels *ngIf="(labelPanelSettings$ | async)?.visible" [panel]="vm.panels"></g>
           </svg:g>
-          <g app-labels-layer [stars]="p.stars"></g>
+          <g app-labels-layer *ngIf="(starSettings$ | async)?.labels" [stars]="p.stars"></g>
         </ng-container>
       </ng-container>
     </ng-container>

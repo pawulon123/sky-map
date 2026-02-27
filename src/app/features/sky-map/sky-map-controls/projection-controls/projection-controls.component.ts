@@ -1,20 +1,18 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ProjectionService } from '../../domain/services/projection/projection.service';
-import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
-import { ModeProjection, ProjectionName } from '../../domain/models/projection-options.model';
+import { ModeProjection } from '../../domain/models/projection-options.model';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { defaultProjectionSettings, modes, projections } from '../../domain/default/projection';
+import { defaultProjectionSettings, modes } from '../../domain/default/projection';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatSelect, MatOption, MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
+import { MatSelect, MatOption } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CONSTELLATION_PL } from '../../domain/default/constalation-select';
-import { Subscriber, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MapProjectionControlsComponent } from '../map-projection-controls/map-projection-controls.component';
 import { PanelsProjectionControlsComponent } from '../panels-projection-controls/panels-projection-controls.component';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { HeaderPortalComponent } from '../header-portal.component';
 @Component({
   selector: 'app-projection-controls',
   imports: [
@@ -24,13 +22,12 @@ import { MatDividerModule } from '@angular/material/divider';
     MatLabel,
     MatSelect,
     MatOption,
-    // MatInputModule,
     MatCheckboxModule,
-    // MatSelectModule,
     ReactiveFormsModule,
     MapProjectionControlsComponent,
     PanelsProjectionControlsComponent,
     MatDividerModule,
+    HeaderPortalComponent,
   ],
   templateUrl: './projection-controls.component.html',
   styleUrl: './projection-controls.component.css',
@@ -38,7 +35,6 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class ProjectionControlsComponent implements OnInit, OnDestroy {
   protected projectionSv = inject(ProjectionService);
-
   constalationSelectSub = new Subscription();
   constellationsCtrl = new FormControl<string[]>([], { nonNullable: true });
   CONSTELLATION_PL = CONSTELLATION_PL;
@@ -74,7 +70,7 @@ export class ProjectionControlsComponent implements OnInit, OnDestroy {
     this.constellationsCtrl.setValue([]);
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     this.constalationSelectSub.unsubscribe();
     this.modeSelectSub.unsubscribe();
   }

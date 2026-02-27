@@ -1,7 +1,17 @@
 <div style="" *ngIf="starsSettings$ | async as starsSettings">
-  <mat-slide-toggle [checked]="starsSettings.labels.visible" (change)="update('visible', $event.checked)">
-    Widoczne
-  </mat-slide-toggle>
+  <app-header-portal key="starsLabel">
+    <div class="cb-vertical">
+      <label class="cb-label" for="labelVisible">Etykiety</label>
+
+      <mat-checkbox
+        id="labelVisible"
+        [checked]="starsSettings.labels.visible"
+        (change)="update('visible', $event.checked)"
+        color="primary"
+      >
+      </mat-checkbox>
+    </div>
+  </app-header-portal>
   <mat-slide-toggle [checked]="starsSettings.labels.showBayer" (change)="update('showBayer', $event.checked)">
     Pokaż Bayer
   </mat-slide-toggle>

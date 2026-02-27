@@ -147,3 +147,18 @@ mat-sidenav-container {
 .head-in-menu {
   text-align: center;
 }
+
+.cb-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* albo center */
+}
+
+.cb-label {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.cb-vertical mat-checkbox {
+  margin-top: -10px;
+}

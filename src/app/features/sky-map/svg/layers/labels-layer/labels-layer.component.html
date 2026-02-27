@@ -1,5 +1,3 @@
 <ng-container *ngIf="starsSettings$ | async as settings">
-  <ng-container *ngIf="settings.labels.visible">
-    <svg:g app-taxt-polines [lines]="computeLabelLayout()" [settings]="settings.labels"></svg:g>
-  </ng-container>
+  <svg:g app-taxt-polines [lines]="computeLabelLayout()" [settings]="settings.labels"></svg:g>
 </ng-container>
