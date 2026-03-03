@@ -3,7 +3,7 @@
     <!-- PROJEKCJA -->
     <mat-expansion-panel [expanded]="activePanel === 'projection'" (opened)="setActivePanel('projection')">
       <mat-expansion-panel-header>
-        <div style="padding-top: 20px; width: 100%; display: flex; justify-content: space-between">
+        <div class="headers-in-menu">
           <div style="padding-top: 5px">Projekcja</div>
           <ng-container *ngIf="projectionHeaderPortal$ | async as p">
             <ng-template [cdkPortalOutlet]="p"></ng-template>
@@ -20,7 +20,7 @@
     <mat-expansion-panel [expanded]="activePanel === 'stars'" (opened)="setActivePanel('stars')">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          <div style="padding-top: 20px; width: 100%; display: flex; justify-content: space-between">
+          <div class="headers-in-menu">
             <div style="padding-top: 5px">Gwiazdy</div>
 
             <ng-container *ngIf="starsHeaderPortal$ | async as p">
@@ -48,7 +48,7 @@
       >
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <div style="padding-top: 20px; width: 100%; display: flex; justify-content: space-between">
+            <div class="headers-in-menu">
               <div>Granice gwiazdozbiorów</div>
               <ng-container *ngIf="boundariesLineHeaderPortal$ | async as p">
                 <ng-template [cdkPortalOutlet]="p"></ng-template>
@@ -112,4 +112,3 @@
     </mat-expansion-panel> -->
   </mat-accordion>
 </div>
-<router-outlet></router-outlet>

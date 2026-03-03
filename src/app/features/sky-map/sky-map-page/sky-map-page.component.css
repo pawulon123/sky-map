@@ -16,6 +16,7 @@
 }
 
 .stage {
+  width: 100%;
   height: calc(100dvh - 48px); /* dopasuj do realnej wysokości toolbara */
   overflow: hidden;
   display: grid;

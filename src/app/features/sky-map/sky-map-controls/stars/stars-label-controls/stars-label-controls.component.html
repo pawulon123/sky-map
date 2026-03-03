@@ -1,4 +1,4 @@
-<div style="" *ngIf="starsSettings$ | async as starsSettings">
+<div *ngIf="starsSettings$ | async as starsSettings">
   <app-header-portal key="starsLabel">
     <div class="cb-vertical">
       <label class="cb-label" for="labelVisible">Etykiety</label>
@@ -12,41 +12,99 @@
       </mat-checkbox>
     </div>
   </app-header-portal>
-  <mat-slide-toggle [checked]="starsSettings.labels.showBayer" (change)="update('showBayer', $event.checked)">
-    Pokaż Bayer
-  </mat-slide-toggle>
-  <app-font-label [settingsLabels]="starsSettings.labels" (updateFont)="updateFont($event)"></app-font-label>
+
+  <mat-divider class="mat-divider-style"></mat-divider>
+
+  <div class="section-in-menu-center">
+    Oznaczenie Bayer
+    <mat-checkbox
+      [checked]="starsSettings.labels.showBayer"
+      (change)="update('showBayer', $event.checked)"
+      color="primary"
+    >
+    </mat-checkbox>
+  </div>
+
+  <mat-divider class="mat-divider-style"></mat-divider>
+
+  <div class="head-in-menu">
+    Czcionka
+    <app-font-label [settingsLabels]="starsSettings.labels" (updateFont)="updateFont($event)"></app-font-label>
+  </div>
+
+  <mat-divider class="mat-divider-style"></mat-divider>
+
+  <div class="head-in-menu">
+    Odstęp od gwiazdy
+
+    <div class="section-in-menu" style="padding-top: 10px">
+      <div>
+        <div class="label-for-mat-slider">
+          <span>Pozioma </span>
+          <span>{{ starsSettings.labels.offsetXPx }} px</span>
+        </div>
+        <mat-slider [min]="-200" [max]="200" [step]="1">
+          <input
+            matSliderThumb
+            type="range"
+            [ngModel]="starsSettings.labels.offsetXPx"
+            (ngModelChange)="update('offsetXPx', $event)"
+          />
+        </mat-slider>
+      </div>
+      <div>
+        <div class="label-for-mat-slider">
+          <span>Pionowa </span>
+          <span>{{ starsSettings.labels.offsetYPx }} px</span>
+        </div>
+        <mat-slider [min]="-200" [max]="200" [step]="1">
+          <input
+            matSliderThumb
+            type="range"
+            [ngModel]="starsSettings.labels.offsetYPx"
+            (ngModelChange)="update('offsetYPx', $event)"
+          />
+        </mat-slider>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider class="mat-divider-style"></mat-divider>
 
   <app-colision-label (updateColision)="updateColision($event)"></app-colision-label>
-  >
-  <div>
-    <div class="">Magnitudo od–do</div>
-    <div class="">
-      <mat-form-field appearance="outline" class="">
-        <mat-label>Od</mat-label>
-        <input
-          matInput
-          type="number"
-          min="-5"
-          max="20"
-          [ngModel]="starsSettings.labels.magnitudeRange[0]"
-          (ngModelChange)="updateMagnitudeRange(0, $event, starsSettings.labels.magnitudeRange)"
-        />
-      </mat-form-field>
 
-      <span>–</span>
+  <mat-divider class="mat-divider-style"></mat-divider>
 
-      <mat-form-field appearance="outline" class="">
-        <mat-label>Do</mat-label>
-        <input
-          matInput
-          type="number"
-          min="-5"
-          max="20"
-          [ngModel]="starsSettings.labels.magnitudeRange[1]"
-          (ngModelChange)="updateMagnitudeRange(1, $event, starsSettings.labels.magnitudeRange)"
-        />
-      </mat-form-field>
+  <div class="head-in-menu">
+    Zakres widzialności magnitudo
+
+    <div class="section-in-menu section-in-menu-top">
+      <div>
+        <mat-form-field appearance="outline" style="width: 70px">
+          <mat-label>Od</mat-label>
+          <input
+            matInput
+            type="number"
+            min="-5"
+            max="20"
+            [ngModel]="starsSettings.labels.magnitudeRange[0]"
+            (ngModelChange)="updateMagnitudeRange(0, $event, starsSettings.labels.magnitudeRange)"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline" style="width: 70px">
+          <mat-label>Do</mat-label>
+          <input
+            matInput
+            type="number"
+            min="-5"
+            max="20"
+            [ngModel]="starsSettings.labels.magnitudeRange[1]"
+            (ngModelChange)="updateMagnitudeRange(1, $event, starsSettings.labels.magnitudeRange)"
+          />
+        </mat-form-field>
+      </div>
     </div>
   </div>
 </div>

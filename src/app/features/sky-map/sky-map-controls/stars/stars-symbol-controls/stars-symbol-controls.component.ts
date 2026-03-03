@@ -10,6 +10,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { StarsSymbolsSettings } from '../../../domain/models/stars-layer-settings.model';
 import { HeaderPortalComponent } from '../../header-portal.component';
+import { MatDividerModule } from '@angular/material/divider';
 @Component({
   selector: 'app-stars-symbol-controls',
   standalone: true,
@@ -23,6 +24,7 @@ import { HeaderPortalComponent } from '../../header-portal.component';
     MatSelectModule,
     MatInputModule,
     HeaderPortalComponent,
+    MatDividerModule,
   ],
   templateUrl: './stars-symbol-controls.component.html',
   styleUrls: ['./stars-symbol-controls.component.css'],

@@ -19,7 +19,6 @@ import { PanelHeaderPortalService, HeaderKey } from './panel-header-portal.servi
   template: `
     <ng-template #tpl>
       <div
-        class="header-portal-stop"
         (click)="$event.stopPropagation()"
         (mousedown)="$event.stopPropagation()"
         (mouseup)="$event.stopPropagation()"

@@ -2,7 +2,6 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { SkyMapLayerStarsControlsComponent } from './stars/sky-map-layer-stars-controls/sky-map-layer-stars-controls.component';
 import { ProjectionControlsComponent } from './projection-controls/projection-controls.component';
 import { RefreshProjectionService } from '../domain/services/projection/refresh-projection.service';
-import { AsterismControlsComponent } from './asterism-controls/asterism-controls.component';
 import { ConstellationLineControlsComponent } from './constellation-line-controls/constellation-line-controls.component';
 import { BoundariesControllsComponent } from './boundaries-controls/boundaries-controlls/boundaries-controlls.component';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -10,7 +9,6 @@ import { SkyMapStateService } from '../domain/services/sky-map-state/sky-map-sta
 import { CommonModule } from '@angular/common';
 import { PanelsLabelComponent } from './panels-label/panels-label.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { RouterOutlet } from '@angular/router';
 import { Portal, PortalModule } from '@angular/cdk/portal';
 import { Subscription } from 'rxjs';
 import { PanelHeaderPortalService } from './panel-header-portal.service';
@@ -21,12 +19,10 @@ import { PanelHeaderPortalService } from './panel-header-portal.service';
     MatExpansionModule,
     SkyMapLayerStarsControlsComponent,
     ProjectionControlsComponent,
-    // AsterismControlsComponent,
     ConstellationLineControlsComponent,
     BoundariesControllsComponent,
     PanelsLabelComponent,
     MatCheckboxModule,
-    RouterOutlet,
     PortalModule,
   ],
   templateUrl: './sky-map-controls.component.html',
@@ -57,6 +53,7 @@ export class SkyMapControlsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.refreshProjectionSv.loadOnceEndRefresh();
   }
+
   setActivePanel(panel: typeof this.activePanel) {
     this.activePanel = panel;
   }

@@ -1,13 +1,11 @@
 <!-- KOLIZJE ETYKIET -->
-<div class="">
-  <!-- GŁÓWNY CHECKBOX -->
-  <mat-checkbox [checked]="collisionsMain" (change)="onCollisionsMainChange($event.checked)">
-    Kolizje etykiet z obiektami
-  </mat-checkbox>
+<div class="section-in-menu-center">
+  Kolizje
 
-  <!-- PODRZĘDNE CHECKBOXY -->
-  <div class="">
-    <div *ngFor="let opt of collisionOptions">
+  <mat-checkbox [checked]="collisionsMain" (change)="onCollisionsMainChange($event.checked)"> </mat-checkbox>
+</div>
+
+<!-- <div *ngFor="let opt of collisionOptions">
       <mat-checkbox
         [checked]="opt.checked"
         [disabled]="!collisionsMain"
@@ -15,6 +13,5 @@
       >
         {{ opt.label }}
       </mat-checkbox>
-    </div>
-  </div>
-</div>
+    </div> -->
+<!-- </div> -->

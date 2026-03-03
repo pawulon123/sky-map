@@ -40,4 +40,11 @@
 
 .controls-wrapper {
   color: white;
+  width: 350px;
+}
+.headers-in-menu {
+  padding-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }

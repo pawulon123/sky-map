@@ -162,3 +162,22 @@ mat-sidenav-container {
 .cb-vertical mat-checkbox {
   margin-top: -10px;
 }
+.section-in-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.section-in-menu-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.section-in-menu-top {
+  padding-top: 10px;
+}
+.label-for-mat-slider {
+  margin-bottom: -10px;
+}
+.mat-divider-style {
+  margin: 10px;
+}

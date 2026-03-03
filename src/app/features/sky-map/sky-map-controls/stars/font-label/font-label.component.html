@@ -1,114 +1,97 @@
-<div>
-  <div class="">
-    <span>Rozmiar czcionki</span>
-    <span>{{ settingsLabels.fontSize }} px</span>
+<div class="section-in-menu section-in-menu-top">
+  <div>
+    <div class="label-for-mat-slider">
+      <span>Rozmiar </span>
+      <span>{{ settingsLabels.fontSize }} px</span>
+    </div>
+    <mat-slider [min]="1" [max]="50" [step]="1">
+      <input
+        matSliderThumb
+        type="range"
+        [ngModel]="settingsLabels.fontSize"
+        (ngModelChange)="update('fontSize', $event)"
+      />
+    </mat-slider>
   </div>
-  <mat-slider [min]="1" [max]="50" [step]="1">
-    <input
-      matSliderThumb
-      type="range"
-      [ngModel]="settingsLabels.fontSize"
-      (ngModelChange)="update('fontSize', $event)"
-    />
-  </mat-slider>
-</div>
-<div>
-  <div class="">
-    <span>Odległość od gwiazdy pozioma</span>
-    <span>{{ settingsLabels.offsetXPx }} px</span>
+
+  <div>
+    <div class="label-for-mat-slider">
+      <span>Szerokość </span>
+      <span>{{ settingsLabels.letterSpacing }} px</span>
+    </div>
+
+    <mat-slider [min]="-5" [max]="20" [step]="0.5">
+      <input
+        matSliderThumb
+        type="range"
+        [ngModel]="settingsLabels.letterSpacing"
+        (ngModelChange)="update('letterSpacing', $event)"
+      />
+    </mat-slider>
   </div>
-  <mat-slider [min]="-200" [max]="200" [step]="1">
-    <input
-      matSliderThumb
-      type="range"
-      [ngModel]="settingsLabels.offsetXPx"
-      (ngModelChange)="update('offsetXPx', $event)"
-    />
-  </mat-slider>
-</div>
-<div>
-  <div class="">
-    <span>Odległość od gwiazdy pionowa</span>
-    <span>{{ settingsLabels.offsetYPx }} px</span>
-  </div>
-  <mat-slider [min]="-200" [max]="200" [step]="1">
-    <input
-      matSliderThumb
-      type="range"
-      [ngModel]="settingsLabels.offsetYPx"
-      (ngModelChange)="update('offsetYPx', $event)"
-    />
-  </mat-slider>
 </div>
 
-<!-- FONT WEIGHT -->
-<mat-form-field appearance="outline">
-  <mat-label>Grubość czcionki (font-weight)</mat-label>
-  <mat-select [ngModel]="settingsLabels.fontWeight" (ngModelChange)="update('fontWeight', $event)">
-    <mat-option value="normal">Normal</mat-option>
-    <mat-option value="bold">Bold</mat-option>
-    <mat-option value="300">300</mat-option>
-    <mat-option value="500">500</mat-option>
-    <mat-option value="700">700</mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="section-in-menu section-in-menu-top">
+  <!-- FONT FAMILY -->
+  <mat-form-field appearance="outline" style="width: 150px">
+    <mat-label>Font family</mat-label>
 
-<!-- STROKE WIDTH -->
-<mat-form-field appearance="outline">
-  <mat-label>Grubość obrysu (stroke-width)</mat-label>
-  <input
-    matInput
-    type="number"
-    min="0"
-    step="0.2"
-    [ngModel]="settingsLabels.strokeWidth"
-    (ngModelChange)="update('strokeWidth', $event)"
-  />
-</mat-form-field>
+    <mat-select [ngModel]="settingsLabels.fontFamily" (ngModelChange)="update('fontFamily', $event)">
+      <mat-option *ngFor="let font of fonts" [value]="font">
+        {{ font }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-<!-- STROKE OPACITY -->
-<mat-form-field appearance="outline">
-  <mat-label>Przezroczystość obrysu (stroke-opacity)</mat-label>
-  <input
-    matInput
-    type="number"
-    min="0"
-    max="1"
-    step="0.05"
-    [ngModel]="settingsLabels.strokeOpacity"
-    (ngModelChange)="update('strokeOpacity', $event)"
-  />
-</mat-form-field>
+  <!-- FONT WEIGHT -->
+  <mat-form-field appearance="outline" style="width: 150px">
+    <mat-label>Grubość </mat-label>
+    <mat-select [ngModel]="settingsLabels.fontWeight" (ngModelChange)="update('fontWeight', $event)">
+      <mat-option value="normal">Normal</mat-option>
+      <mat-option value="bold">Bold</mat-option>
+      <mat-option value="300">300</mat-option>
+      <mat-option value="500">500</mat-option>
+      <mat-option value="700">700</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
 
+<!-- <div> Obrys -->
+<div class="section-in-menu section-in-menu-top">
+  <!-- STROKE WIDTH -->
+  <div>
+    <div class="label-for-mat-slider">
+      <span>Grubość </span>
+      <span>{{ settingsLabels.strokeWidth }} px</span>
+    </div>
+    <mat-slider [min]="0" [max]="100" [step]="0.2">
+      <input
+        matSliderThumb
+        type="range"
+        [ngModel]="settingsLabels.strokeWidth"
+        (ngModelChange)="update('strokeWidth', $event)"
+      />
+    </mat-slider>
+  </div>
+
+  <!-- STROKE OPACITY -->
+  <div>
+    <div class="label-for-mat-slider">
+      <span>Przezroczystość </span>
+      <span>{{ settingsLabels.strokeOpacity }} px</span>
+    </div>
+    <mat-slider min="0" max="1" step="0.01">
+      <input
+        matSliderThumb
+        type="range"
+        [ngModel]="settingsLabels.strokeOpacity"
+        (ngModelChange)="update('strokeOpacity', $event)"
+      />
+    </mat-slider>
+  </div>
+</div>
 <!-- STROKE COLOR -->
-<mat-form-field appearance="outline">
+<mat-form-field appearance="outline" style="width: 150px">
   <mat-label>Kolor obrysu</mat-label>
   <input matInput type="color" [ngModel]="settingsLabels.stroke" (ngModelChange)="update('stroke', $event)" />
 </mat-form-field>
-
-<!-- FONT FAMILY -->
-<mat-form-field appearance="outline">
-  <mat-label>Font family</mat-label>
-
-  <mat-select [ngModel]="settingsLabels.fontFamily" (ngModelChange)="update('fontFamily', $event)">
-    <mat-option *ngFor="let font of fonts">
-      {{ font }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-<!-- LETTER SPACING (SLIDER) -->
-<div>
-  <div class="">
-    <span>Odstęp między literami</span>
-    <span>{{ settingsLabels.letterSpacing }} px</span>
-  </div>
-
-  <mat-slider [min]="-5" [max]="20" [step]="0.5">
-    <input
-      matSliderThumb
-      type="range"
-      [ngModel]="settingsLabels.letterSpacing"
-      (ngModelChange)="update('letterSpacing', $event)"
-    />
-  </mat-slider>
-</div>

@@ -13,6 +13,8 @@ import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
 import { FontLabelComponent } from '../font-label/font-label.component';
 import { ColisionLabelComponent } from '../colision-label/colision-label.component';
 import { HeaderPortalComponent } from '../../header-portal.component';
+import { MatDividerModule } from '@angular/material/divider';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-stars-label-controls',
@@ -30,6 +32,7 @@ import { HeaderPortalComponent } from '../../header-portal.component';
     ColisionLabelComponent,
     HeaderPortalComponent,
     MatCheckboxModule,
+    MatDividerModule,
   ],
   templateUrl: './stars-label-controls.component.html',
   styleUrls: ['./stars-label-controls.component.css'],

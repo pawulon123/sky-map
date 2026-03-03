@@ -1,4 +1,4 @@
-<div style="">
+<div>
   <app-header-portal key="projection">
     <mat-form-field appearance="outline" style="width: 130px; padding-right: 10px">
       <mat-label>Wizualizacja</mat-label>
@@ -10,12 +10,12 @@
     </mat-form-field>
   </app-header-portal>
 
-  <mat-divider style="margin: 10px"></mat-divider>
+  <mat-divider class="mat-divider-style"></mat-divider>
 
   <app-map-projection-controls *ngIf="modeCtrl.value == 'map'"></app-map-projection-controls>
   <app-panels-projection-controls *ngIf="modeCtrl.value == 'panels'"></app-panels-projection-controls>
 
-  <mat-divider style="margin: 10px"></mat-divider>
+  <mat-divider class="mat-divider-style"></mat-divider>
   <div class="head-in-menu">
     Konstelacje
 
