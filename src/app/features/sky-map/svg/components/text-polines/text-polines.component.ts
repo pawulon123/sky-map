@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { PolilineText, SettingsPolilineText } from '../../../domain/models/svg-general';
+import { PolilineText } from '../../../domain/models/svg-general';
+import { FontSVG } from '../../../domain/models/font';
 
 @Component({
   selector: 'g[app-taxt-polines]',
@@ -9,6 +10,6 @@ import { PolilineText, SettingsPolilineText } from '../../../domain/models/svg-g
   styleUrl: './text-polines.component.css',
 })
 export class TaxtPolinesComponent {
-  @Input() settings!: SettingsPolilineText;
+  @Input() settings!: FontSVG;
   @Input() lines: PolilineText[] = [];
 }

@@ -1,3 +1,4 @@
+import { FontSVG } from './font';
 import { Star } from './star.model';
 
 export type StarLabelPosition = 'top' | 'bottom' | 'left' | 'right';
@@ -20,21 +21,14 @@ export interface StarsSymbolsSettings {
   // mnożnik skali (domyślnie 1)
 }
 
-export interface StarsLabelsSettings {
-  offsetXPx: number; // poziom (left/right)
-  offsetYPx: number;
+export interface StarsLabelsSettings extends FontSVG {
+  offsetXPx?: number; // poziom (left/right)
+  offsetYPx?: number;
   visible: boolean;
   magnitudeRange: [number, number];
-  position: StarLabelPosition;
-  fontSize: number;
-  showBayer: boolean;
-  fontWeight: string;
-  stroke: string;
-  strokeWidth: number;
-  strokeOpacity: number;
-  fontFamily: string;
-  letterSpacing: number;
-  colision: ColisinLabelStar[] | null;
+  position?: StarLabelPosition;
+  showBayer?: boolean;
+  colision?: ColisinLabelStar[] | null;
 }
 export type ColisinLabelStar = 'boundaries' | 'star-symbol';
 export interface StarsLayerSettings {

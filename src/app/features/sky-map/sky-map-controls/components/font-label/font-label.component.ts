@@ -2,13 +2,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { defaultStarsSettings, fontForLabelStars } from '../../../domain/default/stars';
+import { fontFamily } from '../../../domain/default/stars';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { StarsLabelsSettings } from '../../../domain/models/stars-layer-settings.model';
 import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FontSVG } from '../../../domain/models/font';
 
 @Component({
   selector: 'app-font-label',
@@ -26,11 +26,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
   styleUrl: './font-label.component.css',
 })
 export class FontLabelComponent {
-  @Input() settingsLabels = defaultStarsSettings.labels;
+  @Input() settingsLabels!: FontSVG;
   @Output() updateFont = new EventEmitter();
-  fonts = fontForLabelStars;
+  fonts = fontFamily;
 
-  update(prop: keyof StarsLabelsSettings, value: any) {
+  update(prop: keyof FontSVG, value: any) {
     this.updateFont.emit({ [prop]: value });
   }
 }

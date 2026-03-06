@@ -1,4 +1,5 @@
 import { RaDec } from './constellation-line.model';
+import { FontSVG } from './font';
 import { PolilineText } from './svg-general';
 
 export type Lines = {
@@ -13,17 +14,10 @@ export type Lines = {
   hoverScale: number;
   dasharray: string | null;
 };
-export type BoundaryLabels = {
+export interface BoundaryLabels extends FontSVG {
   visible: boolean;
   language: BoundaryLanguage;
-  fontSize: number;
-  letterSpacing: number;
-  fontFamily: string;
-  fontWeight: string;
-  stroke: string;
-  strokeWidth: number;
-  strokeOpacity: number;
-};
+}
 
 export interface BoundaryLayerSettings {
   lines: Lines;
@@ -46,7 +40,7 @@ export interface BoundariesData {
   meta?: any;
   boundaries: Boundary[];
 }
-// np. w tym samym folderze co segment-to-screen-chunks.ts
+
 export type RaDecPoint = [ra: number, dec: number];
 export type ScreenPoint = [x: number, y: number];
 export type ScreenChunk = ScreenPoint[];

@@ -4,7 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormControl, FormsModule } from '@angular/forms';
 import { SkyMapStateService } from '../../domain/services/sky-map-state/sky-map-state.service';
-import { fontForLabelStars } from '../../domain/default/stars';
+import { fontFamily } from '../../domain/default/stars';
 import { LabelPanelPosition, PanelLabel } from '../../domain/models/panels.model';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -12,6 +12,8 @@ import { panelLabelDefault } from '../../domain/default/label-panels';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { HeaderPortalComponent } from '../header-portal.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FontLabelComponent } from '../components/font-label/font-label.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-panels-label',
@@ -25,6 +27,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSlideToggleModule,
     HeaderPortalComponent,
     MatCheckboxModule,
+    FontLabelComponent,
+    MatDividerModule,
   ],
   templateUrl: './panels-label.component.html',
   styleUrl: './panels-label.component.css',
@@ -43,9 +47,12 @@ export class PanelsLabelComponent {
   settingsLabels = this.state.labelPanelsSettings$;
   position: LabelPanelPosition = panelLabelDefault.position;
 
-  fonts = fontForLabelStars;
+  fonts = fontFamily;
 
   update(prop: keyof PanelLabel, value: any) {
     this.state.updateLabelPanels({ [prop]: value });
+  }
+  updateFont(font: any) {
+    this.state.updateLabelPanels(font);
   }
 }

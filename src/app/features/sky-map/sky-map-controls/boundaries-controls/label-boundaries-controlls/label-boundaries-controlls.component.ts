@@ -9,6 +9,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HeaderPortalComponent } from '../../header-portal.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { FontLabelComponent } from '../../components/font-label/font-label.component';
+import { FontSVG } from '../../../domain/models/font';
 
 @Component({
   selector: 'app-label-boundaries-controlls',
@@ -21,6 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSliderModule,
     HeaderPortalComponent,
     MatCheckboxModule,
+    FontLabelComponent,
   ],
   templateUrl: './label-boundaries-controlls.component.html',
   styleUrl: './label-boundaries-controlls.component.css',
@@ -29,8 +32,10 @@ export class LabelBoundariesControllsComponent {
   private state = inject(SkyMapStateService);
 
   boundariesSettings$ = this.state.boundariesLayerSettings$;
-
   update(key: keyof BoundaryLabels, value: any) {
     this.state.updateBoundaryLabel({ [key]: value });
+  }
+  updateFont(objFont: FontSVG) {
+    this.state.updateBoundaryLabel(objFont);
   }
 }

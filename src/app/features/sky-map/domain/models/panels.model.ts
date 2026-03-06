@@ -1,7 +1,7 @@
 import { Star } from '../models/star.model';
-import { SettingsPolilineText } from './svg-general';
+import { FontSVG } from './font';
 
-export interface PanelLabel extends SettingsPolilineText {
+export interface PanelLabel extends FontSVG {
   visible: boolean;
   position: LabelPanelPosition;
 }

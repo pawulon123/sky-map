@@ -10,11 +10,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckbox, MatCheckboxModule } from '@angular/material/checkbox';
-import { FontLabelComponent } from '../font-label/font-label.component';
+import { FontLabelComponent } from '../../components/font-label/font-label.component';
 import { ColisionLabelComponent } from '../colision-label/colision-label.component';
 import { HeaderPortalComponent } from '../../header-portal.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { tap } from 'rxjs';
+import { FontSVG } from '../../../domain/models/font';
 
 @Component({
   selector: 'app-stars-label-controls',
@@ -41,7 +42,7 @@ export class StarsLabelControlsComponent {
   private state = inject(SkyMapStateService);
   starsSettings$ = this.state.starsLayerSettings$;
 
-  updateFont(font: StarsLabelsSettings) {
+  updateFont(font: FontSVG) {
     this.state.updateStarsLabels(font);
   }
   updateColision(Colision: StarsLabelsSettings) {

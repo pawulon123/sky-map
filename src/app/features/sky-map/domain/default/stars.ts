@@ -11,8 +11,6 @@ export const defaultStarsSettings: StarsLayerSettings = {
     strokeWidth: 0.2,
     strokeColor: '#1c7138ff',
     scaleByMagnitude: 0.4,
-
-    // mnożnik wielkości (1 = bez zmian)
     fillOpacity: 0.5, // 0–1
     strokeOpacity: 0.5, // 0–1
   },
@@ -35,7 +33,7 @@ export const defaultStarsSettings: StarsLayerSettings = {
   },
 };
 
-export const fontForLabelStars = [
+export const fontFamily = [
   'Inter',
   'Roboto',
   'Open Sans',
