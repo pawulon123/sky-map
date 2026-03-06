@@ -1,19 +1,15 @@
 import { RaDec } from './constellation-line.model';
 import { FontSVG } from './font';
+import { LineSVGControll } from './line-svg-controll';
 import { PolilineText } from './svg-general';
 
-export type Lines = {
+export interface Lines extends LineSVGControll {
   visible: boolean;
-  color: string;
   hitWidth: number;
-  lineWidth: number;
-  hoverColor: string;
-  dashSize: number;
-  strokeOpacity: number;
-  style: string;
   hoverScale: number;
+  hoverColor: string;
   dasharray: string | null;
-};
+}
 export interface BoundaryLabels extends FontSVG {
   visible: boolean;
   language: BoundaryLanguage;

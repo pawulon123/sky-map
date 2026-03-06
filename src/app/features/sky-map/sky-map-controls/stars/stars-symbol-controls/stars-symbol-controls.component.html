@@ -89,24 +89,11 @@
 
     <!-- KOLOR WYPEŁNIENIA -->
     <div class="section-in-menu section-in-menu-top">
-      <mat-form-field appearance="outline" style="width: 130px">
-        <mat-label>Kolor</mat-label>
-        <input matInput type="color" [ngModel]="settings.symbols.color" (ngModelChange)="update('color', $event)" />
-      </mat-form-field>
-      <div>
-        <div class="label-for-mat-slider">
-          <span>Przezroczystość </span>
-          <span>{{ settings.symbols.fillOpacity * 100 | number: '1.0-0' }}%</span>
-        </div>
-
-        <mat-slider min="0" max="1" step="0.01">
-          <input
-            matSliderThumb
-            [ngModel]="settings.symbols.fillOpacity"
-            (ngModelChange)="update('fillOpacity', +$event)"
-          />
-        </mat-slider>
-      </div>
+      <app-color-input [value]="settings.symbols.color" (valueChange)="update('color', $event)"></app-color-input>
+      <app-opacity-input
+        [value]="settings.symbols.fillOpacity"
+        (valueChange)="update('fillOpacity', +$event)"
+      ></app-opacity-input>
     </div>
   </div>
 
@@ -115,15 +102,10 @@
   <div class="head-in-menu">
     Obramowanie
     <div class="section-in-menu section-in-menu-top">
-      <mat-form-field appearance="outline" style="width: 130px">
-        <mat-label>Kolor</mat-label>
-        <input
-          matInput
-          type="color"
-          [ngModel]="settings.symbols.strokeColor"
-          (ngModelChange)="update('strokeColor', $event)"
-        />
-      </mat-form-field>
+      <app-color-input
+        [value]="settings.symbols.strokeColor"
+        (valueChange)="update('strokeColor', $event)"
+      ></app-color-input>
       <div>
         <div class="label-for-mat-slider">
           <span> Grubość </span>
@@ -141,21 +123,12 @@
     </div>
   </div>
 
-  <!-- PRZEŹROCZYSTOŚĆ OBRAMOWANIA -->
   <div class="section-in-menu">
-    <div>
-      <div class="label-for-mat-slider">
-        <span>Przezroczystość </span>
-        <span>{{ settings.symbols.strokeOpacity * 100 | number: '1.0-0' }}%</span>
-      </div>
-
-      <mat-slider min="0" max="1" step="0.01">
-        <input
-          matSliderThumb
-          [ngModel]="settings.symbols.strokeOpacity"
-          (ngModelChange)="update('strokeOpacity', +$event)"
-        />
-      </mat-slider>
+    <div class="label-for-mat-slider">
+      <app-opacity-input
+        [value]="settings.symbols.strokeOpacity"
+        (valueChange)="update('strokeOpacity', +$event)"
+      ></app-opacity-input>
     </div>
   </div>
 </ng-container>

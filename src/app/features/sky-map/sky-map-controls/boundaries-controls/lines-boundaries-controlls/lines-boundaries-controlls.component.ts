@@ -13,6 +13,8 @@ import { BoundaryLayerSettings } from '../../../domain/models/boundary.model';
 import { SkyMapStateService } from '../../../domain/services/sky-map-state/sky-map-state.service';
 import { HeaderPortalComponent } from '../../header-portal.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { LineControllComponent } from '../../components/line-controll/line-controll.component';
+import { LineSVGControll } from '../../../domain/models/line-svg-controll';
 
 type BoundaryLinesSettings = BoundaryLayerSettings['lines'];
 
@@ -28,6 +30,7 @@ type BoundaryLinesSettings = BoundaryLayerSettings['lines'];
     MatInputModule,
     HeaderPortalComponent,
     MatCheckboxModule,
+    LineControllComponent,
   ],
   templateUrl: './lines-boundaries-controlls.component.html',
   styleUrl: './lines-boundaries-controlls.component.css',
@@ -39,5 +42,8 @@ export class BoundaryLinesControlsComponent {
 
   update<K extends keyof BoundaryLinesSettings>(key: K, value: BoundaryLinesSettings[K]) {
     this.state.updateBoundaryLines({ [key]: value } as Partial<BoundaryLinesSettings>);
+  }
+  updateLine(line: LineSVGControll) {
+    this.state.updateBoundaryLines(line as Partial<BoundaryLinesSettings>);
   }
 }

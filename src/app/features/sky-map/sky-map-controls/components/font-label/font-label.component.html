@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<div class="section-in-menu section-in-menu-top">
+<div class="section-in-menu">
   <!-- FONT FAMILY -->
   <mat-form-field appearance="outline" style="width: 150px">
     <mat-label>Font family</mat-label>
@@ -77,25 +77,13 @@
       </mat-slider>
     </div>
 
-    <!-- STROKE OPACITY -->
     <div>
-      <div class="label-for-mat-slider">
-        <span>Przezroczystość </span>
-        <span>{{ settingsLabels.strokeOpacity }} px</span>
-      </div>
-      <mat-slider min="0" max="1" step="0.01">
-        <input
-          matSliderThumb
-          type="range"
-          [ngModel]="settingsLabels.strokeOpacity"
-          (ngModelChange)="update('strokeOpacity', $event)"
-        />
-      </mat-slider>
+      <app-opacity-input
+        [value]="settingsLabels.strokeOpacity"
+        (valueChange)="update('strokeOpacity', $event)"
+      ></app-opacity-input>
     </div>
   </div>
-  <!-- STROKE COLOR -->
-  <mat-form-field appearance="outline" style="width: 150px">
-    <mat-label>Kolor obrysu</mat-label>
-    <input matInput type="color" [ngModel]="settingsLabels.stroke" (ngModelChange)="update('stroke', $event)" />
-  </mat-form-field>
+
+  <app-color-input [value]="settingsLabels.stroke" (valueChange)="update('stroke', $event)"></app-color-input>
 </div>

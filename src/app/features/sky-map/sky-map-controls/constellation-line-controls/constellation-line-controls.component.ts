@@ -10,6 +10,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { HeaderPortalComponent } from '../header-portal.component';
+import { LineControllComponent } from '../components/line-controll/line-controll.component';
 
 @Component({
   selector: 'app-constellation-line-controls',
@@ -22,11 +23,15 @@ import { HeaderPortalComponent } from '../header-portal.component';
     MatFormFieldModule,
     MatInputModule,
     HeaderPortalComponent,
+    LineControllComponent,
   ],
   templateUrl: './constellation-line-controls.component.html',
   styleUrl: './constellation-line-controls.component.css',
 })
 export class ConstellationLineControlsComponent {
+  updateLine(line: any) {
+    this.state.updateConstellationLine(line as Partial<ConstellationLineSettings>);
+  }
   private state = inject(SkyMapStateService);
   constellationLineSettings$ = this.state.constellationLineSettings$;
 

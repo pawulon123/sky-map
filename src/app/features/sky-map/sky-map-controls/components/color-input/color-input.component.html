@@ -1,0 +1,41 @@
+<div class="color-outline-field" [class.color-outline-field--disabled]="disabled">
+  <div class="color-outline-field__outline">
+    <div class="color-outline-field__notch">
+      <label class="color-outline-field__label">{{ label }}</label>
+    </div>
+  </div>
+
+  <div class="color-outline-field__content">
+    <!-- <button
+      type="button"
+      class="color-outline-field__swatch-button"
+      [disabled]="disabled"
+      (click)="openNativePicker(colorPicker)"
+      [attr.aria-label]="label"
+    >
+      <span
+        class="color-outline-field__swatch"
+        [style.background]="value"
+      ></span>
+    </button> -->
+
+    <input
+      #colorPicker
+      class="color-outline-field__native-picker"
+      type="color"
+      [ngModel]="value"
+      (ngModelChange)="onColorChange($event)"
+      [disabled]="disabled"
+    />
+
+    <input
+      *ngIf="showHex"
+      class="color-outline-field__text"
+      type="text"
+      [ngModel]="value"
+      (ngModelChange)="onTextChange($event)"
+      [disabled]="disabled"
+      placeholder="#ffffff"
+    />
+  </div>
+</div>

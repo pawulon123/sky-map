@@ -9,6 +9,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FontSVG } from '../../../domain/models/font';
+import { ColorInputComponent } from '../color-input/color-input.component';
+import { OpacityInputComponent } from '../opacity-input/opacity-input.component';
 
 @Component({
   selector: 'app-font-label',
@@ -21,6 +23,8 @@ import { FontSVG } from '../../../domain/models/font';
     MatSliderModule,
     CommonModule,
     FormsModule,
+    ColorInputComponent,
+    OpacityInputComponent,
   ],
   templateUrl: './font-label.component.html',
   styleUrl: './font-label.component.css',

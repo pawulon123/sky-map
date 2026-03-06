@@ -7,7 +7,7 @@ export const defaultProjectionSettings: ProjectionSettings = {
   projectionName: 'equirect',
   mirrorX: false,
   selected: ['And', 'Ori'],
-  mode: 'panels',
+  mode: 'map',
   panelSize: {
     w: 400,
     h: 300,

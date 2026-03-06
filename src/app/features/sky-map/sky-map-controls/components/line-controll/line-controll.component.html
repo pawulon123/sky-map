@@ -1,1 +1,45 @@
-<p>line-controll works!</p>
+<div class="head-in-menu section-in-menu-top">
+  <div class="section-in-menu section-in-menu-top">
+    <mat-radio-group
+      class="flex flex-col gap-1"
+      name="boundaryLineStyle"
+      [value]="settings.style"
+      (change)="update('style', $event.value)"
+    >
+      <mat-radio-button [value]="'solid'">Ciągła</mat-radio-button>
+      <mat-radio-button [value]="'dashed'">Przerywana</mat-radio-button>
+    </mat-radio-group>
+  </div>
+</div>
+
+<!-- Kolor linii -->
+<div class="section-in-menu section-in-menu-top">
+  <app-color-input [value]="settings.color" (valueChange)="update('color', $event)"></app-color-input>
+
+  <div>
+    <div class="label-for-mat-slider">
+      <span>Grubość</span>
+      <span>{{ settings.lineWidth }} px</span>
+    </div>
+
+    <mat-slider [min]="0" [max]="50" [step]="0.5">
+      <input matSliderThumb [ngModel]="settings.lineWidth" (ngModelChange)="update('lineWidth', $event)" />
+    </mat-slider>
+  </div>
+</div>
+<div class="section-in-menu section-in-menu-top">
+  <app-opacity-input
+    [value]="settings.strokeOpacity"
+    (valueChange)="update('strokeOpacity', $event)"
+  ></app-opacity-input>
+
+  <div class="">
+    <div class="">Rozmiar kreski: {{ settings.dashSize }}</div>
+
+    <mat-slider [min]="1" [max]="30" [step]="1" [disabled]="settings.style !== 'dashed'">
+      <input matSliderThumb [ngModel]="settings.dashSize" (ngModelChange)="update('dashSize', $event)" />
+    </mat-slider>
+  </div>
+</div>
+
+<!-- Dash -->

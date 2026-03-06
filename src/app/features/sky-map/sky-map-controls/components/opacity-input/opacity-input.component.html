@@ -1,0 +1,9 @@
+<div class="">
+  <div class="">
+    <span> Przeźroczystość: {{ value * 100 }}%</span>
+  </div>
+
+  <mat-slider [min]="0" [max]="1" [step]="0.05">
+    <input matSliderThumb [ngModel]="value" (ngModelChange)="onOpacityChange($event)" />
+  </mat-slider>
+</div>

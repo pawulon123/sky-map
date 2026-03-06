@@ -11,6 +11,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { StarsSymbolsSettings } from '../../../domain/models/stars-layer-settings.model';
 import { HeaderPortalComponent } from '../../header-portal.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { ColorInputComponent } from '../../components/color-input/color-input.component';
+import { OpacityInputComponent } from '../../components/opacity-input/opacity-input.component';
 @Component({
   selector: 'app-stars-symbol-controls',
   standalone: true,
@@ -25,6 +27,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatInputModule,
     HeaderPortalComponent,
     MatDividerModule,
+    ColorInputComponent,
+    OpacityInputComponent,
   ],
   templateUrl: './stars-symbol-controls.component.html',
   styleUrls: ['./stars-symbol-controls.component.css'],
