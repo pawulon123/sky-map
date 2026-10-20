@@ -66,21 +66,36 @@
           </mat-slider>
         </div>
       </div>
-      <!-- SKALUJ WG MAGNITUDO -->
-      <div>
-        <div class="label-for-mat-slider">
-          <span> Skaluj </span>
-          <span>{{ settings.symbols.scaleByMagnitude | number: '1.1-1' }}</span>
-        </div>
+    <!-- SKALUJ WG MAGNITUDO -->
+<div>
+  <div class="label-for-mat-slider">
+    <span>Skaluj</span>
+    <span>
+      {{ settings.symbols.scaleByMagnitude | number: '1.1-1' }}
+    </span>
+  </div>
 
-        <mat-slider min="-125" max="125" step="10.4">
-          <input
-            matSliderThumb
-            [ngModel]="settings.symbols.size"
-            (ngModelChange)="update('scaleByMagnitude', +$event)"
-          />
-        </mat-slider>
-      </div>
+  <mat-slider
+    min="0"
+    max="125"
+    step="10.4"
+    [disabled]="settings.symbols.fixedSize"
+  >
+    <input
+      matSliderThumb
+      [ngModel]="settings.symbols.scaleByMagnitude"
+      (ngModelChange)="update('scaleByMagnitude', +$event)"
+    />
+  </mat-slider>
+
+  <mat-checkbox
+    [checked]="settings.symbols.fixedSize"
+    (change)="update('fixedSize', $event.checked)"
+    color="primary"
+  >
+    Stały rozmiar
+  </mat-checkbox>
+</div>
     </div>
   </div>
   <mat-divider class="mat-divider-style"></mat-divider>

@@ -13,6 +13,7 @@ export const defaultStarsSettings: StarsLayerSettings = {
     scaleByMagnitude: 0.4,
     fillOpacity: 0.5, // 0–1
     strokeOpacity: 0.5, // 0–1
+    fixedSize: false
   },
   labels: {
     visible: true,

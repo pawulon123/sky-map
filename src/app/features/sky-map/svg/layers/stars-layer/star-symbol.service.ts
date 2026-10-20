@@ -16,7 +16,7 @@ export class StarSymbolService {
 
   private readonly settingsSig = toSignal(this.state.starsLayerSettings$, {
     initialValue: defaultStarsSettings,
-  });
+  }); 
 
   readonly starSynbols = computed<RenderStar[]>(() => {
     const settings = this.settingsSig();

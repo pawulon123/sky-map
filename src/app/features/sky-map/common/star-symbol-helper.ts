@@ -1,12 +1,33 @@
 import { Star } from '../domain/models/star.model';
 import { StarsLayerSettings } from '../domain/models/stars-layer-settings.model';
 
-export function createRadius(star: Star, settings: StarsLayerSettings['symbols']) {
+// export function createRadius(star: Star, settings: StarsLayerSettings['symbols']) {
+//   const rBase = radiusFromMag(star);
+//   const magScale = magnitudeScale(star.mag, settings.scaleByMagnitude ?? 0);
+//   const scale = (settings.size ?? 1) * magScale;
+//   const r = rBase * scale;
+//   return r;
+// }
+
+export function createRadius(
+  star: Star,
+  settings: StarsLayerSettings['symbols']
+): number {
+  const size = settings.size ?? 1;
+
+  // Stały rozmiar wszystkich gwiazd
+  if (settings.fixedSize) {
+    return size;
+  }
+
+  // Rozmiar zależny od magnitudo
   const rBase = radiusFromMag(star);
-  const magScale = magnitudeScale(star.mag, settings.scaleByMagnitude ?? 0);
-  const scale = (settings.size ?? 1) * magScale;
-  const r = rBase * scale;
-  return r;
+  const magScale = magnitudeScale(
+    star.mag,
+    settings.scaleByMagnitude ?? 0
+  );
+
+  return rBase * size * magScale;
 }
 export function getPropBaseRadius(
   r: number,

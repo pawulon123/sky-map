@@ -19,6 +19,7 @@ export interface StarsSymbolsSettings {
   fillOpacity: number; // 0–1
   strokeOpacity: number; // 0–1
   // mnożnik skali (domyślnie 1)
+   fixedSize: boolean;
 }
 
 export interface StarsLabelsSettings extends FontSVG {
