@@ -83,7 +83,7 @@ export interface PanelStarSymbolSettings {
 export interface RenderPanelStar {
   star: Star;
 
-  x: number; // globalne w dużym SVG (jak wcześniej)
+  x: number;
   y: number;
 
   mag: number | null;

@@ -32,7 +32,7 @@
 
             <ng-container *ngIf="(starSettings$ | async)?.symbols?.visible">
               <ng-container *ngFor="let s of p.stars">
-                <svg:g app-shapes-star [star]="s"></svg:g>
+                <svg:g app-shapes-star [star]="s"  [attr.data-tooltip]="getTooltip(s)"></svg:g>
               </ng-container>
             </ng-container>
 

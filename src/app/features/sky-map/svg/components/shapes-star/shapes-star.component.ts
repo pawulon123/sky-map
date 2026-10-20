@@ -7,6 +7,7 @@ import { CustomComponent } from './shapes/custom.component';
 import { SquareComponent } from './shapes/square.component';
 import { StarComponent } from './shapes/star.component';
 import { TriangleComponent } from './shapes/triangle.component';
+import { RenderPanelStar } from '../../../domain/models/panels.model';
 
 @Component({
   selector: 'g[app-shapes-star]',
@@ -25,5 +26,6 @@ import { TriangleComponent } from './shapes/triangle.component';
   standalone: true,
 })
 export class ShapesStarComponent {
-  @Input('star') s: any;
+  @Input('star') s!: any;
+
 }

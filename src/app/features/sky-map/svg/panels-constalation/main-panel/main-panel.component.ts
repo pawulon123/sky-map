@@ -30,4 +30,11 @@ export class ConstellationPanelsLayerComponent {
     const dasharray = style !== 'dashed' ? null : `${dashSize} ${dashSize}`;
     return { ...settings, dasharray };
   }
+  getTooltip(star: any): string {
+  const name = star.star.name ?? '';
+  const diameter = star.r * 2;
+
+  return `${name}\nŚrednica: ${diameter.toFixed(2)} mm`;
+}
+  
 }

@@ -24,7 +24,10 @@ export class StarsLayerComponent {
     return index;
   }
 
-  getTooltip(star: RenderStar): string {
-    return star.star.name ?? '';
-  }
+getTooltip(star: RenderStar): string {
+  const name = star.star.name ?? '';
+  const diameter = star.r * 2;
+
+  return `${name}\nŚrednica: ${diameter.toFixed(2)} mm`;
+}
 }

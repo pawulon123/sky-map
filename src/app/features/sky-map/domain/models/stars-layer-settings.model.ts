@@ -85,4 +85,6 @@ export interface RenderStar {
   strokeColor: string;
   strokeOpacity: number;
   hasFill: boolean;
+
+
 }

@@ -1,6 +1,6 @@
-<svg:g>
-  <ng-container [ngSwitch]="s.shape">
-    <g app-circle [star]="s" *ngSwitchCase="'circle'"></g>
+<svg:g >
+  <ng-container [ngSwitch]="s.shape" >
+    <g app-circle [star]="s" *ngSwitchCase="'circle'" ></g>
     <g app-ring [star]="s" *ngSwitchCase="'ring'"></g>
     <g app-cross [star]="s" *ngSwitchCase="'cross'"></g>
     <g app-star [star]="s" *ngSwitchCase="'star'"></g>
