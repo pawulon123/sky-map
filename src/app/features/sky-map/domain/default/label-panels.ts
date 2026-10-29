@@ -1,7 +1,7 @@
 import { PanelLabel } from '../models/panels.model';
 
 export const panelLabelDefault: PanelLabel = {
-  visible: true,
+  visible: false,
   position: 'leftBottom',
   fontSize: 10,
   fontWeight: 'normal',

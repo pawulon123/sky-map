@@ -1,4 +1,5 @@
 import { SvgData } from '../../core/common/svg-data';
+import { svgToMm } from '../../core/utils/utils-function';
 
 export function exportSvg({ width, height }: SvgData, nativeElement: SVGSVGElement | null) {
   const svgEl = nativeElement;
@@ -13,10 +14,21 @@ export function exportSvg({ width, height }: SvgData, nativeElement: SVGSVGEleme
   clone.setAttribute('viewBox', `0 0 ${width} ${height}`);
   // opcjonalnie: ustaw rozmiar w mm (wiele grawerek lubi mm)
   // np. 1px = 0.264583 mm (96 dpi), możesz dopasować do swojego workflow
-  const mmWidth = width * 0.264583;
-  const mmHeight = height * 0.264583;
-  clone.setAttribute('width', `${mmWidth}mm`);
-  clone.setAttribute('height', `${mmHeight}mm`);
+
+const mmWidth = svgToMm(width);
+const mmHeight = svgToMm(height);
+
+clone.setAttribute('width', `${mmWidth}mm`);
+clone.setAttribute('height', `${mmHeight}mm`);
+
+
+
+
+
+  // const mmWidth = width * 0.264583;
+  // const mmHeight = height * 0.264583;
+  // clone.setAttribute('width', `${mmWidth}mm`);
+  // clone.setAttribute('height', `${mmHeight}mm`);
 
   // serializacja do stringa
   const serializer = new XMLSerializer();

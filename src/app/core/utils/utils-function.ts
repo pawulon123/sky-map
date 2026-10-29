@@ -34,3 +34,15 @@ export const partial =
   (fn: Function, ...args: any[]) =>
   (...restArgs: any[]) =>
     fn(...args, ...restArgs);
+
+  export const SVG_TO_MM = 25.4 / 96;
+
+export function svgToMm(value: number): number {
+  return value * SVG_TO_MM;
+}
+export function getDescribeStar(star: { r: number; name?: string }): string {
+  const name = star.name ?? '';
+  const diameterMm = svgToMm(star.r * 2);
+
+  return `${name}\nŚrednica: ${diameterMm.toFixed(2)} mm`;
+}

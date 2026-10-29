@@ -9,6 +9,9 @@ import { ConstellationPanelsLayoutService } from '../constellation-panels-layout
 import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.component';
 import { LabelsLayerComponent } from '../../layers/labels-layer/labels-layer.component';
 import { LabelPanelsComponent } from '../label-panels/label-panels.component';
+import { getDescribeStar, svgToMm } from '../../../../../core/utils/utils-function';
+import { RenderStar } from '../../../domain/models/stars-layer-settings.model';
+import { RenderPanelStar } from '../../../domain/models/panels.model';
 
 @Component({
   selector: 'g[app-constellation-panels-layer]',
@@ -30,11 +33,8 @@ export class ConstellationPanelsLayerComponent {
     const dasharray = style !== 'dashed' ? null : `${dashSize} ${dashSize}`;
     return { ...settings, dasharray };
   }
-  getTooltip(star: any): string {
-  const name = star.star.name ?? '';
-  const diameter = star.r * 2;
-
-  return `${name}\nŚrednica: ${diameter.toFixed(2)} mm`;
+getTooltip(star: RenderPanelStar): string {
+ return getDescribeStar(star);
 }
   
 }

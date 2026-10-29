@@ -30,7 +30,8 @@ export class StarSymbolService {
         const mag = star.mag ?? null;
 
         const r = createRadius(star, sym);
-        const propsBaseRadis = getPropBaseRadius(r, sym);
+ 
+       const propsBaseRadis = getPropBaseRadius(r, sym);
         return {
           star,
           cx,

@@ -4,6 +4,7 @@ import { RenderStar } from '../../../domain/models/stars-layer-settings.model';
 import { LabelsLayerComponent } from '../labels-layer/labels-layer.component';
 import { StarSymbolService } from './star-symbol.service';
 import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.component';
+import { getDescribeStar, svgToMm } from '../../../../../core/utils/utils-function';
 
 @Component({
   selector: 'g[app-stars-layer]',
@@ -25,9 +26,6 @@ export class StarsLayerComponent {
   }
 
 getTooltip(star: RenderStar): string {
-  const name = star.star.name ?? '';
-  const diameter = star.r * 2;
-
-  return `${name}\nŚrednica: ${diameter.toFixed(2)} mm`;
+ return getDescribeStar(star);
 }
 }
