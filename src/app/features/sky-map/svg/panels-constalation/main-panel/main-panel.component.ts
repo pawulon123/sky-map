@@ -10,7 +10,6 @@ import { ShapesStarComponent } from '../../components/shapes-star/shapes-star.co
 import { LabelsLayerComponent } from '../../layers/labels-layer/labels-layer.component';
 import { LabelPanelsComponent } from '../label-panels/label-panels.component';
 import { getDescribeStar, svgToMm } from '../../../../../core/utils/utils-function';
-import { RenderStar } from '../../../domain/models/stars-layer-settings.model';
 import { RenderPanelStar } from '../../../domain/models/panels.model';
 
 @Component({

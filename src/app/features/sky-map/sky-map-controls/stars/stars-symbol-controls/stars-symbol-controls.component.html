@@ -95,6 +95,24 @@
   >
     Stały rozmiar
   </mat-checkbox>
+
+  <!-- MINIMALNA ŚREDNICA GWIAZDY -->
+<div>
+  <mat-form-field appearance="outline" style="width: 150px">
+    <mat-label>Min. średnica (mm)</mat-label>
+
+    <input
+      matInput
+      type="number"
+      min="0"
+      step="1"
+      [ngModel]="settings.symbols.minDiameterMm"
+      (ngModelChange)="updateMinDiameter($event)"
+    />
+
+    <span matSuffix>mm</span>
+  </mat-form-field>
+</div>
 </div>
     </div>
   </div>

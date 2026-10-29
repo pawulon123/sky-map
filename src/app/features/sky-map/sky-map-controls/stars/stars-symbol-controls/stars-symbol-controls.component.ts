@@ -40,4 +40,13 @@ export class StarsSymbolControlsComponent {
   update<K extends keyof StarsSymbolsSettings>(key: K, value: StarsSymbolsSettings[K]): void {
     this.state.updateStarsSymbols({ [key]: value });
   }
+
+  updateMinDiameter(value: number | string | null): void {
+  const numericValue = Number(value);
+  const normalized = Number.isFinite(numericValue)
+    ? Math.max(0, Math.floor(numericValue))
+    : 0;
+
+  this.update('minDiameterMm', normalized);
+}
 }

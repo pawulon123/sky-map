@@ -1,33 +1,36 @@
 import { Star } from '../domain/models/star.model';
 import { StarsLayerSettings } from '../domain/models/stars-layer-settings.model';
 
-// export function createRadius(star: Star, settings: StarsLayerSettings['symbols']) {
-//   const rBase = radiusFromMag(star);
-//   const magScale = magnitudeScale(star.mag, settings.scaleByMagnitude ?? 0);
-//   const scale = (settings.size ?? 1) * magScale;
-//   const r = rBase * scale;
-//   return r;
-// }
-
+const SVG_TO_MM = 25.4 / 96;
 export function createRadius(
   star: Star,
   settings: StarsLayerSettings['symbols']
 ): number {
   const size = settings.size ?? 1;
 
-  // Stały rozmiar wszystkich gwiazd
+  let r: number;
+
   if (settings.fixedSize) {
-    return size;
+    r = size;
+  } else {
+    const rBase = radiusFromMag(star);
+    const magScale = magnitudeScale(
+      star.mag,
+      settings.scaleByMagnitude ?? 0
+    );
+
+    r = rBase * size * magScale;
   }
 
-  // Rozmiar zależny od magnitudo
-  const rBase = radiusFromMag(star);
-  const magScale = magnitudeScale(
-    star.mag,
-    settings.scaleByMagnitude ?? 0
-  );
+  // Minimalna średnica gwiazdy w mm
+  const minDiameterMm = Math.max(0, settings.minDiameterMm ?? 0);
 
-  return rBase * size * magScale;
+  if (minDiameterMm > 0) {
+    const minRadiusSvg = (minDiameterMm / SVG_TO_MM) / 2;
+    r = Math.max(r, minRadiusSvg);
+  }
+
+  return r;
 }
 export function getPropBaseRadius(
   r: number,
