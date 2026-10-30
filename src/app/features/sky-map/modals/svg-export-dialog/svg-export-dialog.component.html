@@ -1,0 +1,26 @@
+
+<h2 mat-dialog-title>Eksport pliku</h2>
+
+<mat-dialog-content>
+  <mat-checkbox [(ngModel)]="options.truncateMm">
+    Zaokrąglaj średnice okręgów w górę do pełnych mm
+  </mat-checkbox>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">
+    Anuluj
+  </button>
+
+  <button mat-flat-button
+          color="primary"
+          (click)="export('svg')">
+    SVG
+  </button>
+
+  <button mat-flat-button
+          color="primary"
+          (click)="export('dxf')">
+    DXF
+  </button>
+</mat-dialog-actions>
