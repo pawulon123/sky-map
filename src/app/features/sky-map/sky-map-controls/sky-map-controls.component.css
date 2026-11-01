@@ -28,7 +28,7 @@
 
 .panel-body-scroll {
   background: #48555c;
-  height: calc(100vh - 6 * 45px); /* stała wysokość contentu */
+  height: calc(100vh - 7 * 45px); /* stała wysokość contentu */
 
   overflow-y: auto; /* pionowy */
   overflow-x: auto; /* poziomy */

@@ -12,6 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Portal, PortalModule } from '@angular/cdk/portal';
 import { Subscription } from 'rxjs';
 import { PanelHeaderPortalService } from './panel-header-portal.service';
+import { PredefinedComponent } from './predefined/predefined.component';
 @Component({
   selector: 'app-sky-map-controls',
   imports: [
@@ -24,12 +25,13 @@ import { PanelHeaderPortalService } from './panel-header-portal.service';
     PanelsLabelComponent,
     MatCheckboxModule,
     PortalModule,
-  ],
+    PredefinedComponent
+],
   templateUrl: './sky-map-controls.component.html',
   styleUrl: './sky-map-controls.component.css',
 })
 export class SkyMapControlsComponent implements OnInit, OnDestroy {
-  activePanel: 'projection' | 'stars' | 'boundaries' | 'constellationLines' | 'asterisms' = 'projection';
+  activePanel: 'projection' | 'stars' | 'boundaries' | 'constellationLines' | 'asterisms'|'preDefined' = 'projection';
   private state = inject(SkyMapStateService);
   private refreshProjectionSv = inject(RefreshProjectionService);
   projectionSettings = this.state.projectionSettings$;
@@ -49,6 +51,7 @@ export class SkyMapControlsComponent implements OnInit, OnDestroy {
   boundariesLabelHeaderPortal$ = this.header.portalFor('boundariesLabel');
   panelLabelHeaderPortal$ = this.header.portalFor('panelLabel');
   constellationLinesHeaderPortal$ = this.header.portalFor('constellationLines');
+  preDefinedHeaderPortal$ = this.header.portalFor('preDefined');
 
   ngOnInit(): void {
     this.refreshProjectionSv.loadOnceEndRefresh();

@@ -13,14 +13,21 @@ import { MatInputModule } from '@angular/material/input';
 })
 export class PanelsProjectionControlsComponent {
   private projectionSv = inject(ProjectionService);
-  settings = this.projectionSv.settings();
-  // pxToMm = PX_TO_MM
+  settings = this.projectionSv.settings;
 
-  updatePanelSize(key: string, value: number) {
-    const size = this.projectionSv.settings().panelSize;
-    this.projectionSv.setSettings({ panelSize: { ...size, [key]: value } });
+  updatePanelSize(key: 'w' | 'h', value: number): void {
+    const size = this.settings();
+
+    this.projectionSv.setSettings({
+      panelSize: {
+        ...size.panelSize,
+        [key]: value
+      }
+    });
   }
   update(key: string, value: number) {
     this.projectionSv.setSettings({ [key]: value });
   }
+
+
 }

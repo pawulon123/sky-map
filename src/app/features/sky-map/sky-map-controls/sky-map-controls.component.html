@@ -110,5 +110,25 @@
          <app-asterism-controls></app-asterism-controls>
       </div>
     </mat-expansion-panel> -->
+
+
+
+     <mat-expansion-panel
+     [disabled]="true"
+     [expanded]="false"
+      
+      (opened)="setActivePanel('preDefined')"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title> Zdefiniwane </mat-panel-title>
+        <ng-container *ngIf="preDefinedHeaderPortal$ | async as l">
+          <ng-template [cdkPortalOutlet]="l"></ng-template>
+        </ng-container>
+      </mat-expansion-panel-header>
+
+      <div class="panel-body-scroll">
+        <app-predefined></app-predefined>
+      </div>
+    </mat-expansion-panel>
   </mat-accordion>
 </div>

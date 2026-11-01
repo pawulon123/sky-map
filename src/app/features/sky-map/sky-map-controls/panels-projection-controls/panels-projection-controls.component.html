@@ -9,9 +9,10 @@
           type="number"
           min="0"
           step="1"
-          [ngModel]="settings.panelSize.w"
+          [ngModel]="settings().panelSize.w"
           (ngModelChange)="updatePanelSize('w', +$event)"
         />
+       
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Wysokość</mat-label>
@@ -20,7 +21,7 @@
           type="number"
           min="0"
           step="1"
-          [ngModel]="settings.panelSize.h"
+          [ngModel]="settings().panelSize.h"
           (ngModelChange)="updatePanelSize('h', +$event)"
         />
       </mat-form-field>
@@ -31,7 +32,7 @@
           type="number"
           min="0"
           step="1"
-          [ngModel]="settings.padding"
+          [ngModel]="settings().padding"
           (ngModelChange)="update('padding', +$event)"
         />
       </mat-form-field>
@@ -48,7 +49,7 @@
           type="number"
           min="0"
           step="1"
-          [ngModel]="settings.gap"
+          [ngModel]="settings().gap"
           (ngModelChange)="update('gap', +$event)"
         />
       </mat-form-field>
@@ -59,7 +60,7 @@
           type="number"
           min="0"
           step="1"
-          [ngModel]="settings.columns"
+          [ngModel]="settings().columns"
           (ngModelChange)="update('columns', +$event)"
         />
       </mat-form-field>

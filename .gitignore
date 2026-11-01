@@ -10,7 +10,10 @@
 /node_modules
 npm-debug.log
 yarn-error.log
-
+# Moje
+/prjekty fizyczne
+/puzzle sky-map
+/lightBurn
 # IDEs and editors
 .idea/
 .project

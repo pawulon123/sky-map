@@ -12,7 +12,8 @@ export type HeaderKey =
   | 'starsLabel'
   | 'boundariesLabel'
   | 'boundariesLine'
-  | 'panelLabel';
+  | 'panelLabel'
+  | 'preDefined';
 
 type Store = Record<HeaderKey, Portal<any> | null>;
 
@@ -27,6 +28,7 @@ export class PanelHeaderPortalService {
     boundariesLabel: null,
     boundariesLine: null,
     panelLabel: null,
+    preDefined:null
   });
 
   register(key: HeaderKey, portal: Portal<any>) {

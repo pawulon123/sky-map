@@ -1,0 +1,31 @@
+   <!-- <ng-container *ngIf="starsSettings$ | async as settings"> -->
+
+       <app-header-portal key="preDefined">
+           <div>
+                         
+
+
+            <mat-form-field appearance="outline" style="width: 130px; padding-right: 10px; padding-top: 15px;">
+            
+  <mat-label>Zdefiniowane</mat-label>
+
+  <mat-select
+    [(value)]="selectedOption"
+    (selectionChange)="onPredefinedChange($event.value)"
+  >
+    @for (option of predefined; track option.value) {
+      <mat-option [value]="option.value">
+        {{ option.label }}
+      </mat-option>
+    }
+  </mat-select>
+
+            </mat-form-field>
+
+
+
+
+               
+            </div>
+        </app-header-portal>
+    <!-- </ng-container> -->
